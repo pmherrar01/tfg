@@ -385,3 +385,55 @@ footer a:hover {
     transform: scale(1.15); /* Crece un poquito al pasar el ratón */
     box-shadow: 0 0 6px rgba(0,0,0,0.4);
 }
+
+/* --- DUAL RANGE SLIDER DE PRECIO --- */
+.range-slider-container {
+    height: 5px;
+    background-color: #e9ecef; /* Color gris de fondo de la barra */
+    border-radius: 5px;
+}
+
+.slider-track {
+    height: 100%;
+    position: absolute;
+    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    border-radius: 5px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.custom-range {
+    position: absolute;
+    top: -7px;
+    left: 0;
+    width: 100%;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    z-index: 2;
+}
+
+.custom-range::-webkit-slider-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    border: 2px solid #fff;
+    pointer-events: auto;
+    -webkit-appearance: none;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.custom-range::-moz-range-thumb {
+    height: 18px;
+    width: 18px;
+    border-radius: 50%;
+    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    border: 2px solid #fff;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}

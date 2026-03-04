@@ -273,7 +273,7 @@ class Producto
 
         $sql = "SELECT nombre FROM tipos_producto WHERE id = :idTipoPrenda";
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([":idColeccion" => $idTipoPrenda]);
+        $sentencia->execute([":idTipoPrenda" => $idTipoPrenda]);
 
         return $sentencia->fetch(PDO::FETCH_ASSOC);
 
