@@ -87,12 +87,8 @@ include './includes/header.php';
                                 <ul class="list-unstyled mb-0">
                                     <?php
                                     foreach ($listaCategorias as $categoria) {
-
-
                                     ?>
-
                                         <li class="mb-2"><a href="?coleccion=<?php echo $categoria['id']; ?>" class="text-muted nav-filtro"><?php echo $categoria["nombre"] ?></a></li>
-
                                     <?php
                                     }
                                     ?>
@@ -112,7 +108,6 @@ include './includes/header.php';
                                 <ul class="list-unstyled mb-0">
                                     <?php
                                     foreach ($listaTiposProductos as $producto) {
-
                                     ?>
                                         <li class="mb-2"><a href="?tipo=<?php echo $producto["id"] ?>" class="text-muted nav-filtro"><?php echo $producto["nombre"] ?></a></li>
                                     <?php
@@ -139,50 +134,49 @@ include './includes/header.php';
                                 </div>
                             </div>
                         </div>
-                        <div class="accordion-item bg-transparent border-bottom">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColor">
-                                    Color
-                                </button>
-                            </h2>
-                            <div id="filtroColor" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                                <div class="accordion-body px-0 py-2">
-                                    <div class="d-flex flex-wrap gap-2">
-                                        <a href="?color=negro" class="color-swatch border border-dark" style="background-color: #000000;" title="Negro"></a>
-                                        <a href="?color=blanco" class="color-swatch border border-secondary" style="background-color: #ffffff;" title="Blanco"></a>
-                                        <a href="?color=gris" class="color-swatch border border-secondary" style="background-color: #808080;" title="Gris"></a>
-                                        <a href="?color=azul" class="color-swatch border border-secondary" style="background-color: #1e3a8a;" title="Azul marino"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item bg-transparent border-bottom">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroPrecio">
-                                    Precio
-                                </button>
-                            </h2>
-                            <div id="filtroPrecio" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                                <div class="accordion-body px-0 py-3">
-
-                                    <div class="range-slider-container position-relative mb-3 mt-2">
-                                        <div class="slider-track"></div>
-                                        <input type="range" min="0" max="150" value="0" id="slider-min" class="form-range custom-range">
-                                        <input type="range" min="0" max="150" value="150" id="slider-max" class="form-range custom-range">
-                                    </div>
-
-                                    <div class="d-flex justify-content-between text-muted small fw-bold mb-3">
-                                        <span>Min: <span id="precio-min-val">0</span>€</span>
-                                        <span>Max: <span id="precio-max-val">150</span>€</span>
-                                    </div>
-
-                                    <button class="btn btn-dark w-100 btn-sm text-uppercase" onclick="aplicarFiltroPrecio()">Aplicar Filtro</button>
-
+                    </div>
+                    <div class="accordion-item bg-transparent border-bottom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColor">
+                                Color
+                            </button>
+                        </h2>
+                        <div id="filtroColor" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                            <div class="accordion-body px-0 py-2">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="?color=negro" class="color-swatch border border-dark" style="background-color: #000000;" title="Negro"></a>
+                                    <a href="?color=blanco" class="color-swatch border border-secondary" style="background-color: #ffffff;" title="Blanco"></a>
+                                    <a href="?color=gris" class="color-swatch border border-secondary" style="background-color: #808080;" title="Gris"></a>
+                                    <a href="?color=azul" class="color-swatch border border-secondary" style="background-color: #1e3a8a;" title="Azul marino"></a>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="accordion-item bg-transparent border-bottom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroPrecio">
+                                Precio
+                            </button>
+                        </h2>
+                        <div id="filtroPrecio" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                            <div class="accordion-body px-0 py-3">
 
+                                <div class="range-slider-container position-relative mb-3 mt-4">
+                                    <div class="slider-track"></div>
+                                    <input type="range" min="0" max="150" value="0" id="slider-min" class="custom-range">
+                                    <input type="range" min="0" max="150" value="150" id="slider-max" class="custom-range">
+                                </div>
+
+                                <div class="d-flex justify-content-between text-muted small fw-bold mb-3">
+                                    <span>Min: <span id="precio-min-val">0</span>€</span>
+                                    <span>Max: <span id="precio-max-val">150</span>€</span>
+                                </div>
+
+                                <button class="btn btn-dark w-100 btn-sm text-uppercase" onclick="aplicarFiltroPrecio()">Aplicar Filtro</button>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </aside>

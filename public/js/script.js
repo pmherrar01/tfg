@@ -57,10 +57,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const maxVal = document.getElementById("precio-max-val");
     const sliderTrack = document.querySelector(".slider-track");
 
-    // Si no estamos en la página del catálogo, no hacemos nada
     if(!sliderMin || !sliderMax) return;
 
-    const gap = 5; // Diferencia mínima en € para que no se choquen los tiradores
+    // Diferencia mínima de 1€ para que actúe como un "muro" y no se crucen
+    const gap = 1; 
 
     function updateSliderTrack() {
         const min = parseInt(sliderMin.value);
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const minAttr = parseInt(sliderMin.min);
         const maxAttr = parseInt(sliderMax.max);
         
-        // Calculamos los porcentajes para pintar la barra a color del medio
         const percent1 = ((min - minAttr) / (maxAttr - minAttr)) * 100;
         const percent2 = ((max - minAttr) / (maxAttr - minAttr)) * 100;
         
@@ -76,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function() {
         sliderTrack.style.width = (percent2 - percent1) + "%";
     }
 
-    // Cuando movemos el tirador izquierdo (Mínimo)
+    // Actualización en tiempo real al mover el Mínimo
     sliderMin.addEventListener("input", function() {
         if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
             sliderMin.value = parseInt(sliderMax.value) - gap;
@@ -85,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateSliderTrack();
     });
 
-    // Cuando movemos el tirador derecho (Máximo)
+    // Actualización en tiempo real al mover el Máximo
     sliderMax.addEventListener("input", function() {
         if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
             sliderMax.value = parseInt(sliderMin.value) + gap;
@@ -94,14 +93,12 @@ document.addEventListener("DOMContentLoaded", function() {
         updateSliderTrack();
     });
 
-    // Pintar la barra inicial al cargar
+    // Pintar la barra inicial
     updateSliderTrack();
 });
 
-// Esta función se ejecuta al darle al botón "Aplicar Filtro"
 function aplicarFiltroPrecio() {
     const min = document.getElementById("slider-min").value;
     const max = document.getElementById("slider-max").value;
-    // Recargamos la página pasando los precios por URL
     window.location.href = `catalogo.php?precio_min=${min}&precio_max=${max}`;
 }

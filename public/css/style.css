@@ -388,52 +388,65 @@ footer a:hover {
 
 /* --- DUAL RANGE SLIDER DE PRECIO --- */
 .range-slider-container {
-    height: 5px;
-    background-color: #e9ecef; /* Color gris de fondo de la barra */
+    height: 6px; 
+    background-color: #e9ecef; 
     border-radius: 5px;
+    position: relative;
+    width: 100%;
 }
 
 .slider-track {
     height: 100%;
     position: absolute;
-    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    background-color: #000000; /* <-- Tu color principal */
     border-radius: 5px;
     top: 0;
-    left: 0;
-    right: 0;
+    bottom: 0;
     z-index: 1;
 }
 
 .custom-range {
     position: absolute;
-    top: -7px;
+    top: -6px; /* Centra el tirador exactamente en el medio */
     left: 0;
     width: 100%;
     background: none;
-    pointer-events: none;
+    pointer-events: none; /* Esto evita que hagan clic fuera del tirador */
     -webkit-appearance: none;
+    -moz-appearance: none;
+    margin: 0;
     z-index: 2;
+}
+
+/* Ocultar cualquier rastro de la barra nativa */
+.custom-range::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    height: 5px;
 }
 
 .custom-range::-webkit-slider-thumb {
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    background-color: #000000; /* <-- Tu color principal */
     border: 2px solid #fff;
-    pointer-events: auto;
+    pointer-events: auto; /* Solo el tirador es clicable */
     -webkit-appearance: none;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 3;
 }
 
 .custom-range::-moz-range-thumb {
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background-color: #000000; /* <-- AQUÍ TU COLOR PRINCIPAL */
+    background-color: #000000;
     border: 2px solid #fff;
     pointer-events: auto;
     cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 3;
 }
