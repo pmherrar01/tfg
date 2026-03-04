@@ -12,28 +12,29 @@ if (isset($_GET["genero"])) {
     $mensajeFiltrado = $_GET['genero'];
 
     if ($mensajeFiltrado == "1") {
-    $mensajeFiltrado = "Hombre";
-} elseif ($mensajeFiltrado == "2") {
-    $mensajeFiltrado = "Mujer";
-} elseif ($mensajeFiltrado == "3") {
-    $mensajeFiltrado =  "Unisex";
-}
-
-
-}elseif (isset($_GET["coleccion"])) {
+        $mensajeFiltrado = "Hombre";
+    } elseif ($mensajeFiltrado == "2") {
+        $mensajeFiltrado = "Mujer";
+    } elseif ($mensajeFiltrado == "3") {
+        $mensajeFiltrado =  "Unisex";
+    }
+} elseif (isset($_GET["coleccion"])) {
 
     $listaProductos = $producto->filtrar('coleccion', $_GET["coleccion"]);
     $datosColeccion = $producto->obtenerNombreColeccion($_GET["coleccion"]);
     $mensajeFiltrado = "Colección: " . $datosColeccion['nombre'];
+} elseif ($_GET["tipo"]) {
+    $listaProductos = $producto->filtrar('tipoPrenda', $_GET["tipo"]);
+    $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]);
+        $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
 
-    } elseif ($_GET["tipo"]) {
-        
-    }else {
+} else {
     $listaProductos = $producto->listarProductos();
 }
 
 
 $listaCategorias = $producto->listarColecciones();
+$listaTiposProductos = $producto->listarTiposPrendas();
 
 include './includes/header.php';
 ?>
@@ -86,12 +87,12 @@ include './includes/header.php';
                             <div class="accordion-body px-0 py-2">
                                 <ul class="list-unstyled mb-0">
                                     <?php
-                                    foreach ($listaCategorias as $categoria ) {
-                                
+                                    foreach ($listaCategorias as $categoria) {
+
 
                                     ?>
 
-                                    <li class="mb-2"><a href="?coleccion=<?php echo $categoria['id']; ?>" class="text-muted nav-filtro"><?php echo $categoria["nombre"] ?></a></li>
+                                        <li class="mb-2"><a href="?coleccion=<?php echo $categoria['id']; ?>" class="text-muted nav-filtro"><?php echo $categoria["nombre"] ?></a></li>
 
                                     <?php
                                     }
@@ -111,11 +112,11 @@ include './includes/header.php';
                             <div class="accordion-body px-0 py-2">
                                 <ul class="list-unstyled mb-0">
                                     <?php
-                                    foreach ($listaProductos as $producto) {
-                                    
+                                    foreach ($listaTiposProductos as $producto) {
+
                                     ?>
-                                    <li class="mb-2"><a href="?tipo=<?php echo $producto["tipo_id"] ?>" class="text-muted nav-filtro"><?php echo $producto["tipo_id"] ?></a></li>
-                                    <?php 
+                                        <li class="mb-2"><a href="?tipo=<?php echo $producto["id"] ?>" class="text-muted nav-filtro"><?php echo $producto["nombre"] ?></a></li>
+                                    <?php
                                     }
                                     ?>
                                 </ul>

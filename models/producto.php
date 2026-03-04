@@ -255,6 +255,7 @@ class Producto
         $sql = "SELECT nombre from tipos_producto";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia -> execute();
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function obtenerNombreColeccion($idColeccion){
@@ -262,6 +263,17 @@ class Producto
         $sql = "SELECT nombre FROM colecciones WHERE id = :idColeccion";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idColeccion" => $idColeccion]);
+
+        return $sentencia->fetch(PDO::FETCH_ASSOC);
+
+    }
+
+
+    public function obtenerTipoPrenda($idTipoPrenda){
+
+        $sql = "SELECT nombre FROM tipos_producto WHERE id = :idTipoPrenda";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":idColeccion" => $idTipoPrenda]);
 
         return $sentencia->fetch(PDO::FETCH_ASSOC);
 
@@ -319,6 +331,14 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    private function filtrarTipoPrenda($prendaAFiltrar){
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 where tipo_id = :prendaAFiltrar";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":prendaAFiltrar" => $prendaAFiltrar]);
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function filtrar($filtrado, $valor)
     {
         switch ($filtrado) {
@@ -329,6 +349,7 @@ class Producto
                 return $this->filtrarColeccion($valor);
                 break;
             case 'tipoPrenda':
+                return $this->filtrarTipoPrenda($valor);
                 break;
             case 'color':
                 break;
