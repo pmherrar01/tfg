@@ -252,7 +252,7 @@ class Producto
     }
 
     public function listarTiposPrendas(){
-        $sql = "SELECT nombre from tipos_producto";
+        $sql = "SELECT id, nombre from tipos_producto";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia -> execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
