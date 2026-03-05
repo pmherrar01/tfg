@@ -11,6 +11,12 @@ $imagen = new Imagen($db->conectar());
 $idPrenda = isset($_GET["idPrenda"]) ? $_GET["idPrenda"] : 0;
 
 $datosPrenda = $producto->obtenerProducto($idPrenda);
+
+if (!$datosPrenda) {
+    header("Location: catalogo.php");
+    exit;
+}
+
 $galeria = $imagen->listarImagenes($idPrenda);
 $listaTallas = $producto->obtenerTallas($idPrenda);
 

@@ -382,17 +382,21 @@ private function filtrarPorTalla($talla)
         }
     }
 
-    public function obtenerColoresPorProducto($idProducto)
+public function obtenerColoresPorProducto($idProducto)
     {
-        $sql = "SELECT c.id, c.nombre, c.valor_hexadecimal 
-                FROM colores c
-                INNER JOIN producto_colores pc ON c.id = pc.color_id
-                WHERE pc.producto_id = :idProducto";
-        
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([":idProducto" => $idProducto]);
-        
-        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT c.id, c.nombre, c.valor_hexadecimal 
+                    FROM colores c
+                    INNER JOIN producto_colores pc ON c.id = pc.color_id
+                    WHERE pc.producto_id = :idProducto";
+            
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([":idProducto" => $idProducto]);
+            
+            return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
 }
