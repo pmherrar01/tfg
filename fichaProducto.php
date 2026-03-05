@@ -14,6 +14,9 @@ $datosPrenda = $producto->obtenerProducto($idPrenda);
 $galeria = $imagen->listarImagenes($idPrenda);
 $listaTallas = $producto->obtenerTallas($idPrenda);
 
+// NUEVO: Obtenemos los colores de esta prenda
+$coloresProducto = $producto->obtenerColoresPorProducto($idPrenda);
+
 $cont = 0;
 
 include './includes/header.php';
@@ -32,9 +35,12 @@ include './includes/header.php';
                     $cont = 0;
                     foreach ($galeria as $img) {
                         $claseActiva = ($cont == 0) ? 'borde-activo' : '';
+                        // Por si alguna imagen antigua no tiene color asignado aún, evitamos errores
+                        $colorId = isset($img['color_id']) ? $img['color_id'] : '';
                     ?>
                         <img src="<?php echo $img['url_imagen']; ?>"
-                            class="miniatura-galeria <?php echo $claseActiva; ?>"
+                            class="miniatura-galeria miniatura-color <?php echo $claseActiva; ?>"
+                            data-color-id="<?php echo $colorId; ?>"
                             style="width: 100%; height: 110px; object-fit: cover; cursor: pointer; flex-shrink: 0;"
                             onclick="cambiarFoto(this, '<?php echo $img['url_imagen']; ?>')"
                             alt="Miniatura">
@@ -95,7 +101,30 @@ include './includes/header.php';
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-dark w-100 py-3 rounded-0 text-uppercase fw-bold" style="letter-spacing: 2px; transition: all 0.3s ease;">
+                <?php if(!empty($coloresProducto)) { ?>
+                <div class="mb-4">
+                    <label class="form-label text-uppercase m-0 mb-2" style="letter-spacing: 2px; font-size: 0.85rem;">Color</label>
+                    <div class="d-flex flex-wrap gap-2" id="contenedor-colores">
+                        <?php foreach($coloresProducto as $index => $color) { 
+                            // El primer color por defecto tendrá el borde oscuro activo
+                            $claseActivo = ($index == 0) ? 'border-dark' : 'border-light';
+                        ?>
+                            <div class="color-swatch-wrapper rounded-circle border border-2 <?php echo $claseActivo; ?>" 
+                                 style="cursor: pointer; transition: all 0.2s ease; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
+                                 data-color-id="<?php echo $color['id']; ?>"
+                                 onclick="seleccionarColor(<?php echo $color['id']; ?>, this)">
+                                 
+                                <div class="color-swatch rounded-circle shadow-sm" 
+                                     style="background-color: <?php echo $color['valor_hexadecimal']; ?>; width: 26px; height: 26px;" 
+                                     title="<?php echo $color['nombre']; ?>">
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
+                <?php } ?>
+
+                <button type="submit" class="btn btn-dark w-100 py-3 rounded-0 text-uppercase fw-bold mt-2" style="letter-spacing: 2px; transition: all 0.3s ease;">
                     Añadir al Carrito
                 </button>
             </form>
