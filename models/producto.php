@@ -233,10 +233,11 @@ class Producto
     }
 
 
-    public function listarProductos($limite = null)
+public function listarProductos($limite = null)
     {
+        // Hemos quitado p.color y p.talla porque ya no existen en esta tabla
         $sql = "SELECT p.id, p.coleccion_id, p.tipo_id, p.nombre, p.descripcion, 
-                       p.precio, p.stock, p.color, p.talla, p.destacado, p.creado_en, i.url_imagen
+                       p.precio, p.stock, p.destacado, p.creado_en, i.url_imagen
                 FROM productos p
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
                 WHERE p.activo = 1

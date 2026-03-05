@@ -24,13 +24,11 @@ class Imagen{
     public function listarImagenes($idPrenda)
     {
         try {
-            // Intentamos traer la foto y su color
             $sql = "SELECT url_imagen, color_id FROM imagenes_productos WHERE producto_id = :idProducto ORDER BY es_principal DESC";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([":idProducto" => $idPrenda]);
             return $sentencia->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            // Si la columna color_id falla, usamos la versión antigua para evitar el Error 500
             $sql = "SELECT url_imagen FROM imagenes_productos WHERE producto_id = :idProducto ORDER BY es_principal DESC";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([":idProducto" => $idPrenda]);
