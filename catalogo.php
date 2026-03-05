@@ -32,6 +32,7 @@ if (isset($_GET["genero"])) {
     $mensajeFiltrado = "Talla: " . $_GET["talla"];
 }elseif (isset($_GET["color"])) {
     $listaProductos = $producto->filtrar('color', $_GET["color"]);
+    $mensajeFiltrado = "Color: " . $_GET["color"];
 } else {
     $listaProductos = $producto->listarProductos();
     $mensajeFiltrado = "Todos los productos";
@@ -186,7 +187,7 @@ include './includes/header.php';
                                 </div>
 
                                 <div class="d-flex justify-content-between text-muted small fw-bold mb-3">
-                                    <span>Min: <span id="precio-min-val">0</span>€</span>
+                                    <span>Min: <span id="precio-min-val"><?php echo $producto->obtenerPrecioMinMax("MIN") ?></span>€</span>
                                     <span>Max: <span id="precio-max-val">150</span>€</span>
                                 </div>
 

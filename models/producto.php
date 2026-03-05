@@ -431,4 +431,22 @@ class Producto
             return [];
         }
     }
+
+    public function obtenerPrecioMinMax($valor){
+        $funcionSql = "MAX";
+
+        if($valor === "MIN"){
+            $funcionSql = "MIN";
+        }
+
+        $sql = "SELECT {$funcionSql}(precio) as precio_limite FROM productos WHERE activo = 1";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+        return round($resultado['precio_limite'], 2);
+
+    }
 }
