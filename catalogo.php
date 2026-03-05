@@ -35,6 +35,7 @@ if (isset($_GET["genero"])) {
 } else {
     $listaProductos = $producto->listarProductos();
     $mensajeFiltrado = "Todos los productos";
+    //prueba
 }
 
 
