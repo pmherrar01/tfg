@@ -29,8 +29,10 @@ if (isset($_GET["genero"])) {
     $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
 }elseif (isset($_GET["talla"])) {
     $listaProductos = $producto->filtrar('talla', $_GET["talla"]);
+    $mensajeFiltrado = "Talla: " . $_GET["talla"];
 } else {
     $listaProductos = $producto->listarProductos();
+    $mensajeFiltrado = "Todos los productos";
 }
 
 

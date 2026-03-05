@@ -3,7 +3,7 @@
         <div class="row text-center text-md-start">
             
             <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                <h5 class="text-uppercase mb-4 fw-bold text-white">MI MARCA</h5>
+                <h5 class="text-uppercase mb-4 fw-bold text-white">Herror</h5>
                 <p>Streetwear diseñado en España para el mundo. Calidad premium.</p>
             </div>
 
@@ -15,7 +15,7 @@
 
             <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
                 <h6 class="text-uppercase mb-4 fw-bold text-white">Contacto</h6>
-                <p><i class="bi bi-envelope me-3"></i> info@mimarca.com</p>
+                <p><i class="bi bi-envelope me-3"></i> herror@gmail.com</p>
             </div>
         </div>
         

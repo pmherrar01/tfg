@@ -343,19 +343,19 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarPorTalla($talla)
+private function filtrarPorTalla($talla)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen 
-            FROM productos p
-            LEFT JOIN imagenes i ON p.id = i.id_producto
-            INNER JOIN producto_tallas pt ON p.id = pt.producto_id
-            WHERE pt.talla = :talla AND pt.stock > 0
-            GROUP BY p.id";
+        // Adaptado a tus tablas reales: imagenes_productos y producto_id
+        $sql = "SELECT p.*, i.url_imagen 
+                FROM productos p
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
+                INNER JOIN producto_tallas pt ON p.id = pt.producto_id
+                WHERE pt.talla = :talla AND pt.stock > 0";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":talla" => $talla]);
 
-        return $sentencia->FetchAll(PDO::FETCH_ASSOC);
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function filtrar($filtrado, $valor)
@@ -381,4 +381,18 @@ class Producto
                 break;
         }
     }
+
+    public function obtenerColoresPorProducto($idProducto)
+    {
+        $sql = "SELECT c.id, c.nombre, c.valor_hexadecimal 
+                FROM colores c
+                INNER JOIN producto_colores pc ON c.id = pc.color_id
+                WHERE pc.producto_id = :idProducto";
+        
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":idProducto" => $idProducto]);
+        
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

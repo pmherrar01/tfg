@@ -50,6 +50,50 @@ function cambiarConFlechas(direccion) {
     nuevaMiniatura.click();
 }
 
+// --- NUEVA FUNCIÓN: FILTRAR GALERÍA POR COLOR ---
+function seleccionarColor(colorId, elementoClicado) {
+    // 1. Cambiar el borde negro al color seleccionado
+    let envolturas = document.querySelectorAll('.color-swatch-wrapper');
+    envolturas.forEach(function(env) {
+        env.classList.remove('border-dark', 'p-1');
+        env.classList.add('border-secondary');
+    });
+    elementoClicado.classList.remove('border-secondary');
+    elementoClicado.classList.add('border-dark', 'p-1');
+
+    // 2. Filtrar las miniaturas de la galería
+    let miniaturas = document.querySelectorAll('.miniatura-color');
+    let primeraVisible = null;
+
+    miniaturas.forEach(function(miniatura) {
+        // Si la foto tiene el mismo ID de color que hemos clicado, la mostramos
+        if (miniatura.getAttribute('data-color-id') == colorId) {
+            miniatura.style.display = 'block';
+            if (!primeraVisible) {
+                primeraVisible = miniatura; // Guardamos la primera que coincida
+            }
+        } else {
+            // Si es de otro color, la ocultamos
+            miniatura.style.display = 'none';
+        }
+    });
+
+    // 3. Autoclic en la primera foto del nuevo color para que cambie la foto grande
+    if (primeraVisible) {
+        primeraVisible.click();
+    }
+}
+
+// 4. Autoejecutar al cargar la página para que filtre el primer color
+document.addEventListener("DOMContentLoaded", function() {
+    let primerColor = document.querySelector('.color-swatch-wrapper');
+    if(primerColor) {
+        // Simulamos un clic en el primer color al entrar a la ficha
+        seleccionarColor(primerColor.getAttribute('data-color-id'), primerColor);
+    }
+});
+
+
 document.addEventListener("DOMContentLoaded", function() {
     const sliderMin = document.getElementById("slider-min");
     const sliderMax = document.getElementById("slider-max");
