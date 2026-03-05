@@ -233,7 +233,7 @@ class Producto
     }
 
 
-public function listarProductos($limite = null)
+    public function listarProductos($limite = null)
     {
         // Hemos quitado p.color y p.talla porque ya no existen en esta tabla
         $sql = "SELECT p.id, p.coleccion_id, p.tipo_id, p.nombre, p.descripcion, 
@@ -344,7 +344,7 @@ public function listarProductos($limite = null)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarPorTalla($talla)
+    private function filtrarPorTalla($talla)
     {
         // Adaptado a tus tablas reales: imagenes_productos y producto_id
         $sql = "SELECT p.*, i.url_imagen 
@@ -383,21 +383,28 @@ private function filtrarPorTalla($talla)
         }
     }
 
-public function obtenerColoresPorProducto($idProducto)
+    public function listaColores(){
+        $sql = "SELECT nombre, valor_hexadecimal from colores";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerColoresPorProducto($idProducto)
     {
         try {
             $sql = "SELECT c.id, c.nombre, c.valor_hexadecimal 
                     FROM colores c
                     INNER JOIN producto_colores pc ON c.id = pc.color_id
                     WHERE pc.producto_id = :idProducto";
-            
+
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([":idProducto" => $idProducto]);
-            
+
             return $sentencia->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];
         }
     }
-
 }

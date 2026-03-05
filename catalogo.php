@@ -27,7 +27,7 @@ if (isset($_GET["genero"])) {
     $listaProductos = $producto->filtrar('tipoPrenda', $_GET["tipo"]);
     $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]);
     $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
-}elseif (isset($_GET["talla"])) {
+} elseif (isset($_GET["talla"])) {
     $listaProductos = $producto->filtrar('talla', $_GET["talla"]);
     $mensajeFiltrado = "Talla: " . $_GET["talla"];
 } else {
@@ -38,6 +38,7 @@ if (isset($_GET["genero"])) {
 
 $listaCategorias = $producto->listarColecciones();
 $listaTiposProductos = $producto->listarTiposPrendas();
+$listaColores = $producto->listaColores();
 
 include './includes/header.php';
 ?>
@@ -148,11 +149,20 @@ include './includes/header.php';
                         <div id="filtroColor" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
                             <div class="accordion-body px-0 py-2">
                                 <div class="d-flex flex-wrap gap-2">
-                                    <a href="?color=negro" class="color-swatch border border-dark" style="background-color: #000000;" title="Negro"></a>
-                                    <a href="?color=blanco" class="color-swatch border border-secondary" style="background-color: #ffffff;" title="Blanco"></a>
-                                    <a href="?color=gris" class="color-swatch border border-secondary" style="background-color: #808080;" title="Gris"></a>
-                                    <a href="?color=azul" class="color-swatch border border-secondary" style="background-color: #1e3a8a;" title="Azul marino"></a>
+
+                                    <?php
+
+                                    foreach ($listaColores as $color) {
+
+
+
+                                    ?>
+                                        <a href="?color=negro" class="color-swatch border border-dark" style="background-color: <?php echo $color["valor_hexadecimal"] ?>;" title="<?php echo $color["nombre"] ?>"><?php echo $color["nombre"] ?></a>
                                 </div>
+
+                            <?php
+                                    }
+                            ?>
                             </div>
                         </div>
                     </div>
