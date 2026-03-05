@@ -27,6 +27,8 @@ if (isset($_GET["genero"])) {
     $listaProductos = $producto->filtrar('tipoPrenda', $_GET["tipo"]);
     $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]);
     $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
+}elseif (isset($_GET["talla"])) {
+    $listaProductos = $producto->filtrar('talla', $_GET["talla"]);
 } else {
     $listaProductos = $producto->listarProductos();
 }

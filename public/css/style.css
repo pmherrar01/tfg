@@ -398,7 +398,7 @@ footer a:hover {
 .slider-track {
     height: 100%;
     position: absolute;
-    background-color: #000000; /* <-- Tu color principal */
+    background-color: var(--color-principal); /* <-- Tu color principal */
     border-radius: 5px;
     top: 0;
     bottom: 0;
@@ -407,28 +407,31 @@ footer a:hover {
 
 .custom-range {
     position: absolute;
-    top: -6px; /* Centra el tirador exactamente en el medio */
+    top: -6px;
     left: 0;
     width: 100%;
-    background: none;
-    pointer-events: none; /* Esto evita que hagan clic fuera del tirador */
+    background-color: transparent; /* ¡ESTO MATA AL DISEÑO DE MAC! */
+    pointer-events: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     margin: 0;
     z-index: 2;
+    outline: none; /* Quita el borde de selección */
 }
 
 /* Ocultar cualquier rastro de la barra nativa */
 .custom-range::-webkit-slider-runnable-track {
     -webkit-appearance: none;
     height: 5px;
+    background: transparent; /* ¡ESTO TAMBIÉN ES VITAL! */
+    border: none;
 }
 
 .custom-range::-webkit-slider-thumb {
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background-color: #000000; /* <-- Tu color principal */
+    background-color: var(--color-principal); /* <-- Tu color principal */
     border: 2px solid #fff;
     pointer-events: auto; /* Solo el tirador es clicable */
     -webkit-appearance: none;
@@ -442,7 +445,7 @@ footer a:hover {
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background-color: #000000;
+    background-color: var(--color-principal);
     border: 2px solid #fff;
     pointer-events: auto;
     cursor: pointer;
