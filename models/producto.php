@@ -361,17 +361,21 @@ class Producto
 
     private function filtrarColor($color)
     {
-        $sql = "SELECT p.* 
+        // 1. Añadimos i.url_imagen al SELECT
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen 
                 FROM productos p
-                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
-                WHERE c.nombre = :color ";
+                -- 2. Le decimos que intente coger la foto que coincida con ese color exacto
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 AND i.color_id = c.id
+                WHERE c.nombre = :color 
+                -- 3. Agrupamos por el ID del producto para evitar que se repita
+                GROUP BY p.id";
 
-                $sentencia = $this->conexionDataBase->prepare($sql);
-                $sentencia->execute([":color" => $color]);
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":color" => $color]);
 
-                return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function filtrar($filtrado, $valor)
@@ -390,6 +394,9 @@ class Producto
                 return $this->filtrarColor($valor);
                 break;
             case 'talla':
+                return $this->filtrarPorTalla($valor);
+                break;
+            case 'precio':
                 return $this->filtrarPorTalla($valor);
                 break;
 
