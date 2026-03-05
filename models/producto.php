@@ -359,6 +359,21 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    private function filtrarColor($color)
+    {
+        $sql = "SELECT p.* 
+                FROM productos p
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
+                INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                INNER JOIN colores c ON pc.color_id = c.id
+                WHERE c.nombre = :color ";
+
+                $sentencia = $this->conexionDataBase->prepare($sql);
+                $sentencia->execute([":color" => $color]);
+
+                return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function filtrar($filtrado, $valor)
     {
         switch ($filtrado) {
@@ -372,6 +387,7 @@ class Producto
                 return $this->filtrarTipoPrenda($valor);
                 break;
             case 'color':
+                return $this->filtrarColor($valor);
                 break;
             case 'talla':
                 return $this->filtrarPorTalla($valor);
@@ -383,7 +399,8 @@ class Producto
         }
     }
 
-    public function listaColores(){
+    public function listaColores()
+    {
         $sql = "SELECT nombre, valor_hexadecimal from colores";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();

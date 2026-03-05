@@ -30,6 +30,8 @@ if (isset($_GET["genero"])) {
 } elseif (isset($_GET["talla"])) {
     $listaProductos = $producto->filtrar('talla', $_GET["talla"]);
     $mensajeFiltrado = "Talla: " . $_GET["talla"];
+}elseif (isset($_GET["color"])) {
+    $listaProductos = $producto->filtrar('color', $_GET["color"]);
 } else {
     $listaProductos = $producto->listarProductos();
     $mensajeFiltrado = "Todos los productos";
@@ -157,12 +159,14 @@ include './includes/header.php';
 
 
                                     ?>
-                                        <a href="?color=negro" class="color-swatch border border-dark" style="background-color: <?php echo $color["valor_hexadecimal"] ?>;" title="<?php echo $color["nombre"] ?>"><?php echo $color["nombre"] ?></a>
+                                        <a href="?color=<?php echo $color["nombre"] ?>" class="color-swatch border border-dark" style="background-color: <?php echo $color["valor_hexadecimal"] ?>;" title="<?php echo $color["nombre"] ?>"></a>
+
+                                    <?php
+                                    }
+                                    ?>
                                 </div>
 
-                            <?php
-                                    }
-                            ?>
+
                             </div>
                         </div>
                     </div>
