@@ -432,21 +432,30 @@ class Producto
         }
     }
 
-    public function obtenerPrecioMinMax($valor){
+    public function obtenerPrecioMinMax($valor)
+    {
         $funcionSql = "MAX";
 
-        if($valor === "MIN"){
+        // Lo pasamos a mayúsculas por si acaso alguien escribe "min" o "Min"
+        if (strtoupper($valor) === "MIN") {
             $funcionSql = "MIN";
         }
 
-        $sql = "SELECT {$funcionSql}(precio) as precio_limite FROM productos WHERE activo = 1";
+        try {
+            $sql = "SELECT {$funcionSql}(precio) as precio_limite FROM productos WHERE activo = 1";
 
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute();
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute();
 
-        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+            $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
 
-        return round($resultado['precio_limite'], 2);
+            // SALVACAÍDAS: Si el resultado es nulo, le asignamos 0. Y forzamos que sea un número (float).
+            $precio = isset($resultado['precio_limite']) ? $resultado['precio_limite'] : 0;
 
+            return round((float)$precio, 2);
+        } catch (PDOException $e) {
+            // Si la base de datos falla, devolvemos 0 para que no se rompa la web
+            return 0;
+        }
     }
 }
