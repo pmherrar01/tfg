@@ -47,19 +47,19 @@ if (isset($_GET["genero"])) {
 }
 
 
-if(isset($_GET["nombreAsc"])){
-    $listaProductos = $producto->ordenar($_GET["nombreAsc"]);
+if(isset($_GET["orden"])){
+    $listaProductos = $producto->ordenar($_GET["orden"]);
 
 }elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["nombreDesc"]);
+ $listaProductos = $producto->ordenar($_GET["orden"]);
 }elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["precioAsc"]);
+ $listaProductos = $producto->ordenar($_GET["orden"]);
 }elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["precioDesc"]);
+ $listaProductos = $producto->ordenar($_GET["orden"]);
 }elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["fechaAsc"]);
+ $listaProductos = $producto->ordenar($_GET["orden"]);
 }elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["fechaDesc"]);
+ $listaProductos = $producto->ordenar($_GET["orden"]);
 }else {
     $listaProductos = $producto->listarProductos();
     $mensajeFiltrado = "Todos los productos";
