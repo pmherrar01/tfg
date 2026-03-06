@@ -12,7 +12,6 @@ $db = new DataBase();
 $producto = new Producto($db->conectar());
 $imagen = new Imagen($db->conectar());
 
-// --- FUNCIÓN MÁGICA PARA MANTENER ORDEN Y FILTROS JUNTOS ---
 function crearUrl($clave, $valor)
 {
     $parametros = $_GET;
@@ -20,10 +19,8 @@ function crearUrl($clave, $valor)
     return '?' . http_build_query($parametros);
 }
 
-// Capturamos el orden actual si existe
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
-// --- BLOQUE PRINCIPAL DE FILTROS ---
 if (isset($_GET["genero"])) {
     $listaProductos = $producto->filtrar("genero", $_GET["genero"], null, $ordenActual);
     $mensajeFiltrado = $_GET['genero'];
@@ -36,11 +33,11 @@ if (isset($_GET["genero"])) {
     }
 } elseif (isset($_GET["coleccion"])) {
     $listaProductos = $producto->filtrar('coleccion', $_GET["coleccion"], null, $ordenActual);
-    $datosColeccion = $producto->obtenerNombreColeccion($_GET["coleccion"]); // Sin ordenActual aquí
+    $datosColeccion = $producto->obtenerNombreColeccion($_GET["coleccion"]); 
     $mensajeFiltrado = "Colección: " . $datosColeccion['nombre'];
 } elseif (isset($_GET["tipo"])) {
     $listaProductos = $producto->filtrar('tipoPrenda', $_GET["tipo"], null, $ordenActual);
-    $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]); // Sin ordenActual aquí
+    $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]); 
     $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
 } elseif (isset($_GET["talla"])) {
     $listaProductos = $producto->filtrar('talla', $_GET["talla"], null, $ordenActual);
