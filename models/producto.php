@@ -378,7 +378,15 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function filtrar($filtrado, $valor)
+    private function filtrarPorPrecio($max, $min){
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where precio >= :min && precio <= :max";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":min" => $min, ":max" => $max]);
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function filtrar($filtrado, $valor, $valor2)
     {
         switch ($filtrado) {
             case 'genero':
@@ -397,7 +405,7 @@ class Producto
                 return $this->filtrarPorTalla($valor);
                 break;
             case 'precio':
-                return $this->filtrarPorTalla($valor);
+                return $this->filtrarPorPrecio($valor, $valor2);
                 break;
 
             default:
