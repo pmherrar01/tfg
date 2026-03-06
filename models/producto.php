@@ -378,15 +378,16 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarPorPrecio($max, $min){
-        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where precio >= :min && precio <= :max";
+    private function filtrarPorPrecio($max, $min)
+    {
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where precio BETWEEN :min AND :max GROUP BY p.id";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":min" => $min, ":max" => $max]);
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function filtrar($filtrado, $valor, $valor2)
+    public function filtrar($filtrado, $valor, $valor2 = null)
     {
         switch ($filtrado) {
             case 'genero':
@@ -466,4 +467,87 @@ class Producto
             return 0;
         }
     }
+
+    private function ordenarPrecioAsc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by precio ASC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    private function ordenarPrecioDesc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by precio DESC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function ordenarFechaDesc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by creado_en DESC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function ordenarFechaAsc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by creado_en ASC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function ordenarNombreAsc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by nombre ASC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    private function ordenarNombreDesc()
+    {
+        $sql = "SELECT * from productos WHERE activo = 1 order by nombre DESC";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function ordenar($accion){
+        switch ($accion) {
+            case 'nombreAsc':
+                return $this->ordenarNombreAsc();
+                break;
+                case 'nombreDesc':
+                    return $this->ordenarNombreDesc();
+                break;
+                case 'precioAsc':
+                return $this->ordenarPrecioAsc();
+                break;
+                case 'precioDesc':
+                return $this->ordenarPrecioDesc();
+                break;
+                case 'fechaAsc':
+                return $this->ordenarFechaAsc();
+                break;
+                case 'fechaDesc':
+                return $this->ordenarPrecioDesc();
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+    }
+
 }
