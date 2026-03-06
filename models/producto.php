@@ -380,7 +380,13 @@ class Producto
 
     private function filtrarPorPrecio($max, $min)
     {
-        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where p.precio BETWEEN :min AND :max GROUP BY p.id";
+
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen 
+                FROM productos p 
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  
+                WHERE p.precio BETWEEN :min AND :max 
+                GROUP BY p.id";
+
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":min" => $min, ":max" => $max]);
 
@@ -523,31 +529,31 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function ordenar($accion){
+    public function ordenar($accion)
+    {
         switch ($accion) {
             case 'nombreAsc':
                 return $this->ordenarNombreAsc();
                 break;
-                case 'nombreDesc':
-                    return $this->ordenarNombreDesc();
+            case 'nombreDesc':
+                return $this->ordenarNombreDesc();
                 break;
-                case 'precioAsc':
+            case 'precioAsc':
                 return $this->ordenarPrecioAsc();
                 break;
-                case 'precioDesc':
+            case 'precioDesc':
                 return $this->ordenarPrecioDesc();
                 break;
-                case 'fechaAsc':
+            case 'fechaAsc':
                 return $this->ordenarFechaAsc();
                 break;
-                case 'fechaDesc':
+            case 'fechaDesc':
                 return $this->ordenarFechaDesc();
                 break;
-            
+
             default:
                 # code...
                 break;
         }
     }
-
 }

@@ -24,7 +24,6 @@ if (isset($_GET["genero"])) {
         $mensajeFiltrado =  "Unisex";
     }
 } elseif (isset($_GET["coleccion"])) {
-
     $listaProductos = $producto->filtrar('coleccion', $_GET["coleccion"]);
     $datosColeccion = $producto->obtenerNombreColeccion($_GET["coleccion"]);
     $mensajeFiltrado = "Colección: " . $datosColeccion['nombre'];
@@ -40,27 +39,11 @@ if (isset($_GET["genero"])) {
     $mensajeFiltrado = "Color: " . $_GET["color"];
 } elseif (isset($_GET["precioMin"]) && isset($_GET["precioMax"])) {
     $listaProductos = $producto->filtrar('precio', $_GET["precioMax"], $_GET["precioMin"]);
-    $mensajeFiltrado = "Productos cuyo precio estan entre " . $_GET["precioMin"] . " y " . $_GET["precioMax"];
-} else {
-    $listaProductos = $producto->listarProductos();
-    $mensajeFiltrado = "Todos los productos";
-}
-
-
-if(isset($_GET["orden"])){
+    $mensajeFiltrado = "Productos entre " . $_GET["precioMin"] . "€ y " . $_GET["precioMax"] . "€";
+} elseif (isset($_GET["orden"])) { // <--- LA ORDENACIÓN SE UNE AL BLOQUE
     $listaProductos = $producto->ordenar($_GET["orden"]);
-
-}elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["orden"]);
-}elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["orden"]);
-}elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["orden"]);
-}elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["orden"]);
-}elseif (isset($_GET["orden"])) {
- $listaProductos = $producto->ordenar($_GET["orden"]);
-}else {
+    $mensajeFiltrado = "Ordenado por selección";
+} else { // <--- UN SOLO ELSE AL FINAL DEL TODO
     $listaProductos = $producto->listarProductos();
     $mensajeFiltrado = "Todos los productos";
 }
