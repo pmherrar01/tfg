@@ -470,7 +470,7 @@ class Producto
 
     private function ordenarPrecioAsc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by precio ASC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.precio ASC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -480,7 +480,7 @@ class Producto
 
     private function ordenarPrecioDesc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by precio DESC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.precio DESC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -489,7 +489,7 @@ class Producto
 
     private function ordenarFechaDesc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by creado_en DESC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.creado_en DESC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -498,7 +498,7 @@ class Producto
 
     private function ordenarFechaAsc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by creado_en ASC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.creado_en ASC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -507,7 +507,7 @@ class Producto
 
     private function ordenarNombreAsc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by nombre ASC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.nombre ASC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -516,7 +516,7 @@ class Producto
 
     private function ordenarNombreDesc()
     {
-        $sql = "SELECT * from productos WHERE activo = 1 order by nombre DESC";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.activo = 1 order by p.nombre DESC";
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
@@ -541,7 +541,7 @@ class Producto
                 return $this->ordenarFechaAsc();
                 break;
                 case 'fechaDesc':
-                return $this->ordenarPrecioDesc();
+                return $this->ordenarFechaDesc();
                 break;
             
             default:

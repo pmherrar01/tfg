@@ -50,15 +50,15 @@ if (isset($_GET["genero"])) {
 if(isset($_GET["nombreAsc"])){
     $listaProductos = $producto->ordenar($_GET["nombreAsc"]);
 
-}elseif (isset($_GET["nombreDesc"])) {
+}elseif (isset($_GET["orden"])) {
  $listaProductos = $producto->ordenar($_GET["nombreDesc"]);
-}elseif (isset($_GET["precioAsc"])) {
+}elseif (isset($_GET["orden"])) {
  $listaProductos = $producto->ordenar($_GET["precioAsc"]);
-}elseif (isset($_GET["precioDesc"])) {
+}elseif (isset($_GET["orden"])) {
  $listaProductos = $producto->ordenar($_GET["precioDesc"]);
-}elseif (isset($_GET["fechaAsc"])) {
+}elseif (isset($_GET["orden"])) {
  $listaProductos = $producto->ordenar($_GET["fechaAsc"]);
-}elseif (isset($_GET["fechaDesc"])) {
+}elseif (isset($_GET["orden"])) {
  $listaProductos = $producto->ordenar($_GET["fechaDesc"]);
 }else {
     $listaProductos = $producto->listarProductos();
@@ -109,7 +109,7 @@ include './includes/header.php';
                             <div id="filtroOrdenar" class="accordion-collapse collapse show" data-bs-parent="#acordeonFiltros">
                                 <div class="accordion-body px-0 py-2">
                                     <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><a href="?orden=fecha_desc" class="text-muted nav-filtro">Fecha: más reciente - más antiguo</a></li>
+                                        <li class="mb-2"><a href="?orden=fechaDesc" class="text-muted nav-filtro">Fecha: más reciente - más antiguo</a></li>
                                         <li class="mb-2"><a href="?orden=fechaAsc" class="text-muted nav-filtro">Fecha: más antiguo - más reciente</a></li>
                                         <li class="mb-2"><a href="?orden=precioAsc" class="text-muted nav-filtro">Precio: Menor a Mayor</a></li>
                                         <li class="mb-2"><a href="?orden=precioDesc" class="text-muted nav-filtro">Precio: Mayor a Menor</a></li>
@@ -120,7 +120,7 @@ include './includes/header.php';
                             </div>
                         </div>
                         <div class="accordion-item bg-transparent border-bottom">
-                            <h2 class="accordion-header">
+                           
 
                                 <div class="accordion-item bg-transparent border-bottom">
                                     <h2 class="accordion-header">
