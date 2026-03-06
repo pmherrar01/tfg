@@ -142,9 +142,19 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function aplicarFiltroPrecio() {
-    const min = document.getElementById("slider-min").value;
-    const max = document.getElementById("slider-max").value;
-    window.location.href = `catalogo.php?precioMin=${min}&precioMax=${max}`;
+    let min = document.getElementById("slider-min").value;
+    let max = document.getElementById("slider-max").value;
+    
+    // Capturar orden actual de la URL para no perderlo
+    let urlParams = new URLSearchParams(window.location.search);
+    let orden = urlParams.get('orden');
+    
+    let urlDestino = '?precioMin=' + min + '&precioMax=' + max;
+    if (orden) {
+        urlDestino += '&orden=' + orden;
+    }
+    
+    window.location.href = urlDestino;
 }
 
 // --- LÓGICA DEL SLIDER DE PRECIOS DOBLE ---
