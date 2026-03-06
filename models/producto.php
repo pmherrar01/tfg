@@ -380,7 +380,7 @@ class Producto
 
     private function filtrarPorPrecio($max, $min)
     {
-        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where precio BETWEEN :min AND :max GROUP BY p.id";
+        $sql = "SELECT * from productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1  where p.precio BETWEEN :min AND :max GROUP BY p.id";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":min" => $min, ":max" => $max]);
 
