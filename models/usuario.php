@@ -17,7 +17,7 @@ class Usuario{
     private $fechaRegistro;
 
     public function __construct($db) {
-        $this->conexionDataBase->$db;
+        $this->conexionDataBase = $db;
     }
 
     /**
@@ -262,13 +262,14 @@ class Usuario{
 
     public function registrar(){
         try {
-            $sql = "INSERT INTO usuarios(nombre, apellidos, email, password, id_rol) values (:nombre, :apellidos, :email, :password, :idRol)";
+            $sql = "INSERT INTO usuarios(nombre, apellidos, email, password, rol_id) values (:nombre, :apellidos, :email, :password, :idRol)";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":nombre" => $this->nombre,
                 ":apellidos" => $this->apellidos,
                 ":email" => $this->email,
-                ":id" => $this->idRol
+                ":password" => password_hash($this->password, PASSWORD_DEFAULT),
+                ":idRol" => $this->idRol
                 ]);
 
                 return true;

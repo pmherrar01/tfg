@@ -453,3 +453,114 @@ footer a:hover {
     position: relative;
     z-index: 3;
 }
+/* =========================================
+   ANIMACIÓN MODAL LOGIN/REGISTRO (PERSONALIZADO TFG)
+   ========================================= */
+.anim-container {
+    position: relative;
+    width: 100%;
+    height: 600px; 
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+}
+
+/* --- ESTILO DE LAS CAJAS BLANCAS (FORMULARIOS) --- */
+.anim-container .form-box {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #fff;
+    z-index: 10;
+    transition: transform 0.7s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.form-box.Login { left: 0; padding: 0 50px; }
+.anim-container.active .form-box.Login { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+
+.form-box.Register { right: 0; padding: 0 50px; transform: translateX(100%); opacity: 0; pointer-events: none; }
+.anim-container.active .form-box.Register { transform: translateX(0%); opacity: 1; pointer-events: auto; }
+
+/* --- ESTILO DE LOS PANELES DE IMAGEN (TEXTOS) --- */
+.anim-container .info-content {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    
+    /* MAGIA AQUÍ: Capa oscura (0.75 de opacidad) + Tu imagen de fondo */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('../img/tu-imagen-aqui.jpg');
+    background-size: cover;
+    background-position: center;
+    
+    color: #fff;
+    z-index: 10;
+    text-align: center;
+    transition: transform 0.7s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.info-content.Login { right: 0; padding: 0 40px; }
+.anim-container.active .info-content.Login { transform: translateX(100%); opacity: 0; pointer-events: none; }
+
+.info-content.Register { left: 0; padding: 0 40px; transform: translateX(-100%); opacity: 0; pointer-events: none; }
+.anim-container.active .info-content.Register { transform: translateX(0%); opacity: 1; pointer-events: auto; }
+
+/* --- TIPOGRAFÍA (Aplicando var(--color-principal)) --- */
+/* Títulos de los formularios en tu color principal */
+.form-box h2 { 
+    font-size: 2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; 
+    margin-bottom: 30px; text-align: center; 
+    color: var(--color-principal); 
+}
+.info-content h2 { font-size: 2.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; color: #fff; }
+.info-content p { font-size: 1.05rem; line-height: 1.6; color: #ddd; letter-spacing: 0.5px; }
+
+/* --- INPUTS FLOTANTES --- */
+.input-box { position: relative; width: 100%; margin-bottom: 30px; }
+.input-box input {
+    width: 100%; height: 40px; background: transparent; border: none; outline: none;
+    border-bottom: 1px solid #aaa; font-size: 15px; padding-right: 30px; transition: border-color 0.3s;
+    border-radius: 0; 
+    color: var(--color-principal); /* El texto que escribe el usuario */
+}
+/* Al hacer click, la línea de abajo se pone de tu color */
+.input-box input:focus, .input-box input:valid { border-bottom-color: var(--color-principal); }
+
+.input-box label {
+    position: absolute; top: 10px; left: 0; font-size: 15px; color: #888; transition: 0.3s; pointer-events: none;
+}
+/* El título pequeñito flota y se pone de tu color principal */
+.input-box input:focus ~ label, .input-box input:valid ~ label {
+    top: -16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--color-principal);
+}
+
+.input-box i { position: absolute; top: 12px; right: 5px; color: #888; transition: 0.3s; }
+.input-box input:focus ~ i, .input-box input:valid ~ i { color: var(--color-principal); }
+
+/* --- BOTÓN Y ENLACES --- */
+.btn-anim {
+    width: 100%; height: 50px; border: none; outline: none; cursor: pointer;
+    font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
+    margin-top: 5px; transition: filter 0.3s;
+    
+    /* Fondo con tu color principal */
+    background: var(--color-principal);
+    color: #fff;
+}
+/* Al pasar el ratón se oscurece un poquito la variable */
+.btn-anim:hover { filter: brightness(0.85); }
+
+.regi-link { text-align: center; margin-top: 25px; font-size: 13px; color: #666; }
+.regi-link a { 
+    font-weight: 700; text-decoration: underline; text-underline-offset: 4px; transition: filter 0.3s; 
+    color: var(--color-principal);
+}
+.regi-link a:hover { filter: brightness(0.7); }

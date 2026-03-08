@@ -192,3 +192,22 @@ document.addEventListener("DOMContentLoaded", function() {
         sliderMax.addEventListener("input", controlarSliders);
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    // Lógica para la animación del Modal de Login/Registro
+    const animContainer = document.querySelector('.anim-container');
+    const loginLink = document.querySelector('.SignInLink');
+    const registerLink = document.querySelector('.SignUpLink');
+
+    if (registerLink && loginLink && animContainer) {
+        registerLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            animContainer.classList.add('active');
+        });
+
+        loginLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            animContainer.classList.remove('active');
+        });
+    }
+});
