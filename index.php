@@ -1,13 +1,6 @@
 <?php
 
-// Recuerda: si en Linux tu archivo se llama "Producto.php", aquí tiene que ser con mayúscula también.
-require_once "./models/producto.php"; 
-require_once "./config/db.php";
-
-$db = new Database();
-$producto = new Producto($db->conectar());
-
-$novedades = $producto->listarProductos(8);
+require_once 'controllers/indexController.php';
 
 include './includes/header.php';
 ?>

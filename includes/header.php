@@ -47,77 +47,77 @@
 
     </div>
 
-    
+
   </nav>
 
-<div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
-    <div class="modal-content rounded-0 border-0 p-0 overflow-hidden shadow-lg">
+  <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
+      <div class="modal-content rounded-0 border-0 p-0 overflow-hidden shadow-lg">
 
-      <div class="anim-container">
-          
+        <div class="anim-container">
+
           <div class="form-box Login">
-              <h2>Entrar</h2>
-              <form action="login.php" method="POST">
-                  <div class="input-box">
-                      <input type="email" name="email" required>
-                      <label>Email</label>
-                      <i class="bi bi-envelope"></i>
-                  </div>
-                  <div class="input-box">
-                      <input type="password" name="password" required>
-                      <label>Contraseña</label>
-                      <i class="bi bi-lock"></i>
-                  </div>
-                  <button class="btn-anim" type="submit" name="accion" value="login">Iniciar Sesión</button>
-                  <div class="regi-link">
-                      <p>¿No tienes cuenta? <a href="#" class="SignUpLink">Regístrate</a></p>
-                  </div>
-              </form>
+            <h2>Entrar</h2>
+            <form action="controllers/usuarioController.php" method="POST">
+              <div class="input-box">
+                <input type="email" name="email" required>
+                <label>Email</label>
+                <i class="bi bi-envelope"></i>
+              </div>
+              <div class="input-box">
+                <input type="password" name="password" required>
+                <label>Contraseña</label>
+                <i class="bi bi-lock"></i>
+              </div>
+              <button class="btn-anim" type="submit" name="accion" value="login">Iniciar Sesión</button>
+              <div class="regi-link">
+                <p>¿No tienes cuenta? <a href="#" class="SignUpLink">Regístrate</a></p>
+              </div>
+            </form>
           </div>
 
           <div class="info-content Login">
-              <h2>¡HOLA!</h2>
-              <p>Inicia sesión para acceder a tu historial de pedidos, guardar tus favoritos y descubrir las últimas novedades.</p>
+            <h2>¡HOLA!</h2>
+            <p>Inicia sesión para acceder a tu historial de pedidos, guardar tus favoritos y descubrir las últimas novedades.</p>
           </div>
 
           <div class="form-box Register">
-              <h2>Registro</h2>
-              <form action="login.php" method="POST">
-                  <div class="input-box">
-                      <input type="text" name="nombre" required>
-                      <label>Nombre</label>
-                      <i class="bi bi-person"></i>
-                  </div>
-                  <div class="input-box">
-                      <input type="text" name="apellidos" required>
-                      <label>Apellidos</label>
-                      <i class="bi bi-people"></i>
-                  </div>
-                  <div class="input-box">
-                      <input type="email" name="email" required>
-                      <label>Email</label>
-                      <i class="bi bi-envelope"></i>
-                  </div>
-                  <div class="input-box">
-                      <input type="password" name="password" required>
-                      <label>Contraseña</label>
-                      <i class="bi bi-lock"></i>
-                  </div>
-                  <button class="btn-anim" type="submit" name="accion" value="registro">Crear Cuenta</button>
-                  <div class="regi-link">
-                      <p>¿Ya tienes cuenta? <a href="#" class="SignInLink">Inicia Sesión</a></p>
-                  </div>
-              </form>
+            <h2>Registro</h2>
+            <form action="controllers/usuarioController.php" method="POST">
+              <div class="input-box">
+                <input type="text" name="nombre" required>
+                <label>Nombre</label>
+                <i class="bi bi-person"></i>
+              </div>
+              <div class="input-box">
+                <input type="text" name="apellidos" required>
+                <label>Apellidos</label>
+                <i class="bi bi-people"></i>
+              </div>
+              <div class="input-box">
+                <input type="email" name="email" required>
+                <label>Email</label>
+                <i class="bi bi-envelope"></i>
+              </div>
+              <div class="input-box">
+                <input type="password" name="password" required>
+                <label>Contraseña</label>
+                <i class="bi bi-lock"></i>
+              </div>
+              <button class="btn-anim" type="submit" name="accion" value="registro">Crear Cuenta</button>
+              <div class="regi-link">
+                <p>¿Ya tienes cuenta? <a href="#" class="SignInLink">Inicia Sesión</a></p>
+              </div>
+            </form>
           </div>
 
           <div class="info-content Register">
-              <h2>¡ÚNETE!</h2>
-              <p>Crea tu cuenta ahora para disfrutar de una experiencia de compra rápida y gestionar tu armario virtual.</p>
+            <h2>¡ÚNETE!</h2>
+            <p>Crea tu cuenta ahora para disfrutar de una experiencia de compra rápida y gestionar tu armario virtual.</p>
           </div>
 
-      </div>
+        </div>
 
+      </div>
     </div>
   </div>
-</div>
