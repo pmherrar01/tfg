@@ -211,3 +211,73 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    
+    if (typeof bienvenidoAlerta !== 'undefined') {
+        if (bienvenidoAlerta === 'true') {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Hola, ' + nombreUsuario + '!',
+                text: 'Has iniciado sesión correctamente.',
+                confirmButtonColor: '#000', 
+                timer: 3000,
+                showConfirmButton: false
+            });
+        } else if (bienvenidoAlerta === 'false') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de acceso',
+                text: 'El email o la contraseña son incorrectos.',
+                confirmButtonColor: '#000'
+            });
+        }
+    }
+
+    if (typeof mensajeAlerta !== 'undefined' && mensajeAlerta === 'registro_exito') {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Bienvenido a HERROR!',
+            text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.',
+            confirmButtonColor: 'var(--color-principal, #000)'
+        });
+    }
+
+    if (typeof errorAlerta !== 'undefined') {
+        if (errorAlerta === 'registro_fallo') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ups...',
+                text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.',
+                confirmButtonColor: 'var(--color-principal, #000)'
+            });
+        } else if (errorAlerta === 'password_debil') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Contraseña poco segura',
+                text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.',
+                confirmButtonColor: 'var(--color-principal, #000)'
+            });
+        }
+    }
+
+    if (typeof errorAlerta !== 'undefined' && errorAlerta === 'registro_fallo') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Ups...',
+            text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.',
+            confirmButtonColor: '#000'
+        });
+    }
+    if (typeof sesionCerradaAlerta !== 'undefined' && sesionCerradaAlerta === 'true') {
+        Swal.fire({
+            icon: 'info', // Queda muy elegante para despedidas
+            title: '¡Hasta pronto!',
+            text: 'Has cerrado sesión correctamente de forma segura.',
+            confirmButtonColor: '#000', // Acuérdate de poner tu color
+            timer: 3000, // Se cierra sola a los 3 segundos
+            showConfirmButton: false
+        });
+    }
+
+});

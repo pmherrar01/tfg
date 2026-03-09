@@ -29,9 +29,17 @@
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js?v=<?php echo time(); ?>"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="public/js/script.js?v=<?php echo time(); ?>"></script>
+  <script>
+      const mensajeAlerta = "<?php echo isset($_GET['mensaje']) ? $_GET['mensaje'] : ''; ?>";
+      const errorAlerta = "<?php echo isset($_GET['error']) ? $_GET['error'] : ''; ?>";
+      const bienvenidoAlerta = "<?php echo isset($_GET['bienvenido']) ? $_GET['bienvenido'] : ''; ?>";
+      const nombreUsuario = "<?php echo isset($_SESSION['nombre']) ? $_SESSION['nombre'] : ''; ?>";
+      const sesionCerradaAlerta = "<?php echo isset($_GET['sesionCerrada']) ? $_GET['sesionCerrada'] : ''; ?>";
+  </script>
 
+  <script src="public/js/script.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

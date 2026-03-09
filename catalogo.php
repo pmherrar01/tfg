@@ -4,8 +4,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 
-require_once 'controllers/CatalogoController.php'; 
-include './includes/header.php'; 
+require_once 'controllers/catalogoController.php'; 
+
 
 
 include './includes/header.php';

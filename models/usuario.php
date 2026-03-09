@@ -278,6 +278,25 @@ class Usuario{
         }
     }
 
+    public function login($email, $password){
+        try {
+            $sql = "SELECT * from usuarios where email = :email";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([":email" => $email]);
+
+            $datosUsu = $sentencia->fetch(PDO::FETCH_ASSOC);
+
+            if($datosUsu && password_verify($password, $datosUsu["password"] )){
+                return $datosUsu;
+            }else{
+                return false;
+            }
+
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
 }
 
 ?>

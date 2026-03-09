@@ -1,8 +1,10 @@
 <?php
 
-require_once "../models/producto.php";
-require_once "../models/imagen.php";
-require_once "../config/db.php";
+session_start();
+
+require_once "models/producto.php";
+require_once "models/imagen.php";
+require_once "config/db.php";
 
 $db = new DataBase();
 $producto = new Producto($db->conectar());
