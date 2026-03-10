@@ -222,9 +222,10 @@ class Producto
         return $this;
     }
 
-    public function obtenerTallas($idPrenda)
+public function obtenerTallas($idPrenda)
     {
-        $sql = "SELECT talla, stock FROM producto_tallas WHERE producto_id = :idPrenda";
+        // AÑADIMOS EL color_id A LA BÚSQUEDA
+        $sql = "SELECT color_id, talla, stock FROM producto_tallas WHERE producto_id = :idPrenda";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idPrenda" => $idPrenda]);

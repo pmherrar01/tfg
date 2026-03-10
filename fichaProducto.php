@@ -64,21 +64,8 @@ require_once "controllers/fichaProductoController.php";
                         <label for="talla" class="form-label text-uppercase m-0" style="letter-spacing: 2px; font-size: 0.85rem;">Talla</label>
                         <a href="#" class="text-muted text-decoration-underline" style="font-size: 0.75rem;">Guía de tallas</a>
                     </div>
-                    <select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
-                        <option value="" selected disabled>Selecciona tu talla</option>
-                        <?php
-
-                        foreach ($listaTallas as $talla) {
-
-                            if ($talla["stock"] == 0) {
-                                echo "<option value='" . $talla["talla"] . "' disabled>" . $talla["talla"] . " (Agotado)</option>";
-                            } elseif ($talla["stock"] <= 10) {
-                                echo "<option value='" . $talla["talla"] . "'>" . $talla["talla"] . " - ¡Rápido, quedan pocas!</option>";
-                            } else {
-                                echo "<option value='" . $talla["talla"] . "'>" . $talla["talla"] . "</option>";
-                            }
-                        }
-                        ?>
+<select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
+                        <option value="" selected disabled>Selecciona un color primero</option>
                     </select>
                 </div>
 
@@ -113,6 +100,10 @@ require_once "controllers/fichaProductoController.php";
         </div>
     </div>
 </main>
+
+<script>
+    const tallasProducto = <?php echo $tallasJson; ?>;
+</script>
 <?php
 
 include './includes/footer.php';

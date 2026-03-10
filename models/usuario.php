@@ -306,29 +306,27 @@ class Usuario{
         return $sentencia->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function actualizarDatosUsu() {
+public function actualizarDatosUsu() {
+        try {
+            $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, telefono = :telefono, direccion = :direccion, ciudad = :ciudad, codigo_postal = :codigoPostal WHERE id = :idUsu";
 
-    try {
-        $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, telefono = :telefono, direccion = :direccion, ciudad = :ciudad, codigo_postal = :codigoPostal WHERE id = :idUsu";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":nombre" => $this->nombre,
+                ":apellidos" => $this->apellidos,
+                ":telefono" => $this->telefono,
+                ":direccion" => $this->direccion,
+                ":ciudad" => $this->ciudad,
+                ":codigoPostal" => $this->codigoPostal,
+                ":idUsu" => $this->idUsuario
+            ]);
 
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([
-            ":nombre" => $this->nombre,
-            ":apellidos" => $this->apellidos,
-            ":telefono" => $this->telefono,
-            ":idUsu" => $this->idUsuario,
-            ":direccion" => $this->direccion,
-            ":ciudad" => $this->ciudad,
-            ":codigoPostal" => $this->codigoPostal,
-        ]);
-
-        return true;
-    } catch (\Throwable $th) {
-        return false;
-    }
-
-
-
+            return true;
+        } catch (PDOException $e) {
+            // TRUCO DE DEBUG: Si te vuelve a fallar, quita las barras '//' de la línea de abajo para ver el error exacto
+            // die("ERROR SQL CRÍTICO: " . $e->getMessage());
+            return false;
+        }
     }
 
 }

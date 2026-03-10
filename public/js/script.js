@@ -50,37 +50,62 @@ function cambiarConFlechas(direccion) {
     nuevaMiniatura.click();
 }
 
-// --- NUEVA FUNCIÓN: FILTRAR GALERÍA POR COLOR ---
 function seleccionarColor(colorId, elementoClicado) {
-    // 1. Cambiar el borde negro al color seleccionado
+    // 1. Cambiar el borde de la bolita de color seleccionada
     let envolturas = document.querySelectorAll('.color-swatch-wrapper');
     envolturas.forEach(function(env) {
         env.classList.remove('border-dark', 'p-1');
-        env.classList.add('border-secondary');
+        env.classList.add('border-light');
     });
-    elementoClicado.classList.remove('border-secondary');
+    elementoClicado.classList.remove('border-light');
     elementoClicado.classList.add('border-dark', 'p-1');
 
-    // 2. Filtrar las miniaturas de la galería
+    // 2. Filtrar las fotos de la galería lateral
     let miniaturas = document.querySelectorAll('.miniatura-color');
     let primeraVisible = null;
 
     miniaturas.forEach(function(miniatura) {
-        // Si la foto tiene el mismo ID de color que hemos clicado, la mostramos
         if (miniatura.getAttribute('data-color-id') == colorId) {
             miniatura.style.display = 'block';
             if (!primeraVisible) {
-                primeraVisible = miniatura; // Guardamos la primera que coincida
+                primeraVisible = miniatura;
             }
         } else {
-            // Si es de otro color, la ocultamos
             miniatura.style.display = 'none';
         }
     });
 
-    // 3. Autoclic en la primera foto del nuevo color para que cambie la foto grande
+    // Cambiamos automáticamente la foto grande a la primera del nuevo color
     if (primeraVisible) {
         primeraVisible.click();
+    }
+
+    // 3. ACTUALIZAR EL STOCK Y LAS TALLAS DINÁMICAMENTE
+    const selectTalla = document.getElementById('talla');
+    if(selectTalla && typeof tallasProducto !== 'undefined') {
+        
+        // Vaciamos el desplegable
+        selectTalla.innerHTML = '<option value="" selected disabled>Selecciona tu talla</option>';
+
+        // Filtramos solo las tallas que coincidan con el color clicado
+        const tallasDelColor = tallasProducto.filter(t => t.color_id == colorId);
+
+        // Creamos las opciones nuevas según el stock de la base de datos
+        tallasDelColor.forEach(tallaObj => {
+            let opcion = document.createElement('option');
+            opcion.value = tallaObj.talla;
+            
+            if (tallaObj.stock == 0) {
+                opcion.disabled = true;
+                opcion.textContent = tallaObj.talla + ' (Agotado)';
+            } else if (tallaObj.stock <= 10) {
+                opcion.textContent = tallaObj.talla + ' - ¡Rápido, quedan ' + tallaObj.stock + '!';
+            } else {
+                opcion.textContent = tallaObj.talla;
+            }
+            
+            selectTalla.appendChild(opcion);
+        });
     }
 }
 

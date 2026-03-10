@@ -1,15 +1,10 @@
 <?php
-
 session_start();
 
-if(!isset($_SESSION["usuario_id"])){
-    header("Location: ../index.php");
-    exit;
+require_once "../includes/auth.php";
 
-}
-
-require_once "../html/models/usuario.php";
-require_once "../html/config/db.php";
+require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../models/usuario.php";
 
 $db = new Database();
 $user = new Usuario($db->conectar());
@@ -19,12 +14,12 @@ $idUsuarioSession = $_SESSION["usuario_id"];
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     $user->setIdUsuario($idUsuarioSession);
-    $user->setNombre(isset($_POST["nombre"]) ? trim($_POST["nombre"]) : "");
-    $user->setApellidos(isset($_POST["apellidos"]) ? trim($_POST["apellidos"]) : "");
-    $user->setTelefono(isset($_POST["telefono"]) ? trim($_POST["telefono"]) : 0);
-    $user->setCiudad(isset($_POST["ciudad"]) ? trim($_POST["ciudad"]) : "");
-    $user->setCodigoPostal(isset($_POST["codigoPostal"]) ? trim($_POST["codigoPostal"]) : 0);
-    $user->setDireccion(isset($_POST["direccion"]) ? trim($_POST["direccion"]) : "");
+    $user->setNombre(!empty($_POST["nombre"]) ? trim($_POST["nombre"]) : "");
+    $user->setApellidos(!empty($_POST["apellidos"]) ? trim($_POST["apellidos"]) : "");
+    $user->setTelefono(!empty($_POST["telefono"]) ? trim($_POST["telefono"]) : null);
+    $user->setCiudad(!empty($_POST["ciudad"]) ? trim($_POST["ciudad"]) : null);
+    $user->setCodigoPostal(!empty($_POST["codigoPostal"]) ? trim($_POST["codigoPostal"]) : null);
+    $user->setDireccion(!empty($_POST["direccion"]) ? trim($_POST["direccion"]) : null);
 
     if($user->actualizarDatosUsu()){
         $_SESSION["nombre"] = $_POST["nombre"];
@@ -38,10 +33,4 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }else{
     $datosUsu = $user->obtenerDatosUsu($idUsuarioSession);
 }
-
-
-
-
-
-
 ?>

@@ -24,7 +24,8 @@ if (!$datosPrenda) {
 $galeria = $imagen->listarImagenes($idPrenda);
 $listaTallas = $producto->obtenerTallas($idPrenda);
 
-// NUEVO: Obtenemos los colores de esta prenda
+$tallasJson = json_encode($listaTallas);
+
 $coloresProducto = $producto->obtenerColoresPorProducto($idPrenda);
 
 $cont = 0;
