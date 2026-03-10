@@ -240,7 +240,7 @@ public function obtenerTallas($idPrenda)
                 FROM productos p
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
                 WHERE p.activo = 1
-                GROUP BY p.id
+               GROUP BY p.id, c.id
                 ORDER BY p.creado_en DESC";
 
         if ($limite != null) {
@@ -342,7 +342,7 @@ public function obtenerTallas($idPrenda)
                 $generoAFiltrar = 3;
                 break;
         }
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.genero = :filtro GROUP BY p.id" . $this->obtenerSqlOrden($orden);
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.genero = :filtro GROUP BY p.id, c.idGROUP BY p.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $generoAFiltrar]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -350,7 +350,7 @@ public function obtenerTallas($idPrenda)
 
     private function filtrarColeccion($idColeccion, $orden)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.coleccion_id = :filtro GROUP BY p.id" . $this->obtenerSqlOrden($orden);
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.coleccion_id = :filtro GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $idColeccion]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -358,7 +358,7 @@ public function obtenerTallas($idPrenda)
 
     private function filtrarTipoPrenda($tipo, $orden)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.tipo_id = :filtro GROUP BY p.id" . $this->obtenerSqlOrden($orden);
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.tipo_id = :filtro GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $tipo]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -366,7 +366,7 @@ public function obtenerTallas($idPrenda)
 
     private function filtrarPorTalla($talla, $orden)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 INNER JOIN producto_tallas pt ON p.id = pt.producto_id WHERE pt.talla = :talla AND pt.stock > 0 GROUP BY p.id" . $this->obtenerSqlOrden($orden);
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 INNER JOIN producto_tallas pt ON p.id = pt.producto_id WHERE pt.talla = :talla AND pt.stock > 0 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":talla" => $talla]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -382,7 +382,7 @@ public function obtenerTallas($idPrenda)
 
     private function filtrarPorPrecio($max, $min, $orden)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.precio BETWEEN :min AND :max GROUP BY p.id" . $this->obtenerSqlOrden($orden);
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen FROM productos p LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 WHERE p.precio BETWEEN :min AND :max GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":min" => $min, ":max" => $max]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -469,7 +469,7 @@ public function obtenerTallas($idPrenda)
                 FROM productos p 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1 
                 WHERE p.activo = 1 
-                GROUP BY p.id" . $ordenSql;
+               GROUP BY p.id, c.id" . $ordenSql;
 
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();

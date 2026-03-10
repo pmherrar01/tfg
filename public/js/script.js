@@ -21,37 +21,32 @@ function cambiarFoto(elementoClicado, urlNuevaFoto) {
     elementoClicado.classList.add('borde-activo');
 }
 
-// Función para mover las flechas
 function cambiarConFlechas(direccion) {
-    // Buscamos qué miniatura tiene el borde negro ahora mismo
-    let miniaturaActual = document.querySelector('.miniatura-galeria.borde-activo');
-    let nuevaMiniatura;
+    let todasLasMiniaturas = Array.from(document.querySelectorAll('.miniatura-galeria'));
+    
+    let miniaturasVisibles = todasLasMiniaturas.filter(min => min.style.display !== 'none');
+    
+    if (miniaturasVisibles.length === 0) return;
+
+    let indexActual = miniaturasVisibles.findIndex(min => min.classList.contains('borde-activo'));
+    let nuevoIndex;
 
     if (direccion === 'next') {
-        // Intentamos coger la miniatura de su derecha
-        nuevaMiniatura = miniaturaActual.nextElementSibling;
-        
-        // Si no hay más a la derecha, volvemos a la primera del todo (efecto bucle)
-        if (!nuevaMiniatura) {
-            nuevaMiniatura = document.querySelector('.miniatura-galeria:first-child');
+        nuevoIndex = indexActual + 1;
+        if (nuevoIndex >= miniaturasVisibles.length) {
+            nuevoIndex = 0;
         }
     } else {
-        // Intentamos coger la miniatura de su izquierda
-        nuevaMiniatura = miniaturaActual.previousElementSibling;
-        
-        // Si no hay más a la izquierda, vamos a la última del todo
-        if (!nuevaMiniatura) {
-            nuevaMiniatura = document.querySelector('.miniatura-galeria:last-child');
+        nuevoIndex = indexActual - 1;
+        if (nuevoIndex < 0) {
+            nuevoIndex = miniaturasVisibles.length - 1;
         }
     }
 
-    // ¡La magia! Simulamos un clic en la miniatura nueva. 
-    // Esto hace que se ejecute la transición y el borde negro solos.
-    nuevaMiniatura.click();
+    miniaturasVisibles[nuevoIndex].click();
 }
 
 function seleccionarColor(colorId, elementoClicado) {
-    // 1. Cambiar el borde de la bolita de color seleccionada
     let envolturas = document.querySelectorAll('.color-swatch-wrapper');
     envolturas.forEach(function(env) {
         env.classList.remove('border-dark', 'p-1');
@@ -60,7 +55,6 @@ function seleccionarColor(colorId, elementoClicado) {
     elementoClicado.classList.remove('border-light');
     elementoClicado.classList.add('border-dark', 'p-1');
 
-    // 2. Filtrar las fotos de la galería lateral
     let miniaturas = document.querySelectorAll('.miniatura-color');
     let primeraVisible = null;
 
