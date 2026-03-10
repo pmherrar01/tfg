@@ -2,6 +2,8 @@
 
 session_start();
 
+
+
 require_once "models/producto.php";
 require_once "models/imagen.php";
 require_once "config/db.php";
@@ -12,8 +14,30 @@ $imagen = new Imagen($db->conectar());
 
 function crearUrl($clave, $valor)
 {
-    $parametros = $_GET;
+    $parametros = [];
+    
+    if ($clave === 'orden') {
+        if (isset($_GET['genero'])) $parametros['genero'] = $_GET['genero'];
+        if (isset($_GET['coleccion'])) $parametros['coleccion'] = $_GET['coleccion'];
+        if (isset($_GET['tipo'])) $parametros['tipo'] = $_GET['tipo'];
+        if (isset($_GET['talla'])) $parametros['talla'] = $_GET['talla'];
+        if (isset($_GET['color'])) $parametros['color'] = $_GET['color'];
+        if (isset($_GET['precioMin'])) {
+            $parametros['precioMin'] = $_GET['precioMin'];
+            $parametros['precioMax'] = $_GET['precioMax'];
+        }
+    } 
+    else {
+        if (isset($_GET['orden'])) $parametros['orden'] = $_GET['orden'];
+        
+        if ($clave === 'precioMin' || $clave === 'precioMax') {
+            if (isset($_GET['precioMin'])) $parametros['precioMin'] = $_GET['precioMin'];
+            if (isset($_GET['precioMax'])) $parametros['precioMax'] = $_GET['precioMax'];
+        }
+    }
+
     $parametros[$clave] = $valor;
+    
     return '?' . http_build_query($parametros);
 }
 

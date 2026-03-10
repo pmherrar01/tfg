@@ -297,6 +297,41 @@ class Usuario{
         }
     }
 
+    public function obtenerDatosUsu($idUsu){
+        $sql = "SELECT * from usuarios where id = :idUsu"; 
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":idUsu" => $idUsu]);
+
+        return $sentencia->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function actualizarDatosUsu() {
+
+    try {
+        $sql = "UPDATE usuarios SET nombre = :nombre, apellidos = :apellidos, telefono = :telefono, direccion = :direccion, ciudad = :ciudad, codigo_postal = :codigoPostal, puntos_fidelidad = :puntosFidelidad WHERE id = :idUsu";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([
+            ":nombre" => $this->nombre,
+            ":apellidos" => $this->apellidos,
+            ":telefono" => $this->telefono,
+            ":idUsu" => $this->idUsuario,
+            ":direccion" => $this->direccion,
+            ":ciudad" => $this->ciudad,
+            ":codigoPostal" => $this->codigoPostal,
+            ":puntosFidelidad" => $this->puntosFidelidad
+        ]);
+
+        return true;
+    } catch (\Throwable $th) {
+        return false;
+    }
+
+
+
+    }
+
 }
 
 ?>
