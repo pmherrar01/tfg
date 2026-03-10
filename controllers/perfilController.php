@@ -25,7 +25,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $user->setCiudad(isset($_POST["ciudad"]) ? trim($_POST["ciudad"]) : "");
     $user->setCodigoPostal(isset($_POST["codigoPostal"]) ? trim($_POST["codigoPostal"]) : 0);
     $user->setDireccion(isset($_POST["direccion"]) ? trim($_POST["direccion"]) : "");
-    $user->setPuntosFidelidad(isset($_POST["puntosFidelidad"]) ? trim($_POST["puntosFidelidad"]) : "");
 
     if($user->actualizarDatosUsu()){
         $_SESSION["nombre"] = $_POST["nombre"];
