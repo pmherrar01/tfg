@@ -166,12 +166,14 @@ include './includes/header.php';
         <section class="col-lg-9">
 
             <div class="row g-4">
-
-                <?php
+<?php
                 if (!empty($listaProductos)) {
                     foreach ($listaProductos as $prenda) {
-                        $listaImagenes = $imagen->listarImagenes($prenda["id"]);
-                        $fotoHover = count($listaImagenes) > 1 ? $listaImagenes[1]["url_imagen"] : $prenda["url_imagen"];
+                        // NUEVO: Usamos tu nueva función pasándole el color de la tarjeta
+                        $listaImagenesColor = $imagen->listarImagenesPorColor($prenda["id"], $prenda["color_id"]);
+                        
+                        // Si ese color en concreto tiene más de 1 foto, mostramos la segunda en el Hover
+                        $fotoHover = count($listaImagenesColor) > 1 ? $listaImagenesColor[1]["url_imagen"] : $prenda["url_imagen"];
                 ?>
 
                         <div class="col-6 col-md-4">
@@ -180,10 +182,10 @@ include './includes/header.php';
                                 <button type="button" class="btn btn-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" onclick="this.querySelector('i').classList.toggle('bi-heart'); this.querySelector('i').classList.toggle('bi-heart-fill');">
                                     <i class="bi bi-heart"></i>
                                 </button>
-                                <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>">
+                                
+                                <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>">
                                     <div class="img-wrapper position-relative">
                                         <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal" alt="Prenda">
-
                                         <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
                                     </div>
 
@@ -196,6 +198,7 @@ include './includes/header.php';
                         </div>
 
                 <?php
+
                     }
                 } else {
                     echo "<p class='text-center'>No hay productos disponibles en este momento.</p>";

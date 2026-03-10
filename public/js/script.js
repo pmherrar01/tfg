@@ -103,12 +103,23 @@ function seleccionarColor(colorId, elementoClicado) {
     }
 }
 
-// 4. Autoejecutar al cargar la página para que filtre el primer color
 document.addEventListener("DOMContentLoaded", function() {
-    let primerColor = document.querySelector('.color-swatch-wrapper');
-    if(primerColor) {
-        // Simulamos un clic en el primer color al entrar a la ficha
-        seleccionarColor(primerColor.getAttribute('data-color-id'), primerColor);
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const colorIdUrl = urlParams.get('color');
+
+    let colorInicial = null;
+
+    if (colorIdUrl) {
+        colorInicial = document.querySelector('.color-swatch-wrapper[data-color-id="' + colorIdUrl + '"]');
+    }
+
+    if (!colorInicial) {
+        colorInicial = document.querySelector('.color-swatch-wrapper');
+    }
+
+    if (colorInicial) {
+        seleccionarColor(colorInicial.getAttribute('data-color-id'), colorInicial);
     }
 });
 

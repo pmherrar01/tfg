@@ -35,5 +35,21 @@ class Imagen{
             return $sentencia->fetchAll(PDO::FETCH_ASSOC);
         }
     }
+
+    public function listarImagenesPorColor($idPrenda, $idColor)
+    {
+        try {
+            // Buscamos las fotos de ese producto Y de ese color en concreto
+            $sql = "SELECT url_imagen, color_id FROM imagenes_productos WHERE producto_id = :idProducto AND color_id = :idColor ORDER BY es_principal DESC";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":idProducto" => $idPrenda,
+                ":idColor" => $idColor
+            ]);
+            return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
 }
 ?>
