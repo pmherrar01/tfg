@@ -60,7 +60,15 @@
           <i class="bi bi-bag"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
             <?php
-            echo isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0;
+            if (isset($_SESSION['carrito'])) {
+              $totalArticulos = 0;
+              foreach ($_SESSION['carrito'] as $item) {
+                $totalArticulos += $item['cantidad'];
+              }
+              echo $totalArticulos;
+            } else {
+              echo 0;
+            }
             ?>
           </span>
         </a>
