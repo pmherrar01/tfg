@@ -564,3 +564,64 @@ footer a:hover {
     color: var(--color-principal);
 }
 .regi-link a:hover { filter: brightness(0.7); }
+
+/* =========================================
+   BOTÓN ANIMADO AÑADIR AL CARRITO
+   ========================================= */
+.add-to-cart {
+  --background-default: var(var(--color-principal))
+  --background-hover: #1a1a1a;
+  --text-color: #fff;
+  --cart: #fff;
+  --tick-color: #198754; 
+  --shirt-color: #fff;
+  --shirt-logo: #000;
+  
+  position: relative;
+  width: 100%; 
+  padding: 16px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.add-to-cart:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--background-default);
+  transition: background 0.25s;
+}
+
+.add-to-cart:hover:not(.active):before {
+  background: var(--background-hover);
+}
+
+.add-to-cart span {
+  display: block;
+  position: relative;
+  z-index: 1;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-color);
+  text-align: center;
+ 
+}
+
+
+.add-to-cart svg {
+  display: block;
+  position: absolute;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ... El resto de estilos internos del botón los tienes en el archivo styles.css que me pasaste. 
+   Simplemente asegúrate de copiar el bloque de .morph, .shirt, .cart y .wheel
+   pero cambiando los colores fijos por las variables que definimos arriba. */
