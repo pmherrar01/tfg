@@ -564,64 +564,114 @@ footer a:hover {
     color: var(--color-principal);
 }
 .regi-link a:hover { filter: brightness(0.7); }
-
 /* =========================================
    BOTÓN ANIMADO AÑADIR AL CARRITO
    ========================================= */
 .add-to-cart {
-  --background-default: var(var(--color-principal))
-  --background-hover: #1a1a1a;
-  --text-color: #fff;
-  --cart: #fff;
-  --tick-color: #198754; 
-  --shirt-color: #fff;
-  --shirt-logo: #000;
-  
-  position: relative;
-  width: 100%; 
-  padding: 16px 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
+    --background-default: var(--color-principal);
+    --background-hover: #1a1a1a;
+    --text-color: #fff;
+    --cart: #fff;
+    --tick-color: #198754; 
+    --shirt-color: #fff;
+    --shirt-logo: #000;
+    
+    position: relative;
+    width: 100%; 
+    padding: 16px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    overflow: hidden;
+    border-radius: 0;
 }
 
 .add-to-cart:before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--background-default);
-  transition: background 0.25s;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--background-default);
+    transition: background 0.25s;
 }
 
 .add-to-cart:hover:not(.active):before {
-  background: var(--background-hover);
+    background: var(--background-hover);
 }
 
 .add-to-cart span {
-  display: block;
-  position: relative;
-  z-index: 1;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-color);
-  text-align: center;
- 
+    display: block;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-color);
+    text-align: center;
+    opacity: var(--text-o, 1);
+    transform: translateX(var(--text-x, 0px));
 }
-
 
 .add-to-cart svg {
-  display: block;
-  position: absolute;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+    display: block;
+    position: absolute;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-/* ... El resto de estilos internos del botón los tienes en el archivo styles.css que me pasaste. 
-   Simplemente asegúrate de copiar el bloque de .morph, .shirt, .cart y .wheel
-   pero cambiando los colores fijos por las variables que definimos arriba. */
+.add-to-cart .morph {
+    width: 64px;
+    height: 13px;
+    stroke: var(--text-color);
+    stroke-width: 2;
+    left: 50%;
+    margin-left: -32px;
+    bottom: 12px;
+    transform: translateY(var(--morph-y, 13px));
+    opacity: var(--text-o, 0);
+}
+
+.add-to-cart .shirt {
+    width: 24px;
+    height: 24px;
+    left: 50%;
+    margin-left: -12px;
+    bottom: 16px;
+    position: absolute;
+    transform: translateY(var(--shirt-y, 16px)) scale(var(--shirt-scale, 0));
+}
+
+.add-to-cart .shirt svg.first {
+    width: 24px;
+    height: 24px;
+    transform: translateY(var(--shirt-second-y, 24px));
+    stroke: var(--shirt-color);
+    stroke-width: 2;
+}
+
+.add-to-cart .cart {
+    width: 36px;
+    height: 26px;
+    left: 50%;
+    margin-left: -18px;
+    bottom: 14px;
+    position: absolute;
+    transform: translateX(var(--cart-x, -104px)) scale(var(--cart-scale, 0.75)) rotate(var(--cart-rotate, 0deg));
+}
+
+.add-to-cart .cart .shape, 
+.add-to-cart .cart .wheel {
+    stroke: var(--cart);
+    stroke-width: 2;
+}
+
+.add-to-cart .cart .tick {
+    stroke: var(--tick-color);
+    stroke-width: 2;
+    stroke-dasharray: 10px;
+    stroke-dashoffset: var(--cart-tick-offset, 10px);
+}
