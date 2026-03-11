@@ -101,6 +101,12 @@ function seleccionarColor(colorId, elementoClicado) {
             selectTalla.appendChild(opcion);
         });
     }
+
+    let inputColor = document.getElementById('input_color_id');
+    if (inputColor) {
+        inputColor.value = colorId;
+    }
+
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -224,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Lógica para la animación del Modal de Login/Registro
     const animContainer = document.querySelector('.anim-container');
     const loginLink = document.querySelector('.SignInLink');
     const registerLink = document.querySelector('.SignUpLink');
@@ -270,6 +275,19 @@ document.addEventListener("DOMContentLoaded", function() {
             title: '¡Bienvenido a HERROR!',
             text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.',
             confirmButtonColor: 'var(--color-principal, #000)'
+        });
+    }
+
+    if (typeof mensajeAlerta !== 'undefined' && mensajeAlerta === 'carrito_ok') {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Añadido!',
+            text: 'El producto se ha añadido a tu carrito correctamente.',
+            confirmButtonColor: 'var(--color-principal, #000)',
+            timer: 2000, 
+            showConfirmButton: false,
+            toast: true, 
+            position: 'top-end'
         });
     }
 

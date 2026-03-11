@@ -57,39 +57,42 @@ require_once "controllers/fichaProductoController.php";
                 <p class="fs-6" style="line-height: 1.8;"><?php echo $datosPrenda["descripcion"] ?></p>
             </div>
 
-            <form action="#" method="POST" class="mt-auto">
+            <form action="controllers/carritoController.php" method="POST" class="mt-auto">
+
+                <input type="hidden" name="accion" value="agregar">
+                <input type="hidden" name="idPrenda" value="<?php echo $datosPrenda['id']; ?>">
+                <input type="hidden" name="color_id" id="input_color_id" value="">
 
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label for="talla" class="form-label text-uppercase m-0" style="letter-spacing: 2px; font-size: 0.85rem;">Talla</label>
                         <a href="#" class="text-muted text-decoration-underline" style="font-size: 0.75rem;">Guía de tallas</a>
                     </div>
-<select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
+                    <select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
                         <option value="" selected disabled>Selecciona un color primero</option>
                     </select>
                 </div>
 
-                <?php if(!empty($coloresProducto)) { ?>
-                <div class="mb-4">
-                    <label class="form-label text-uppercase m-0 mb-2" style="letter-spacing: 2px; font-size: 0.85rem;">Color</label>
-                    <div class="d-flex flex-wrap gap-2" id="contenedor-colores">
-                        <?php foreach($coloresProducto as $index => $color) { 
-                            // El primer color por defecto tendrá el borde oscuro activo
-                            $claseActivo = ($index == 0) ? 'border-dark' : 'border-light';
-                        ?>
-                            <div class="color-swatch-wrapper rounded-circle border border-2 <?php echo $claseActivo; ?>" 
-                                 style="cursor: pointer; transition: all 0.2s ease; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
-                                 data-color-id="<?php echo $color['id']; ?>"
-                                 onclick="seleccionarColor(<?php echo $color['id']; ?>, this)">
-                                 
-                                <div class="color-swatch rounded-circle shadow-sm" 
-                                     style="background-color: <?php echo $color['valor_hexadecimal']; ?>; width: 26px; height: 26px;" 
-                                     title="<?php echo $color['nombre']; ?>">
+                <?php if (!empty($coloresProducto)) { ?>
+                    <div class="mb-4">
+                        <label class="form-label text-uppercase m-0 mb-2" style="letter-spacing: 2px; font-size: 0.85rem;">Color</label>
+                        <div class="d-flex flex-wrap gap-2" id="contenedor-colores">
+                            <?php foreach ($coloresProducto as $index => $color) {
+                                $claseActivo = ($index == 0) ? 'border-dark' : 'border-light';
+                            ?>
+                                <div class="color-swatch-wrapper rounded-circle border border-2 <?php echo $claseActivo; ?>"
+                                    style="cursor: pointer; transition: all 0.2s ease; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;"
+                                    data-color-id="<?php echo $color['id']; ?>"
+                                    onclick="seleccionarColor(<?php echo $color['id']; ?>, this)">
+
+                                    <div class="color-swatch rounded-circle shadow-sm"
+                                        style="background-color: <?php echo $color['valor_hexadecimal']; ?>; width: 26px; height: 26px;"
+                                        title="<?php echo $color['nombre']; ?>">
+                                    </div>
                                 </div>
-                            </div>
-                        <?php } ?>
+                            <?php } ?>
+                        </div>
                     </div>
-                </div>
                 <?php } ?>
 
                 <button type="submit" class="btn btn-dark w-100 py-3 rounded-0 text-uppercase fw-bold mt-2" style="letter-spacing: 2px; transition: all 0.3s ease;">

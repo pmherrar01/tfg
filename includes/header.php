@@ -56,10 +56,13 @@
             </ul>
           </div>
         <?php endif; ?>
-
-        <a href="#" class="text-reset position-relative">
+        <a href="carrito.php" class="text-reset position-relative">
           <i class="bi bi-bag"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">0</span>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+            <?php
+            echo isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0;
+            ?>
+          </span>
         </a>
       </div>
 
