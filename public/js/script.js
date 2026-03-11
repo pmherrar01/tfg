@@ -2,30 +2,30 @@
 
 function cambiarFoto(elementoClicado, urlNuevaFoto) {
     let imgPrincipal = document.getElementById('imagenPrincipal');
-    
+
     // 1. Bajamos la opacidad a 0 (Se hace invisible suavemente)
     imgPrincipal.classList.add('oculto-transicion');
-    
+
     // 2. Esperamos un instante (150ms), cambiamos la foto y volvemos a subir la opacidad
-    setTimeout(function() {
+    setTimeout(function () {
         imgPrincipal.src = urlNuevaFoto;
         imgPrincipal.classList.remove('oculto-transicion');
     }, 150);
 
     // 3. Gestión del borde negro en las miniaturas
     let miniaturas = document.querySelectorAll('.miniatura-galeria');
-    miniaturas.forEach(function(miniatura) {
+    miniaturas.forEach(function (miniatura) {
         miniatura.classList.remove('borde-activo');
     });
-    
+
     elementoClicado.classList.add('borde-activo');
 }
 
 function cambiarConFlechas(direccion) {
     let todasLasMiniaturas = Array.from(document.querySelectorAll('.miniatura-galeria'));
-    
+
     let miniaturasVisibles = todasLasMiniaturas.filter(min => min.style.display !== 'none');
-    
+
     if (miniaturasVisibles.length === 0) return;
 
     let indexActual = miniaturasVisibles.findIndex(min => min.classList.contains('borde-activo'));
@@ -48,7 +48,7 @@ function cambiarConFlechas(direccion) {
 
 function seleccionarColor(colorId, elementoClicado) {
     let envolturas = document.querySelectorAll('.color-swatch-wrapper');
-    envolturas.forEach(function(env) {
+    envolturas.forEach(function (env) {
         env.classList.remove('border-dark', 'p-1');
         env.classList.add('border-light');
     });
@@ -58,7 +58,7 @@ function seleccionarColor(colorId, elementoClicado) {
     let miniaturas = document.querySelectorAll('.miniatura-color');
     let primeraVisible = null;
 
-    miniaturas.forEach(function(miniatura) {
+    miniaturas.forEach(function (miniatura) {
         if (miniatura.getAttribute('data-color-id') == colorId) {
             miniatura.style.display = 'block';
             if (!primeraVisible) {
@@ -76,8 +76,8 @@ function seleccionarColor(colorId, elementoClicado) {
 
     // 3. ACTUALIZAR EL STOCK Y LAS TALLAS DINÁMICAMENTE
     const selectTalla = document.getElementById('talla');
-    if(selectTalla && typeof tallasProducto !== 'undefined') {
-        
+    if (selectTalla && typeof tallasProducto !== 'undefined') {
+
         // Vaciamos el desplegable
         selectTalla.innerHTML = '<option value="" selected disabled>Selecciona tu talla</option>';
 
@@ -88,7 +88,7 @@ function seleccionarColor(colorId, elementoClicado) {
         tallasDelColor.forEach(tallaObj => {
             let opcion = document.createElement('option');
             opcion.value = tallaObj.talla;
-            
+
             if (tallaObj.stock == 0) {
                 opcion.disabled = true;
                 opcion.textContent = tallaObj.talla + ' (Agotado)';
@@ -97,7 +97,7 @@ function seleccionarColor(colorId, elementoClicado) {
             } else {
                 opcion.textContent = tallaObj.talla;
             }
-            
+
             selectTalla.appendChild(opcion);
         });
     }
@@ -109,8 +109,8 @@ function seleccionarColor(colorId, elementoClicado) {
 
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    
+document.addEventListener("DOMContentLoaded", function () {
+
     const urlParams = new URLSearchParams(window.location.search);
     const colorIdUrl = urlParams.get('color');
 
@@ -130,33 +130,33 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const sliderMin = document.getElementById("slider-min");
     const sliderMax = document.getElementById("slider-max");
     const minVal = document.getElementById("precio-min-val");
     const maxVal = document.getElementById("precio-max-val");
     const sliderTrack = document.querySelector(".slider-track");
 
-    if(!sliderMin || !sliderMax) return;
+    if (!sliderMin || !sliderMax) return;
 
     // Diferencia mínima de 1€ para que actúe como un "muro" y no se crucen
-    const gap = 1; 
+    const gap = 1;
 
     function updateSliderTrack() {
         const min = parseInt(sliderMin.value);
         const max = parseInt(sliderMax.value);
         const minAttr = parseInt(sliderMin.min);
         const maxAttr = parseInt(sliderMax.max);
-        
+
         const percent1 = ((min - minAttr) / (maxAttr - minAttr)) * 100;
         const percent2 = ((max - minAttr) / (maxAttr - minAttr)) * 100;
-        
+
         sliderTrack.style.left = percent1 + "%";
         sliderTrack.style.width = (percent2 - percent1) + "%";
     }
 
     // Actualización en tiempo real al mover el Mínimo
-    sliderMin.addEventListener("input", function() {
+    sliderMin.addEventListener("input", function () {
         if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
             sliderMin.value = parseInt(sliderMax.value) - gap;
         }
@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Actualización en tiempo real al mover el Máximo
-    sliderMax.addEventListener("input", function() {
+    sliderMax.addEventListener("input", function () {
         if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
             sliderMax.value = parseInt(sliderMin.value) + gap;
         }
@@ -180,21 +180,21 @@ document.addEventListener("DOMContentLoaded", function() {
 function aplicarFiltroPrecio() {
     let min = document.getElementById("slider-min").value;
     let max = document.getElementById("slider-max").value;
-    
+
     // Capturar orden actual de la URL para no perderlo
     let urlParams = new URLSearchParams(window.location.search);
     let orden = urlParams.get('orden');
-    
+
     let urlDestino = '?precioMin=' + min + '&precioMax=' + max;
     if (orden) {
         urlDestino += '&orden=' + orden;
     }
-    
+
     window.location.href = urlDestino;
 }
 
 // --- LÓGICA DEL SLIDER DE PRECIOS DOBLE ---
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     let sliderMin = document.getElementById("slider-min");
     let sliderMax = document.getElementById("slider-max");
     let displayMin = document.getElementById("precio-min-val");
@@ -229,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const animContainer = document.querySelector('.anim-container');
     const loginLink = document.querySelector('.SignInLink');
     const registerLink = document.querySelector('.SignUpLink');
@@ -247,15 +247,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    
+document.addEventListener("DOMContentLoaded", function () {
+
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
             Swal.fire({
                 icon: 'success',
                 title: '¡Hola, ' + nombreUsuario + '!',
                 text: 'Has iniciado sesión correctamente.',
-                confirmButtonColor: '#000', 
+                confirmButtonColor: '#000',
                 timer: 3000,
                 showConfirmButton: false
             });
@@ -284,10 +284,19 @@ document.addEventListener("DOMContentLoaded", function() {
             title: '¡Añadido!',
             text: 'El producto se ha añadido a tu carrito correctamente.',
             confirmButtonColor: 'var(--color-principal, #000)',
-            timer: 2000, 
+            timer: 2000,
             showConfirmButton: false,
-            toast: true, 
+            toast: true,
             position: 'top-end'
+        });
+    }
+
+    if (typeof errorAlerta !== 'undefined' && errorAlerta === 'no_stock') {
+        Swal.fire({
+            icon: 'error',
+            title: 'Límite de stock',
+            text: 'No hay más unidades disponibles de este artículo en tu talla y color.',
+            confirmButtonColor: 'var(--color-principal, #000)'
         });
     }
 
@@ -329,7 +338,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
 });
-
 // --- LÓGICA DEL BOTÓN ANIMADO ---
 if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
     gsap.registerPlugin(MorphSVGPlugin);
@@ -338,67 +346,98 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
         let morph = button.querySelector('.morph path'),
             shirt = button.querySelectorAll('.shirt svg > path');
 
+        button.addEventListener('pointerdown', e => {
+            if (button.classList.contains('active')) { return; }
+            gsap.to(button, { '--background-scale': .97, duration: .15 });
+        });
+
         button.addEventListener('click', e => {
-            // 1. Paramos el formulario en seco
             e.preventDefault();
 
-            if (button.classList.contains('active')) {
-                return;
+            let selectTalla = button.closest('form').querySelector('#talla');
+            if (selectTalla && (!selectTalla.value || selectTalla.value === "")) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '¡Falta la talla!',
+                    text: 'Por favor, selecciona una talla antes de añadir al carrito.',
+                    confirmButtonColor: 'var(--color-principal, #000)'
+                });
+                return; // Cortamos la ejecución de la función, la animación NO empieza
             }
+
+            if (button.classList.contains('active')) { return; }
             button.classList.add('active');
 
-            // 2. Animación de hundir el botón
             gsap.to(button, {
-                keyframes: [
-                    { '--background-scale': .97, duration: .15 },
-                    { '--background-scale': 1, delay: .125, duration: 1.2, ease: 'elastic.out(1, .6)' }
-                ]
+                keyframes: [{
+                    '--background-scale': .97, duration: .15
+                }, {
+                    '--background-scale': 1, delay: .125, duration: 1.2, ease: 'elastic.out(1, .6)'
+                }]
             });
 
-            // 3. Animación de la camiseta cayendo
             gsap.to(button, {
-                keyframes: [
-                    { '--shirt-scale': 1, '--shirt-y': '-42px', '--cart-x': '0px', '--cart-scale': 1, duration: .4, ease: 'power1.in' },
-                    { '--shirt-y': '-40px', duration: .3 },
-                    { '--shirt-y': '16px', '--shirt-scale': .9, duration: .25, ease: 'none' },
-                    { '--shirt-scale': 0, duration: .3, ease: 'none' }
-                ]
+                keyframes: [{
+                    '--shirt-scale': 1, '--shirt-y': '-42px', '--cart-x': '0px', '--cart-scale': 1, duration: .4, ease: 'power1.in'
+                }, {
+                    '--shirt-y': '-40px', duration: .3
+                }, {
+                    '--shirt-y': '16px', '--shirt-scale': .9, duration: .25, ease: 'none'
+                }, {
+                    '--shirt-scale': 0, duration: .3, ease: 'none'
+                }]
             });
 
             gsap.to(button, { '--shirt-second-y': '0px', delay: .835, duration: .12 });
 
-            // 4. Animación del carrito y el check verde
             gsap.to(button, {
-                keyframes: [
-                    { '--cart-clip': '12px', '--cart-clip-x': '3px', delay: .9, duration: .06 },
-                    { '--cart-y': '2px', duration: .1 },
-                    { '--cart-tick-offset': '0px', '--cart-y': '0px', duration: .2, onComplete() { button.style.overflow = 'hidden'; } },
-                    { '--cart-x': '52px', '--cart-rotate': '-15deg', duration: .2 },
-                    { '--cart-x': '104px', '--cart-rotate': '0deg', duration: .2, clearProps: true, onComplete() { 
+                keyframes: [{
+                    '--cart-clip': '12px', '--cart-clip-x': '3px', delay: .9, duration: .06
+                }, {
+                    '--cart-y': '2px', duration: .1
+                }, {
+                    '--cart-tick-offset': '0px', '--cart-y': '0px', duration: .2, onComplete() { button.style.overflow = 'hidden'; }
+                }, {
+                    '--cart-x': '52px', '--cart-rotate': '-15deg', duration: .2
+                }, {
+                    // AQUÍ ESTÁ EL TRUCO PARA EL BOTÓN ANCHO: movemos el carrito 200px para que desaparezca seguro
+                    '--cart-x': '200px', '--cart-rotate': '0deg', duration: .3, clearProps: true, onComplete() {
                         button.style.overflow = 'hidden';
                         button.style.setProperty('--text-o', 0);
                         button.style.setProperty('--text-x', '0px');
-                        button.style.setProperty('--cart-x', '-104px');
-                    }},
-                    { '--text-o': 1, '--text-x': '12px', '--cart-x': '-48px', '--cart-scale': .75, duration: .25, clearProps: true, onComplete() { 
+                        button.style.setProperty('--cart-x', '-160px');
+                    }
+                }, {
+                    '--text-o': 1, '--text-x': '20px', '--cart-x': '-100px', '--cart-scale': .75, duration: .25, clearProps: true, onComplete() {
                         button.classList.remove('active');
-                    }}
-                ]
+                    }
+                }]
             });
 
-            // Ocultar texto y deformar línea inferior
             gsap.to(button, { keyframes: [{ '--text-o': 0, duration: .3 }] });
+
             gsap.to(morph, {
-                keyframes: [
-                    { morphSVG: 'M0 12C6 12 20 10 32 0C43.9024 9.99999 58 12 64 12V13H0V12Z', duration: .25, ease: 'power1.out' },
-                    { morphSVG: 'M0 12C6 12 17 12 32 12C47.9024 12 58 12 64 12V13H0V12Z', duration: .15, ease: 'none' }
-                ]
+                keyframes: [{
+                    morphSVG: 'M0 12C6 12 20 10 32 0C43.9024 9.99999 58 12 64 12V13H0V12Z', duration: .25, ease: 'power1.out'
+                }, {
+                    morphSVG: 'M0 12C6 12 17 12 32 12C47.9024 12 58 12 64 12V13H0V12Z', duration: .15, ease: 'none'
+                }]
             });
 
-            // 5. ENVIAMOS EL FORMULARIO DESPUÉS DE LA ANIMACIÓN (1.8 seg)
+            gsap.to(shirt, {
+                keyframes: [{
+                    morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L23.5 8L20.5 11L19 9.5L18 22.5C18 22.5 14 21.5 12 21.5C10 21.5 5.99997 22.5 5.99997 22.5L4.99997 9.5L3.5 11L0.5 8L4.99997 3Z', duration: .25, delay: .25
+                }, {
+                    morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L23.5 8L20.5 11L19 9.5L18.5 22.5C18.5 22.5 13.5 22.5 12 22.5C10.5 22.5 5.5 22.5 5.5 22.5L4.99997 9.5L3.5 11L0.5 8L4.99997 3Z', duration: .85, ease: 'elastic.out(1, .5)'
+                }, {
+                    morphSVG: 'M4.99997 3L8.99997 1.5C8.99997 1.5 10.6901 3 12 3C13.3098 3 15 1.5 15 1.5L19 3L22.5 8L19.5 10.5L19 9.5L17.1781 18.6093C17.062 19.1901 16.778 19.7249 16.3351 20.1181C15.4265 20.925 13.7133 22.3147 12 23C10.2868 22.3147 8.57355 20.925 7.66487 20.1181C7.22198 19.7249 6.93798 19.1901 6.82183 18.6093L4.99997 9.5L4.5 10.5L1.5 8L4.99997 3Z', duration: 0, delay: 1.25
+                }]
+            });
+
+            // Enviar formulario tras la magia
             setTimeout(() => {
-                button.closest('form').submit(); 
-            }, 1800);
+                button.closest('form').submit();
+            }, 1900);
         });
     });
 }
