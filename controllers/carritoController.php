@@ -16,15 +16,28 @@ $imagenModel = new Imagen($conexion);
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     
     $idPrenda = $_POST['idPrenda'];
-    $talla = $_POST['talla'];
     $color_id = $_POST['color_id'];
     $cantidad = 1;
 
+    // PROTECCIÓN 1: Evitamos el Error 500 si no mandan talla
+    if (!isset($_POST['talla']) || empty($_POST['talla'])) {
+        header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=falta_talla");
+        exit;
+    }
+    
+    $talla = $_POST['talla'];
 
-    $sentencia = $conexion->prepare("SELECT stock FROM producto_tallas WHERE producto_id = ? AND color_id = ? AND talla = ?");
-    $sentencia->execute([$idPrenda, $color_id, $talla]);
+    // PROTECCIÓN 2: Comprobamos el stock en la base de datos
+    $stmt = $conexion->prepare("SELECT stock FROM producto_tallas WHERE producto_id = ? AND color_id = ? AND talla = ?");
+    $stmt->execute([$idPrenda, $color_id, $talla]);
     $resultadoStock = $stmt->fetch(PDO::FETCH_ASSOC);
     $stockMaximo = $resultadoStock ? $resultadoStock['stock'] : 0;
+
+    // Si el stock directamente es 0 (Agotado)
+    if ($stockMaximo < 1) {
+        header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
+        exit;
+    }
 
     if (!isset($_SESSION['carrito'])) {
         $_SESSION['carrito'] = [];
@@ -33,12 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     $productoEncontrado = false;
     foreach ($_SESSION['carrito'] as &$item) {
         if ($item['idPrenda'] == $idPrenda && $item['talla'] == $talla && $item['color_id'] == $color_id) {
-
+            
+            // Si al sumar 1 superamos el stock disponible, error
             if ($item['cantidad'] + $cantidad > $stockMaximo) {
                 header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
                 exit;
             }
-
+            
             $item['cantidad'] += $cantidad;
             $productoEncontrado = true;
             break;
@@ -58,34 +72,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     exit;
 }
 
-// --- NUEVO: LÓGICA DE MODIFICAR CARRITO (+, -, Eliminar) ---
+// --- LÓGICA DE MODIFICAR CARRITO (+, -, Eliminar) ---
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET['indice'])) {
     $indice = (int)$_GET['indice'];
 
     if (isset($_SESSION['carrito'][$indice])) {
         if ($_GET['accion'] == 'sumar') {
             
-            // 1. Sacamos los datos del producto que queremos sumar
             $item = $_SESSION['carrito'][$indice];
             
-            // 2. Comprobamos el stock de este producto concreto en la BD
             $stmt = $conexion->prepare("SELECT stock FROM producto_tallas WHERE producto_id = ? AND color_id = ? AND talla = ?");
             $stmt->execute([$item['idPrenda'], $item['color_id'], $item['talla']]);
             $resultadoStock = $stmt->fetch(PDO::FETCH_ASSOC);
             $stockMaximo = $resultadoStock ? $resultadoStock['stock'] : 0;
 
-            // 3. Solo sumamos si no hemos tocado el techo de stock
             if ($item['cantidad'] < $stockMaximo) {
                 $_SESSION['carrito'][$indice]['cantidad']++;
             } else {
-                // Si intenta superar el stock, recargamos con el mensaje de error
                 header("Location: ../carrito.php?error=no_stock");
                 exit;
             }
 
         } elseif ($_GET['accion'] == 'restar') {
             $_SESSION['carrito'][$indice]['cantidad']--;
-            // Si la cantidad llega a 0, lo eliminamos automáticamente
             if ($_SESSION['carrito'][$indice]['cantidad'] <= 0) {
                 unset($_SESSION['carrito'][$indice]);
             }
@@ -93,14 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET
             unset($_SESSION['carrito'][$indice]);
         }
 
-        // Reorganizamos la lista para que no queden huecos vacíos
         $_SESSION['carrito'] = array_values($_SESSION['carrito']);
     }
 
-    // Recargamos el carrito normal si no hubo errores de stock
     header("Location: ../carrito.php");
     exit;
 }
+
 // --- 2. LÓGICA DE MOSTRAR EL CARRITO (GET normal) ---
 $carritoActual = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
 $carritoDetallado = [];
@@ -127,7 +135,7 @@ foreach ($carritoActual as $indice => $item) {
     $carritoDetallado[] = [
         'indice' => $indice, 
         'idPrenda' => $item['idPrenda'],
-        'color_id' => $item['color_id'], // <-- AQUÍ PASAMOS EL COLOR A LA VISTA
+        'color_id' => $item['color_id'],
         'nombre' => $datosProd['nombre'],
         'precio' => $datosProd['precio'],
         'talla' => $item['talla'],

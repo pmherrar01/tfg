@@ -291,6 +291,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    if (typeof errorAlerta !== 'undefined') {
+        if (errorAlerta === 'registro_fallo') {
+            // ... las tuyas de antes
+        } else if (errorAlerta === 'falta_talla') { // <-- NUEVO
+            Swal.fire({
+                icon: 'warning',
+                title: '¡Falta la talla!',
+                text: 'Por favor, selecciona una talla antes de añadir al carrito.',
+                confirmButtonColor: '#000'
+            });
+        } else if (errorAlerta === 'no_stock') { // <-- NUEVO
+            Swal.fire({
+                icon: 'error',
+                title: 'Límite de stock',
+                text: 'No hay más unidades disponibles en esta talla y color.',
+                confirmButtonColor: '#000'
+            });
+        }
+    }
+
     if (typeof errorAlerta !== 'undefined' && errorAlerta === 'no_stock') {
         Swal.fire({
             icon: 'error',
