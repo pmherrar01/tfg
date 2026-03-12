@@ -91,7 +91,13 @@ include './includes/header.php';
                         <span class="fw-bold fs-4"><?php echo number_format($totalCarrito, 2); ?> €</span>
                     </div>
 
-                    <a href="#" class="btn btn-dark rounded-0 py-3 text-uppercase fw-bold w-100 ls-1">Tramitar Pedido</a>
+                    <?php
+
+                    $urlCorrecta = (isset($_SESSION["usuario_id"])) ? "checkout.php" : "index.php?mensaje=login_requerido";
+
+                    ?>
+
+                    <a href="<?php echo $urlCorrecta ?>" class="btn btn-dark rounded-0 py-3 text-uppercase fw-bold w-100 ls-1">Tramitar Pedido</a>
                 </div>
             </div>
         </div>
