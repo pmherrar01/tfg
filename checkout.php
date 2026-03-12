@@ -47,12 +47,12 @@ include './includes/header.php';
                 <div class="form-check d-flex align-items-center">
                     <input class="form-check-input me-3" type="radio" name="metodo_pago" id="pago_tarjeta" checked style="transform: scale(1.2);">
                     <label class="form-check-label fw-bold w-100 d-flex justify-content-between align-items-center" for="pago_tarjeta">
-                        <span>Tarjeta de Crédito / Débito (Simulación)</span>
+                        <span>Tarjeta de Crédito / Débito</span>
                         <i class="bi bi-credit-card-2-back fs-4"></i>
                     </label>
                 </div>
             </div>
-            <p class="text-muted small"><i class="bi bi-shield-lock me-1"></i> Pago seguro. Esta es una simulación para el TFG, no se realizarán cargos reales.</p>
+            <p class="text-muted small"><i class="bi bi-shield-lock me-1"></i> Pago seguro.</p>
         </div>
 
         <div class="col-lg-5">
