@@ -1,8 +1,6 @@
 <?php
-// 1. Cargamos el guardián de sesión usando __DIR__ para que la ruta sea a prueba de balas
 require_once __DIR__ . "/../includes/auth.php";
 
-// 2. Cargamos base de datos y modelo
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
 
