@@ -98,10 +98,9 @@ include './includes/header.php';
                 </div>
 
                 <form action="controllers/pagoController.php" method="POST">
-                    <input type="hidden" name="total_pedido" value="<?php echo $totalCheckout; ?>">
+                    <input type="hidden" name="totalPedido" value="<?php echo $totalCheckout; ?>">
 
                     <?php
-                    // Si faltan datos de envío, desactivamos el botón de pagar
                     $btnDisabled = (empty($datosComprador['direccion']) || empty($datosComprador['ciudad'])) ? 'disabled' : '';
                     ?>
 
