@@ -115,4 +115,32 @@ include './includes/header.php';
     </div>
 </section>
 
+<div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content rounded-0 border-dark border-3 shadow-lg">
+            
+            <div class="modal-header border-bottom border-dark border-2 bg-white">
+                <h5 class="modal-title fw-bold text-uppercase" id="promoModalLabel">
+                     HERROR
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            
+            <div class="modal-body p-5 text-center bg-light">
+                <h1 class="display-4 fw-bold text-uppercase mb-3">¡Consigue un <span class="text-decoration-underline">10%</span> de descuento!</h1>
+                <p class="text-muted fs-5 mb-4">Suscríbete a nuestra newsletter y recibe un código de descuento instantáneo para tu primera compra. ¡Únete a la familia!</p>
+                
+                <form id="formSuscripcion" class="mx-auto" style="max-width: 500px;">
+                    <div class="input-group input-group-lg mb-2">
+                        <input type="email" class="form-control rounded-0 border-dark border-2" placeholder="tu@email.com" required>
+                        <button class="btn btn-dark rounded-0 fw-bold text-uppercase px-4 border-2 border-dark" type="submit">¡Lo quiero!</button>
+                    </div>
+                    <small class="text-muted fw-bold small text-uppercase">No enviamos spam. Solo puro estilo.</small>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <?php include './includes/footer.php'; ?>

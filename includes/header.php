@@ -48,7 +48,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end rounded-0 border-dark mt-3" aria-labelledby="dropdownUser">
               <li><a class="dropdown-item" href="perfil.php">Mi Perfil</a></li>
-              <li><a class="dropdown-item" href="#">Mis Pedidos</a></li>
+              <li><a class="dropdown-item" href="perfil.php?seccion=pedidos">Mis Pedidos</a></li>
               <li>
                 <hr class="dropdown-divider">
               </li>

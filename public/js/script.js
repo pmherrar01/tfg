@@ -1,3 +1,31 @@
+// Esperamos a que la página cargue entera
+document.addEventListener("DOMContentLoaded", function () {
+
+    let promoModalElement = document.getElementById('promoModal')
+
+    if (miModal) {
+        setTimeout(function () {
+            let miModal = new bootstrap.Modal(document.getElementById('promoModal'));
+
+            miModal.show();
+        }, 3000);
+    }
+
+
+    let graciasCompra = document.getElementById("graciasCompra");
+
+    if (graciasCompra) {
+        setTimeout(function () {
+            window.location.href = "perfil.php?seccion=pedidos";
+        }, 4000);
+    }
+
+});
+
+
+
+
+
 // --- FUNCIONES DE LA FICHA DE PRODUCTO ---
 
 function cambiarFoto(elementoClicado, urlNuevaFoto) {
@@ -254,7 +282,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 1. ALERTAS DE ÉXITO O INFORMACIÓN (mensajeAlerta)
     if (typeof mensajeAlerta !== 'undefined') {
-        
+
         if (mensajeAlerta === 'registro_exito') {
             Swal.fire({
                 icon: 'success',
@@ -262,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.',
                 confirmButtonColor: 'var(--color-principal, #000)'
             });
-        } 
+        }
         else if (mensajeAlerta === 'carrito_ok') {
             Swal.fire({
                 icon: 'success',
@@ -275,7 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 position: 'top-end'
             });
         }
-        else if (mensajeAlerta === 'login_requerido') { 
+        else if (mensajeAlerta === 'login_requerido') {
             Swal.fire({
                 icon: 'info',
                 title: '¡Inicia Sesión!',
@@ -287,7 +315,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 2. ALERTAS DE ERRORES (errorAlerta)
     if (typeof errorAlerta !== 'undefined') {
-        
+
         if (errorAlerta === 'registro_fallo') {
             Swal.fire({
                 icon: 'error',
@@ -295,7 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.',
                 confirmButtonColor: 'var(--color-principal, #000)'
             });
-        } 
+        }
         else if (errorAlerta === 'password_debil') {
             Swal.fire({
                 icon: 'warning',
@@ -311,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 text: 'Por favor, selecciona una talla antes de añadir al carrito.',
                 confirmButtonColor: 'var(--color-principal, #000)'
             });
-        } 
+        }
         else if (errorAlerta === 'no_stock') {
             Swal.fire({
                 icon: 'error',

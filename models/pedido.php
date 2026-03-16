@@ -83,8 +83,8 @@ class Pedido
 
     public function listarPedidos($idUsu)
     {
-        $sql = "SELECT * from pedidos where usuario_id = :idUdu order by fecha DESC";
-        $sentencia = $this->conexionDataBase->preprare($sql);
+        $sql = "SELECT * from pedidos where usuario_id = :idUsu order by fecha DESC";
+        $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idUsu" => $idUsu]);
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -92,10 +92,11 @@ class Pedido
 
     public function obtenerInfoPedido($idPedido)
     {
-        $sql = "SELECT lp.*, p.nombre AS producto_nombre, c.nombre AS color_nombre 
+        $sql = "SELECT lp.*, p.nombre AS producto_nombre, c.nombre AS color_nombre, ip.url_imagen 
                 FROM lineas_pedido lp
                 INNER JOIN productos p ON lp.producto_id = p.id
                 LEFT JOIN colores c ON lp.color_id = c.id
+                LEFT JOIN imagenes_productos ip ON p.id = ip.producto_id AND ip.color_id = c.id AND ip.es_principal = 1 
                 WHERE lp.pedido_id = :idPedido";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idPedido" => $idPedido]);
