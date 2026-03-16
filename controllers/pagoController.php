@@ -56,8 +56,7 @@ try {
     // 1. Cancelamos todo para no guardar datos a medias
     $conexion->rollBack();
     
-    // 2. Redirigimos al usuario con un mensaje de error
-die("ERROR CRÍTICO EN SQL: " . $e->getMessage());
+    header("Location: perfil.php?seccion=pedidos");
 }
 
 

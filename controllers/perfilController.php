@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . "/../includes/auth.php";
-
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
+require_once __DIR__ . "/../models/pedido.php";
 
 $db = new Database();
 $user = new Usuario($db->conectar());
+$pedido = new Pedido($db->conectar());
 
 $idUsuarioSession = $_SESSION["usuario_id"];
 
@@ -31,4 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }else{
     $datosUsu = $user->obtenerDatosUsu($idUsuarioSession);
 }
+
+$listaPedidos = $pedido->listarPedidos($_SESSION["usuario_id"]);
+
 ?>
