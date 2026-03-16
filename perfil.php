@@ -144,12 +144,19 @@ include './includes/header.php';
 
 
 
-                    <?php 
-                    
-                    }};
+                    <?php
 
-                
-            elseif ($seccion == 'puntos'): ?>
+                    $lineas = $pedido->obtenerInfoPedido($pedido["id"]);
+
+                    foreach ($lineas as $linea ) {
+                    
+                    }
+
+                    }
+                };
+                    ?>
+
+                    elseif ($seccion == 'puntos'): ?>
                         </div>
 
                         <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
