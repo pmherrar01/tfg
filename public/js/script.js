@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let promoModalElement = document.getElementById('promoModal')
 
-    if (miModal) {
+    if (promoModalElement) {
         setTimeout(function () {
             let miModal = new bootstrap.Modal(document.getElementById('promoModal'));
 

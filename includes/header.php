@@ -24,8 +24,8 @@
       <div class="collapse navbar-collapse" id="menuPrincipal">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
           <li class="nav-item"><a class="nav-link" href="../catalogo.php">Catalogo</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Hombre</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Mujer</a></li>
+          <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=1">Hombre</a></li>
+          <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=2">Mujer</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="#">Rebajas</a></li>
         </ul>
       </div>
@@ -35,7 +35,18 @@
       </a>
 
       <div class="d-flex gap-3 align-items-center order-lg-last ms-auto">
-        <a href="#" class="text-reset"><i class="bi bi-search"></i></a>
+       <div class="search-wrapper d-flex align-items-center position-relative">
+    <a href="#" class="text-reset search-icon-btn"><i class="bi bi-search fs-5"></i></a>
+    
+    <div class="search-input-container">
+        <input type="text" id="inputBuscador" class="form-control rounded-0 border-dark border-2 text-uppercase fw-bold" placeholder="BUSCAR PRENDA..." autocomplete="off">
+        
+        <div id="cajaResultados" class="position-absolute w-100 bg-white border border-dark border-2 shadow-lg d-none" style="top: 100%; left: 0; z-index: 1000; max-height: 400px; overflow-y: auto;">
+            </div>
+    </div>
+</div>
+
+        
 
         <?php if (!isset($_SESSION['usuario_id'])): ?>
           <a href="#" class="text-reset" data-bs-toggle="modal" data-bs-target="#modalUsuario">

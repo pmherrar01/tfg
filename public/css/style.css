@@ -724,4 +724,38 @@ footer a:hover {
     --svg-stroke: var(--cart-tick-color);
     stroke-dasharray: 10px;
     stroke-dashoffset: var(--cart-tick-offset);
+  }
+
+
+  /* =========================================
+   BUSCADOR EN VIVO ANIMADO (HEADER)
+   ========================================= */
+.search-wrapper {
+    height: 40px;
+    margin-right: 15px;
+}
+
+.search-input-container {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.4s ease-in-out;
+    position: absolute;
+    right: 30px; /* Se despliega hacia la izquierda desde el icono */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* El truco: Se abre al pasar el ratón por el icono, O cuando el usuario está escribiendo dentro (focus-within) */
+.search-wrapper:hover .search-input-container,
+.search-input-container:focus-within {
+    width: 250px;
+    opacity: 1;
+    overflow: visible; /* Vital para que se vean los resultados que cuelgan abajo */
+}
+
+/* Evitamos que el icono del buscador haga cosas raras al hacerle clic */
+.search-icon-btn {
+    z-index: 5;
+    position: relative;
 }
