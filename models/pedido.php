@@ -74,7 +74,46 @@ class Pedido{
     }
 
     public function crearPedido($idUsu, $total){
-        $sql = "INSER INTO pedidos";
+
+    try {
+        $sql = "INSERT INTO pedidos (usuario_id, total, estado, fecha) VALUES (:usuarioId, :total, 'Pendiente', NOW())";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia -> execute([
+            ":usuarioId" => $idUsu,
+            ":total" => $total
+            ]);
+
+            return $this->conexionDataBase->lastInsertId();
+
+    } catch (PDOException) {
+        return false;
+    }
+
+            
+    }
+
+
+    public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad){
+
+    try {
+        $sql = "INSERT INTO detalles_pedido (pedido_id, producto_id, color_id, talla, cantidad) VALUES (:idPedido, :idProducto, :idColor, :talla, :cantidad)";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([
+            ":idPedido" => $idPedido,
+            ":idProducto" => $idPrenda,
+            ":idColor" => $idColor,
+            ":talla" => $talla,
+            ":cantidad" => $cantidad
+        ]);
+
+        return true;
+    } catch (PDOException) {
+        return false;
+    }
+
+
+
     }
 
 }

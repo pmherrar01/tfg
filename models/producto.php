@@ -283,5 +283,24 @@ class Producto
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function actualizarStock($idPrenda, $idColor, $talla, $cantidad){
+
+    try {
+        $sql = "UPDATE producto_tallas SET stock = stock - :cantidad WHERE producto_id = :idPrenda, color_id = :idColor, talla = :talla";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([
+            ":cantidad" => $cantidad,
+            ":idPrenda" => $idPrenda,
+            ":idColor" => $idColor,
+            ":talla" => $talla
+        ]); 
+        return true;
+    } catch (PDOException) {
+        return false;
+    }
+
+    }
+
 }
 ?>
