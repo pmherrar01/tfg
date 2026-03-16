@@ -287,7 +287,7 @@ class Producto
     public function actualizarStock($idPrenda, $idColor, $talla, $cantidad){
 
     try {
-        $sql = "UPDATE producto_tallas SET stock = stock - :cantidad WHERE producto_id = :idPrenda, color_id = :idColor, talla = :talla";
+        $sql = "UPDATE producto_tallas SET stock = stock - :cantidad WHERE producto_id = :idPrenda AND color_id = :idColor AND talla = :talla";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([
             ":cantidad" => $cantidad,
