@@ -1,21 +1,23 @@
 <?php
 
-class Pedido{
+class Pedido
+{
     private $conexionDataBase;
     private $idPedido;
     private $idUsuario;
     private $total;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conexionDataBase = $db;
     }
 
-    
+
 
 
     /**
      * Get the value of idPedido
-     */ 
+     */
     public function getIdPedido()
     {
         return $this->idPedido;
@@ -25,7 +27,7 @@ class Pedido{
      * Set the value of idPedido
      *
      * @return  self
-     */ 
+     */
     public function setIdPedido($idPedido)
     {
         $this->idPedido = $idPedido;
@@ -35,7 +37,7 @@ class Pedido{
 
     /**
      * Get the value of idUsuario
-     */ 
+     */
     public function getIdUsuario()
     {
         return $this->idUsuario;
@@ -45,7 +47,7 @@ class Pedido{
      * Set the value of idUsuario
      *
      * @return  self
-     */ 
+     */
     public function setIdUsuario($idUsuario)
     {
         $this->idUsuario = $idUsuario;
@@ -55,7 +57,7 @@ class Pedido{
 
     /**
      * Get the value of total
-     */ 
+     */
     public function getTotal()
     {
         return $this->total;
@@ -65,7 +67,7 @@ class Pedido{
      * Set the value of total
      *
      * @return  self
-     */ 
+     */
     public function setTotal($total)
     {
         $this->total = $total;
@@ -73,31 +75,30 @@ class Pedido{
         return $this;
     }
 
-    public function crearPedido($idUsu, $total){
+    public function crearPedido($idUsu, $total, $direccionPedido)
+    {
 
-    try {
-        $sql = "INSERT INTO pedidos (usuario_id, total, estado, fecha) VALUES (:usuarioId, :total, 'Pendiente', NOW())";
+
+        $sql = "INSERT INTO pedidos (usuario_id, total, estado, fecha, direccion_envio) VALUES (:usuarioId, :total, 'Pendiente', NOW(), :direccion)";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia -> execute([
+        $sentencia->execute([
             ":usuarioId" => $idUsu,
-            ":total" => $total
-            ]);
+            ":total" => $total,
+            ":direccion" => $direccionPedido
+        ]);
 
-            return $this->conexionDataBase->lastInsertId();
-
-    } catch (PDOException) {
-        return false;
-    }
-
-            
+        return $this->conexionDataBase->lastInsertId();
     }
 
 
-    public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad){
 
-    try {
-        $sql = "INSERT INTO detalles_pedido (pedido_id, producto_id, color_id, talla, cantidad) VALUES (:idPedido, :idProducto, :idColor, :talla, :cantidad)";
+
+
+    public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad)
+    {
+
+        $sql = "INSERT INTO pedidos (usuario_id, total, estado, fecha, metodo_pago) VALUES (:usuarioId, :total, 'Pendiente', NOW(), 'Tarjeta')";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([
             ":idPedido" => $idPedido,
@@ -108,14 +109,5 @@ class Pedido{
         ]);
 
         return true;
-    } catch (PDOException) {
-        return false;
     }
-
-
-
-    }
-
 }
-
-?>
