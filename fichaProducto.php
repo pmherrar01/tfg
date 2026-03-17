@@ -147,8 +147,13 @@ require_once "controllers/fichaProductoController.php";
 
 <script>
     const tallasProducto = <?php echo $tallasJson; ?>;
+    
 </script>
+
+<script src="public/js/producto.js"></script>
 <?php
+
+
 
 include './includes/footer.php';
 

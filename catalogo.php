@@ -211,4 +211,6 @@ include './includes/header.php';
     </div>
 </main>
 
+<script src="public/js/catalogo.js"></script>
+
 <?php include './includes/footer.php'; ?>
