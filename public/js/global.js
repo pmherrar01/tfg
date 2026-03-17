@@ -20,30 +20,45 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 3000);
         }
 
-        inicializarBuscadorEnVivo();
+
 
     }
 
-    //funcion para el ajax de la lupa 
-    function inicializarBuscadorEnVivo() {
-        let prendaABuscar = document.getElementById("inputBuscador");
-        let contenedorResultados = document.getElementById("cajaResultados");
+    inicializarBuscadorEnVivo();
 
 
-        if (prendaABuscar && contenedorResultados) {
-            prendaABuscar.addEventListener("input", function () {
-                let texto = this.value.trim();
 
-                if (texto.length >= 2) {
+    let graciasCompra = document.getElementById("graciasCompra");
 
-                    fetch('controllers/apiBuscarController.php?q=' + texto)
-                        .then(respuesta => respuesta.json())
-                        .then(datos => {
+    if (graciasCompra) {
+        setTimeout(function () {
+            window.location.href = "perfil.php?seccion=pedidos";
+        }, 4000);
+    }
 
-                            if (datos.length > 0) {
-                                datos.forEach(producto => {
+});
 
-                                    let htmlProducto = `
+//funcion para el ajax de la lupa 
+function inicializarBuscadorEnVivo() {
+    let prendaABuscar = document.getElementById("inputBuscador");
+    let contenedorResultados = document.getElementById("cajaResultados");
+
+
+    if (prendaABuscar && contenedorResultados) {
+        prendaABuscar.addEventListener("input", function () {
+            let texto = this.value.trim();
+
+            if (texto.length >= 2) {
+
+                fetch('controllers/apiBuscarController.php?q=' + texto)
+                    .then(respuesta => respuesta.json())
+                    .then(datos => {
+
+                        if (datos.length > 0) {
+                            contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
+                            datos.forEach(producto => {
+
+                                let htmlProducto = `
                                         <a href="fichaProducto.php?id=${producto.id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
                                             <div class="d-flex align-items-center">
                                                 <img src="${producto.url_imagen}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 border border-dark border-1">
@@ -55,33 +70,26 @@ document.addEventListener("DOMContentLoaded", function () {
                                         </a>
                                         `;
 
-                                        contenedorResultados.innerHTML += htmlProducto;
-                                });
-                            } else {
-                                contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
+                                contenedorResultados.innerHTML += htmlProducto;
                             }
+                            );
 
-                        });
+                            contenedorResultados.classList.remove('d-none');
+                        } else {
+                            contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
+                        }
 
-                } else {
-                    contenedorResultados.innerHTML = "";
-                    contenedorResultados.classList.add('d-none');
+                    });
 
-                }
-            });
-        }
+            } else {
+                contenedorResultados.innerHTML = "";
+                contenedorResultados.classList.add('d-none');
 
+            }
+        });
     }
 
-    let graciasCompra = document.getElementById("graciasCompra");
-
-    if (graciasCompra) {
-        setTimeout(function () {
-            window.location.href = "perfil.php?seccion=pedidos";
-        }, 4000);
-    }
-
-});
+}
 
 
 // ==========================================
