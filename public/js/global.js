@@ -20,14 +20,58 @@ document.addEventListener("DOMContentLoaded", function () {
             }, 3000);
         }
 
+        inicializarBuscadorEnVivo();
+
     }
 
+    //funcion para el ajax de la lupa 
+    function inicializarBuscadorEnVivo() {
+        let prendaABuscar = document.getElementById("inputBuscador");
+        let contenedorResultados = document.getElementById("cajaResultados");
 
 
+        if (prendaABuscar && contenedorResultados) {
+            prendaABuscar.addEventListener("input", function () {
+                let texto = this.value.trim();
 
+                if (texto.length >= 2) {
 
+                    fetch('controllers/apiBuscarController.php?q=' + texto)
+                        .then(respuesta => respuesta.json())
+                        .then(datos => {
 
+                            if (datos.length > 0) {
+                                datos.forEach(producto => {
 
+                                    let htmlProducto = `
+                                        <a href="fichaProducto.php?id=${producto.id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
+                                            <div class="d-flex align-items-center">
+                                                <img src="${producto.url_imagen}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 border border-dark border-1">
+                                                <div>
+                                                    <span class="fw-bold d-block text-uppercase" style="font-size: 0.9rem;">${producto.nombre}</span>
+                                                    <span class="text-muted fw-bold">${producto.precio} €</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        `;
+
+                                        contenedorResultados.innerHTML += htmlProducto;
+                                });
+                            } else {
+                                contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
+                            }
+
+                        });
+
+                } else {
+                    contenedorResultados.innerHTML = "";
+                    contenedorResultados.classList.add('d-none');
+
+                }
+            });
+        }
+
+    }
 
     let graciasCompra = document.getElementById("graciasCompra");
 
