@@ -1,15 +1,32 @@
 // Esperamos a que la página cargue entera
 document.addEventListener("DOMContentLoaded", function () {
 
-    let promoModalElement = document.getElementById('promoModal')
+    let promoModalElement = document.getElementById('promoModal');
 
     if (promoModalElement) {
-        setTimeout(function () {
-            let miModal = new bootstrap.Modal(document.getElementById('promoModal'));
 
-            miModal.show();
-        }, 3000);
+        let horaLocalStore = localStorage.getItem("tiempoModal");
+
+        let horaActual = Date.now();
+
+        if (!horaLocalStore || (horaActual - horaLocalStore) > 18000000) {
+
+            setTimeout(function () {
+                let miModal = new bootstrap.Modal(document.getElementById('promoModal'));
+
+                miModal.show();
+
+                localStorage.setItem('tiempoModal', Date.now());
+            }, 3000);
+        }
+
     }
+
+
+
+
+
+
 
 
     let graciasCompra = document.getElementById("graciasCompra");
@@ -37,18 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: '¡Bienvenido a HERROR!',
                 text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.',
                 confirmButtonColor: 'var(--color-principal, #000)'
-            });
-        }
-        else if (mensajeAlerta === 'carrito_ok') {
-            Swal.fire({
-                icon: 'success',
-                title: '¡Añadido!',
-                text: 'El producto se ha añadido a tu carrito correctamente.',
-                confirmButtonColor: 'var(--color-principal, #000)',
-                timer: 2000,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end'
             });
         }
         else if (mensajeAlerta === 'login_requerido') {

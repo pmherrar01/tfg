@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
         ];
     }
 
-    header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&mensaje=carrito_ok");
+    header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id );
     exit;
 }
 

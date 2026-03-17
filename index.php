@@ -83,7 +83,7 @@ include './includes/header.php';
 
             <div class="collection-overlay d-flex flex-column align-items-center justify-content-center text-center">
                 <h3 class="display-4 fw-bold text-white text-uppercase collection-title">Hombre</h3>
-                <a href="#" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
+                <a href="catalogo.php?genero=1" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
             </div>
         </div>
 
@@ -92,7 +92,7 @@ include './includes/header.php';
 
             <div class="collection-overlay d-flex flex-column align-items-center justify-content-center text-center">
                 <h3 class="display-4 fw-bold text-white text-uppercase collection-title">Mujer</h3>
-                <a href="#" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
+                <a href="catalogo.php?genero=2" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
             </div>
         </div>
 
