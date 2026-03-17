@@ -35,24 +35,24 @@
       </a>
 
       <div class="d-flex gap-3 align-items-center order-lg-last ms-auto">
-       <div class="search-wrapper d-flex align-items-center position-relative">
-    <a href="#" class="text-reset search-icon-btn"><i class="bi bi-search fs-5"></i></a>
-    
-    <div class="search-input-container">
-        <input type="text" id="inputBuscador" class="form-control rounded-0 border-dark border-2 text-uppercase fw-bold" placeholder="BUSCAR PRENDA..." autocomplete="off">
-        
-        <div id="cajaResultados" class="position-absolute w-100 bg-white border border-dark border-2 shadow-lg d-none" style="top: 100%; left: 0; z-index: 1000; max-height: 400px; overflow-y: auto;">
+        <div class="search-wrapper d-flex align-items-center position-relative">
+          <a href="#" class="text-reset search-icon-btn"><i class="bi bi-search fs-5"></i></a>
+
+          <div class="search-input-container">
+            <input type="text" id="inputBuscador" class="form-control rounded-0 border-dark border-2 text-uppercase fw-bold" placeholder="BUSCAR PRENDA..." autocomplete="off">
+
+            <div id="cajaResultados" class="position-absolute w-100 bg-white border border-dark border-2 shadow-lg d-none" style="top: 100%; left: 0; z-index: 1000; max-height: 400px; overflow-y: auto;">
             </div>
-    </div>
-</div>
+          </div>
+        </div>
 
-        
 
-        <?php if (!isset($_SESSION['usuario_id'])): ?>
+
+        <?php if (!isset($_SESSION['usuario_id'])) { ?>
           <a href="#" class="text-reset" data-bs-toggle="modal" data-bs-target="#modalUsuario">
             <i class="bi bi-person"></i>
           </a>
-        <?php else: ?>
+        <?php } else { ?>
           <div class="dropdown">
             <a href="#" class="text-white text-decoration-none dropdown-toggle text-uppercase fw-bold" style="font-size: 0.85rem;" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-person-fill"></i> Hola, <?php echo $_SESSION['nombre']; ?>
@@ -66,7 +66,7 @@
               <li><a class="dropdown-item text-danger fw-bold" href="controllers/usuarioController.php?accion=logout">Cerrar Sesión</a></li>
             </ul>
           </div>
-        <?php endif; ?>
+        <?php }; ?>
         <a href="carrito.php" class="text-reset position-relative">
           <i class="bi bi-bag"></i>
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
