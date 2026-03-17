@@ -304,12 +304,12 @@ class Producto
 
 
     public function buscarPorNombre($nombreABuscar){
-        $sql = "SELECT p.*, MIN(i.url_imagen)
+        $sql = "SELECT p.*, MIN(i.url_imagen) AS url_imagen
         from productos p
-        INNER JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
+        LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
         WHERE p.activo = 1 AND p.nombre LIKE :nombreABuscar
-        LIMIT 5
-        ";
+        GROUP BY p.id
+        LIMIT 5";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":nombreABuscar" => "%" . $nombreABuscar . "%"]);
