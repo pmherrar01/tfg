@@ -150,6 +150,9 @@ require_once "controllers/fichaProductoController.php";
     
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin3.min.js"></script>
+
 <script src="public/js/producto.js"></script>
 <?php
 
