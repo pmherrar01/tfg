@@ -1,22 +1,24 @@
 <?php
 
-class favorito{
+class favorito
+{
     private $idUsu;
     private $idProducto;
     private $fechaAgregado;
     private $conexionDataBase;
 
-    public function __construct($db) {
+    public function __construct($db)
+    {
         $this->conexionDataBase = $db;
     }
-    
 
-    
+
+
 
 
     /**
      * Get the value of idUsu
-     */ 
+     */
     public function getIdUsu()
     {
         return $this->idUsu;
@@ -26,7 +28,7 @@ class favorito{
      * Set the value of idUsu
      *
      * @return  self
-     */ 
+     */
     public function setIdUsu($idUsu)
     {
         $this->idUsu = $idUsu;
@@ -36,7 +38,7 @@ class favorito{
 
     /**
      * Get the value of idProducto
-     */ 
+     */
     public function getIdProducto()
     {
         return $this->idProducto;
@@ -46,7 +48,7 @@ class favorito{
      * Set the value of idProducto
      *
      * @return  self
-     */ 
+     */
     public function setIdProducto($idProducto)
     {
         $this->idProducto = $idProducto;
@@ -56,7 +58,7 @@ class favorito{
 
     /**
      * Get the value of fechaAgregado
-     */ 
+     */
     public function getFechaAgregado()
     {
         return $this->fechaAgregado;
@@ -66,7 +68,7 @@ class favorito{
      * Set the value of fechaAgregado
      *
      * @return  self
-     */ 
+     */
     public function setFechaAgregado($fechaAgregado)
     {
         $this->fechaAgregado = $fechaAgregado;
@@ -74,7 +76,8 @@ class favorito{
         return $this;
     }
 
-    public function esFavorito($idUsu, $idPrenda){
+    public function esFavorito($idUsu, $idPrenda)
+    {
         try {
             $sql = "SELECT * from favoritos where usuario_id = :idUsu AND producto_id = :idPrenda";
             $sentencia = $this->conexionDataBase->prepare($sql);
@@ -82,16 +85,47 @@ class favorito{
                 ":idUsu" => $idUsu,
                 ":idPrenda" => $idPrenda
             ]);
-            
+
             $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
 
-            return(bool)$resultado;
-
+            return (bool)$resultado;
         } catch (PDOException) {
             return false;
         }
     }
 
-}
+    public function agregarFavorito($idUsu, $idPrenda)
+    {
 
-?>
+        try {
+            $sql = "INSERT INTO favoritos(usuario_id, producto_id) VALUES(:idUsu, :idPrenda)";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":idUsu" => $idUsu,
+                ":idPrenda" => $idPrenda
+            ]);
+
+            return true;
+        } catch (PDOException) {
+            return false;
+        }
+    }
+
+    public function eliminarFavoritos($idUsu, $idPrenda){
+
+            try {
+            $sql = "DELETE FROM favoritos WHERE usuario_id = :idUsu AND producto_id = :idPrenda";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":idUsu" => $idUsu,
+                ":idPrenda" => $idPrenda
+            ]);
+
+            return true;
+        } catch (PDOException) {
+            return false;
+        }
+
+    }
+
+}

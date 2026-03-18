@@ -33,7 +33,7 @@ include './includes/header.php';
                             ?>
                             <div class="col-6 col-md-3 position-relative">
 
-                                <button type="button" class="btn btn-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" onclick="this.querySelector('i').classList.toggle('bi-heart'); this.querySelector('i').classList.toggle('bi-heart-fill');">
+                                <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['idPrenda'] ?>">
                                     <i class="bi bi-heart"></i>
                                 </button>
 

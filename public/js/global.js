@@ -209,3 +209,59 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    document.addEventListener('click', function (e) {
+        let botonClick = e.target.closest('.btn-toggle-favorito');
+
+        if (botonClick) {
+            e.preventDefault();
+
+            let idPrenda = botonClick.getAttribute('data-id');
+
+            let icono = botonClick.querySelector('i');
+
+            let datos = new FormData();
+
+            datos.append('idPrenda', idPrenda);
+
+            fetch('controllers/apiFavoritosController.php', {
+                method: 'POST',
+                body: datos
+            })
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+
+                    if (datos.exito === false && datos.mensaje === 'noLogin') {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '¡Inicia Sesión!',
+                            text: 'Debes iniciar sesión para guardar tus prendas favoritas.',
+                            confirmButtonColor: 'var(--color-principal, #000)'
+                        });
+                        return; 
+                    }
+
+                    if (datos.exito === true) {
+
+                        if (datos.accion === 'agregado') {
+                            icono.classList.remove('bi-heart');
+                            icono.classList.add('bi-heart-fill', 'text-danger');
+                        }
+                        else if (datos.accion === 'eliminado') {
+                            icono.classList.remove('bi-heart-fill', 'text-danger');
+                            icono.classList.add('bi-heart');
+                        }
+                    }
+
+                })
+                .catch(error => {
+                    console.error("Error en la petición:", error);
+                });
+
+        }
+
+    });
+});
