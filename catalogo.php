@@ -179,7 +179,7 @@ include './includes/header.php';
                         <div class="col-6 col-md-4">
                             <div class="card product-card border-0 bg-transparent h-100 position-relative">
 
-                                <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['idPrenda'] ?>">
+                                <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['id'] ?>">
                                     <i class="bi bi-heart"></i>
                                 </button>
                                 

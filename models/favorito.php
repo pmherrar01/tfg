@@ -76,14 +76,15 @@ class favorito
         return $this;
     }
 
-    public function esFavorito($idUsu, $idPrenda)
+    public function esFavorito($idUsu, $idPrenda, $colorPrenda)
     {
         try {
-            $sql = "SELECT * from favoritos where usuario_id = :idUsu AND producto_id = :idPrenda";
+            $sql = "SELECT * from favoritos where usuario_id = :idUsu AND producto_id = :idPrenda AND color_id = :colorPrenda";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":idUsu" => $idUsu,
-                ":idPrenda" => $idPrenda
+                ":idPrenda" => $idPrenda,
+                ":colorPrenda" => $colorPrenda
             ]);
 
             $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
@@ -94,15 +95,16 @@ class favorito
         }
     }
 
-    public function agregarFavorito($idUsu, $idPrenda)
+    public function agregarFavorito($idUsu, $idPrenda, $colorPrenda)
     {
 
         try {
-            $sql = "INSERT INTO favoritos(usuario_id, producto_id) VALUES(:idUsu, :idPrenda)";
+            $sql = "INSERT INTO favoritos(usuario_id, producto_id) VALUES(:idUsu, :idPrenda) AND color_id = :colorPrenda";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":idUsu" => $idUsu,
-                ":idPrenda" => $idPrenda
+                ":idPrenda" => $idPrenda,
+                ":colorPrenda" => $colorPrenda
             ]);
 
             return true;
@@ -111,20 +113,27 @@ class favorito
         }
     }
 
-    public function eliminarFavoritos($idUsu, $idPrenda){
+    public function eliminarFavoritos($idUsu, $idPrenda, $colorPrenda){
 
             try {
-            $sql = "DELETE FROM favoritos WHERE usuario_id = :idUsu AND producto_id = :idPrenda";
+            $sql = "DELETE FROM favoritos WHERE usuario_id = :idUsu AND producto_id = :idPrenda AND color_id = :colorPrenda";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":idUsu" => $idUsu,
-                ":idPrenda" => $idPrenda
+                ":idPrenda" => $idPrenda,
+                ":colorPrenda" => $colorPrenda
             ]);
 
             return true;
         } catch (PDOException) {
             return false;
         }
+
+    }
+
+    public function listarFavoritos($idUsu){
+        $sql = "SELECT * from favoritos f  where f.usuario_id = :idUsu
+        LEFT JOJN "; //falta por terminar
 
     }
 

@@ -248,10 +248,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         if (datos.accion === 'agregado') {
                             icono.classList.remove('bi-heart');
-                            icono.classList.add('bi-heart-fill', 'text-danger');
+                            icono.classList.add('bi-heart-fill', );
                         }
                         else if (datos.accion === 'eliminado') {
-                            icono.classList.remove('bi-heart-fill', 'text-danger');
+                            icono.classList.remove('bi-heart-fill', );
                             icono.classList.add('bi-heart');
                         }
                     }

@@ -21,6 +21,7 @@ include './includes/header.php';
                     <div class="list-group list-group-flush rounded-0">
                         <a href="perfil.php?seccion=datos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'datos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Datos</a>
                         <a href="perfil.php?seccion=pedidos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'pedidos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Pedidos</a>
+                        <a href="perfil.php?seccion=favoritos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'favoritos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Favoritos</a>
                         <a href="perfil.php?seccion=puntos" class="list-group-item list-group-item-action p-3 fw-bold d-flex justify-content-between align-items-center <?php echo $seccion == 'puntos' ? 'bg-dark text-white' : 'text-muted'; ?>">
                             Puntos de Fidelidad
                             <span class="badge bg-success rounded-pill"><?php echo isset($datosUsu['puntos_fidelidad']) ? $datosUsu['puntos_fidelidad'] : '0'; ?> pts</span>
@@ -135,8 +136,8 @@ include './includes/header.php';
                                     <?php
                                     $lineas = $pedido->obtenerInfoPedido($pedidoTicket["id"]);
 
-                                    if (!empty($lineas)):
-                                        foreach ($lineas as $linea):
+                                    if (!empty($lineas)){
+                                        foreach ($lineas as $linea){
                                     ?>
                                             <li class="d-flex justify-content-between align-items-center text-muted small mb-3 text-uppercase fw-bold">
 
@@ -163,8 +164,8 @@ include './includes/header.php';
 
                                             </li>
                                     <?php
-                                        endforeach;
-                                    endif;
+                                        };
+                                    };
                                     ?>
                                 </ul>
 
@@ -185,7 +186,12 @@ include './includes/header.php';
                     </div>
                 </div>
 
+            <?php }elseif ($seccion == 'favoritos') { ?>
+
+            
+
             <?php }; ?>
+            
 
         </section>
     </div>
