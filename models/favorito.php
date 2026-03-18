@@ -99,7 +99,7 @@ class favorito
     {
 
         try {
-            $sql = "INSERT INTO favoritos(usuario_id, producto_id, color_id) VALUES(:idUsu, :idPrenda) AND color_id = :colorPrenda";
+            $sql = "INSERT INTO favoritos(usuario_id, producto_id, color_id) VALUES(:idUsu, :idPrenda, :colorPrenda)";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":idUsu" => $idUsu,
@@ -131,10 +131,23 @@ class favorito
 
     }
 
-    public function listarFavoritos($idUsu){
-        $sql = "SELECT * from favoritos f  where f.usuario_id = :idUsu
-        LEFT JOJN "; //falta por terminar
+public function listarFavoritos($idUsu){
+        try {
+            $sql = "SELECT p.id, p.nombre, p.precio, c.id AS color_id, c.nombre AS color_nombre, MIN(i.url_imagen) AS url_imagen
+                    FROM favoritos f
+                    INNER JOIN productos p ON f.producto_id = p.id
+                    INNER JOIN colores c ON f.color_id = c.id
+                    LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
+                    WHERE f.usuario_id = :idUsu
+                    GROUP BY p.id, c.id";
 
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([":idUsu" => $idUsu]);
+            
+            return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
 }

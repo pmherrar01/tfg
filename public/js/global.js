@@ -226,7 +226,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let datos = new FormData();
 
-            datos.append('idPrenda', idPrenda, 'idColor', idColor);
+            datos.append('idPrenda', idPrenda);
+            datos.append('idColor', idColor);
 
             fetch('controllers/apiFavoritosController.php', {
                 method: 'POST',
