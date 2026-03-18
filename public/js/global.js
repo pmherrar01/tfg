@@ -220,12 +220,13 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault();
 
             let idPrenda = botonClick.getAttribute('data-id');
+            let idColor = botonClick.getAttribute('data-color');
 
             let icono = botonClick.querySelector('i');
 
             let datos = new FormData();
 
-            datos.append('idPrenda', idPrenda);
+            datos.append('idPrenda', idPrenda, 'idColor', idColor);
 
             fetch('controllers/apiFavoritosController.php', {
                 method: 'POST',

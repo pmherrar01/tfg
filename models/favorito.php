@@ -99,7 +99,7 @@ class favorito
     {
 
         try {
-            $sql = "INSERT INTO favoritos(usuario_id, producto_id) VALUES(:idUsu, :idPrenda) AND color_id = :colorPrenda";
+            $sql = "INSERT INTO favoritos(usuario_id, producto_id, color_id) VALUES(:idUsu, :idPrenda) AND color_id = :colorPrenda";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ":idUsu" => $idUsu,
