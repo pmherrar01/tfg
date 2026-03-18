@@ -303,19 +303,20 @@ class Producto
     }
 
 
-    public function buscarPorNombre($nombreABuscar){
-        $sql = "SELECT p.*, MIN(i.url_imagen) AS url_imagen
-        from productos p
-        LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
-        WHERE p.activo = 1 AND p.nombre LIKE :nombreABuscar
-        GROUP BY p.id
-        LIMIT 5";
+public function buscarPorNombre($nombreABuscar){
+        $sql = "SELECT p.id, p.nombre, p.precio, c.id AS color_id, c.nombre AS color_nombre, MIN(i.url_imagen) AS url_imagen
+                FROM productos p
+                INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                INNER JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
+                WHERE p.activo = 1 AND p.nombre LIKE :nombreABuscar
+                GROUP BY p.id, c.id
+                LIMIT 6"; 
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":nombreABuscar" => "%" . $nombreABuscar . "%"]);
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
 }

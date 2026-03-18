@@ -17,22 +17,28 @@ include './includes/header.php';
 
     <div id="carruselNovedades" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-pause="hover">
         <div class="carousel-inner px-5">
-            
-            <?php 
+
+            <?php
             if (!empty($novedades)) {
-                $contador = 0; 
+                $contador = 0;
                 foreach ($novedades as $prenda) {
-                    
-                    if ($contador % 4 == 0) { 
+
+                    if ($contador % 4 == 0) {
                         $claseActive = ($contador == 0) ? 'active' : '';
             ?>
                         <div class="carousel-item <?= $claseActive ?>" data-bs-interval="3000">
                             <div class="row">
-            <?php 
-                    } 
-            ?>
-                                <div class="col-6 col-md-3">
-                                    <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>">
+                            <?php
+                        }
+                            ?>
+                            <div class="col-6 col-md-3">
+
+                                <button type="button" class="btn btn-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" onclick="this.querySelector('i').classList.toggle('bi-heart'); this.querySelector('i').classList.toggle('bi-heart-fill');">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+
+                                <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>">
+                                    
                                     <div class="card product-card border-0 bg-transparent">
                                         <div class="img-wrapper">
                                             <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>">
@@ -42,24 +48,24 @@ include './includes/header.php';
                                             <p class="card-text"><?= $prenda['precio'] ?> €</p>
                                         </div>
                                     </div>
-                                    </a>
-                                </div>
-            <?php 
-                    $contador++; 
-                    if ($contador % 4 == 0 || $contador == count($novedades)) { 
-            ?>
+                                </a>
+                            </div>
+                            <?php
+                            $contador++;
+                            if ($contador % 4 == 0 || $contador == count($novedades)) {
+                            ?>
                             </div>
                         </div>
-            <?php 
-                    }
-                } 
-            } else { 
-            ?>
+                <?php
+                            }
+                        }
+                    } else {
+                ?>
                 <div class="text-center py-5">
                     <p class="text-muted">Próximamente nuevas prendas...</p>
                 </div>
-            <?php 
-            } 
+            <?php
+                    }
             ?>
 
         </div>
@@ -118,18 +124,18 @@ include './includes/header.php';
 <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content rounded-0 border-dark border-3 shadow-lg">
-            
+
             <div class="modal-header border-bottom border-dark border-2 bg-white">
                 <h5 class="modal-title fw-bold text-uppercase" id="promoModalLabel">
-                     HERROR
+                    HERROR
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
-            
+
             <div class="modal-body p-5 text-center bg-light">
                 <h1 class="display-4 fw-bold text-uppercase mb-3">¡Consigue un <span class="text-decoration-underline">10%</span> de descuento!</h1>
                 <p class="text-muted fs-5 mb-4">Suscríbete a nuestra newsletter y recibe un código de descuento instantáneo para tu primera compra. ¡Únete a la familia!</p>
-                
+
                 <form id="formSuscripcion" class="mx-auto" style="max-width: 500px;">
                     <div class="input-group input-group-lg mb-2">
                         <input type="email" class="form-control rounded-0 border-dark border-2" placeholder="tu@email.com" required>

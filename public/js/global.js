@@ -55,11 +55,13 @@ function inicializarBuscadorEnVivo() {
                     .then(datos => {
 
                         if (datos.length > 0) {
-                            contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
+
+                            console.log(datos)
+                            contenedorResultados.innerHTML = '';
                             datos.forEach(producto => {
 
                                 let htmlProducto = `
-                                        <a href="fichaProducto.php?id=${producto.id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
+                                        <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
                                             <div class="d-flex align-items-center">
                                                 <img src="${producto.url_imagen}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 border border-dark border-1">
                                                 <div>
