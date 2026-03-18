@@ -187,16 +187,16 @@ include './includes/header.php';
                 </div>
 
             <?php } elseif ($seccion == 'favoritos') { ?>
-
+                
                 <h3 class="fw-bold text-uppercase mb-4">Mis Favoritos</h3>
-
+                
                 <?php if (empty($listaFavoritos)) { ?>
                     <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
                         <div>
                             <i class="bi bi-heart text-muted display-1 mb-3 d-block"></i>
                             <h4 class="fw-bold text-uppercase">Tu lista está vacía</h4>
                             <p class="text-muted">Aún no has guardado ninguna prenda. ¡Descubre nuestro catálogo!</p>
-                            <a href="catalogo.php" class="btn btn-dark rounded-0 px-4 mt-2">Ir al Catálogo</a>
+                            <a href="catalogo.php" class="btn btn-outline-dark rounded-0 px-5 py-2 text-uppercase fw-bold mt-3">Ir al Catálogo</a>
                         </div>
                     </div>
                 <?php } else { ?>
@@ -204,14 +204,14 @@ include './includes/header.php';
                         <?php foreach ($listaFavoritos as $prenda) { ?>
                             <div class="col-6 col-md-4">
                                 <div class="card product-card border-0 bg-transparent h-100 position-relative">
-
+                                    
                                     <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['id'] ?>" data-color="<?= $prenda['color_id'] ?>">
                                         <i class="bi bi-heart-fill"></i>
                                     </button>
 
                                     <a href="fichaProducto.php?idPrenda=<?= $prenda['id'] ?>&color=<?= $prenda['color_id'] ?>" class="text-decoration-none text-dark">
                                         <div class="img-wrapper">
-                                            <img src="<?= $prenda['url_imagen'] ?: 'public/img/fondo.jpg' ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>">
+                                            <img src="<?= !empty($prenda['url_imagen']) ? $prenda['url_imagen'] : 'public/img/fondo.jpg' ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>">
                                         </div>
                                         <div class="card-body text-center px-0">
                                             <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1"><?= $prenda['nombre'] ?></h5>
@@ -219,14 +219,14 @@ include './includes/header.php';
                                             <p class="card-text fw-bold"><?= $prenda['precio'] ?> €</p>
                                         </div>
                                     </a>
+
                                 </div>
                             </div>
-
+                        <?php } ?>
                     </div>
-        <?php }
-                    }
-                } ?>
+                <?php } ?>
 
+            <?php }; ?>
 
 
         </section>

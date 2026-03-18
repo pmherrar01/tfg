@@ -5,12 +5,10 @@ require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/favorito.php";
 
-$favoritoModel = new Favorito($db->conectar());
-$listaFavoritos = $favoritoModel->listarFavoritos($_SESSION['usuario_id']);
-
 $db = new Database();
 $user = new Usuario($db->conectar());
 $pedido = new Pedido($db->conectar());
+$favoritoModel = new Favorito($db->conectar());
 
 $idUsuarioSession = $_SESSION["usuario_id"];
 
@@ -33,11 +31,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         exit;
     }
 
-}else{
+} else {
     $datosUsu = $user->obtenerDatosUsu($idUsuarioSession);
 }
 
 $listaPedidos = $pedido->listarPedidos($_SESSION["usuario_id"]);
-$listaFavoritos;
-
+// ¡Aquí cargamos las prendas favoritas reales!
+$listaFavoritos = $favoritoModel->listarFavoritos($_SESSION["usuario_id"]);
 ?>
