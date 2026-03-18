@@ -9,7 +9,6 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-require_once __DIR__ . "/../includes/auth.php";
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../models/favorito.php';
 
@@ -18,7 +17,7 @@ $idPrenda = isset($_POST["idPrenda"]) ? $_POST["idPrenda"] : 0;
 $colorPrenda = isset($_POST["idColor"]) ? $_POST["idColor"] : 0;
 
 if($idPrenda <= 0 || $colorPrenda <= 0){
-        echo json_encode(["exito" => false, "mensaje" => "noLogin"]);
+        echo json_encode(["exito" => false, "mensaje" => "id_invalido"]);
     exit;
 }
 
