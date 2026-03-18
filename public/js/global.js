@@ -248,14 +248,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     if (datos.exito === true) {
 
+                        let comboMemoria = idPrenda + '-' + idColor;
+
                         if (datos.accion === 'agregado') {
                             icono.classList.remove('bi-heart');
                             icono.classList.add('bi-heart-fill');
+
+                            if (typeof listaFavoritosJS !== 'undefined') {
+                                listaFavoritosJS.push(comboMemoria);
+                            }
                         }
                         else if (datos.accion === 'eliminado') {
 
                             icono.classList.remove('bi-heart-fill');
                             icono.classList.add('bi-heart');
+
+                            if (typeof listaFavoritosJS !== 'undefined') {
+                                let indice = listaFavoritosJS.indexOf(comboMemoria);
+                                if (indice !== -1) {
+                                    listaFavoritosJS.splice(indice, 1);
+                                }
+                            }
 
                             if (window.location.href.includes('seccion=favoritos')) {
 

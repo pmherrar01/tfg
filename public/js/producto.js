@@ -108,6 +108,34 @@ function seleccionarColor(colorId, elementoClicado) {
         inputColor.value = colorId;
     }
 
+    // ==========================================
+    // MAGIA PARA EL BOTÓN DE FAVORITOS
+    // ==========================================
+    
+    // 1. Buscamos el botón de favoritos en el HTML
+    let btnFav = document.getElementById('btn-favorito-ficha');
+    
+    if (btnFav) {
+        // 2. Le cambiamos el "data-color" fantasma por el color que acabas de clicar
+        btnFav.setAttribute('data-color', colorId);
+
+        // 3. Comprobamos si este nuevo color está en la memoria de favoritos
+        let idPrenda = btnFav.getAttribute('data-id');
+        let comboActual = idPrenda + '-' + colorId; // Ej: "1-3"
+        let iconoCorazon = btnFav.querySelector('i');
+        
+        if (typeof listaFavoritosJS !== 'undefined') {
+            if (listaFavoritosJS.includes(comboActual)) {
+                // Si es favorito, rellenamos el corazón
+                iconoCorazon.classList.remove('bi-heart');
+                iconoCorazon.classList.add('bi-heart-fill');
+            } else {
+                // Si no es favorito, vaciamos el corazón
+                iconoCorazon.classList.remove('bi-heart-fill');
+                iconoCorazon.classList.add('bi-heart');
+            }
+        }
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function () {

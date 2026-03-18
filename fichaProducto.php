@@ -172,6 +172,7 @@ include './includes/header.php';
 
 <script>
     const tallasProducto = <?php echo $tallasJson; ?>;
+    const listaFavoritosJS = <?php echo json_encode(isset($arrayFavoritos) ? $arrayFavoritos : []); ?>;
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
