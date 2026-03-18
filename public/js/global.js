@@ -243,18 +243,39 @@ document.addEventListener("DOMContentLoaded", function () {
                             text: 'Debes iniciar sesión para guardar tus prendas favoritas.',
                             confirmButtonColor: 'var(--color-principal, #000)'
                         });
-                        return; 
+                        return;
                     }
 
                     if (datos.exito === true) {
 
                         if (datos.accion === 'agregado') {
                             icono.classList.remove('bi-heart');
-                            icono.classList.add('bi-heart-fill' );
+                            icono.classList.add('bi-heart-fill');
                         }
                         else if (datos.accion === 'eliminado') {
+
                             icono.classList.remove('bi-heart-fill');
                             icono.classList.add('bi-heart');
+
+                            if (window.location.href.includes('seccion=favoritos')) {
+
+                                let columnaContenedora = botonClick.closest('.col-6');
+
+                                if (columnaContenedora) {
+                                    columnaContenedora.style.transition = 'all 0.6s ease';
+                                    columnaContenedora.style.opacity = '0';
+                                    columnaContenedora.style.transform = 'scale(0.5) translateY(50px)';
+
+                                    setTimeout(function () {
+                                        columnaContenedora.remove();
+                                        let prendasRestantes = document.querySelectorAll('.btn-toggle-favorito').length;
+
+                                        if (prendasRestantes === 0) {
+                                            window.location.reload();
+                                        }
+                                    }, 600);
+                                }
+                            }
                         }
                     }
 

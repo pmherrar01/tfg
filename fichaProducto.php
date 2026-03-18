@@ -2,6 +2,8 @@
 
 require_once "controllers/fichaProductoController.php";
 
+include './includes/header.php';
+
 ?>
 
 <main class="container my-5 py-5 mt-5">
@@ -16,7 +18,6 @@ require_once "controllers/fichaProductoController.php";
                     $cont = 0;
                     foreach ($galeria as $img) {
                         $claseActiva = ($cont == 0) ? 'borde-activo' : '';
-                        // Por si alguna imagen antigua no tiene color asignado aún, evitamos errores
                         $colorId = isset($img['color_id']) ? $img['color_id'] : '';
                     ?>
                         <img src="<?php echo $img['url_imagen']; ?>"
@@ -93,7 +94,17 @@ require_once "controllers/fichaProductoController.php";
                             <?php } ?>
                         </div>
                     </div>
-                <?php } ?>
+                <?php }
+                $iconoCorazon = 'bi-heart';
+                if (isset($arrayFavoritos) && in_array($prenda['id'] . '-' . $prenda['color_id'], $arrayFavoritos)) {
+                    $iconoCorazon = 'bi-heart-fill';
+                } ?>
+
+
+                <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['id'] ?>" data-color="<?= $prenda['color_id'] ?>">
+                    <i class="bi <?= $iconoCorazon ?>"></i>
+                </button>
+
 
                 <button type="submit" class="add-to-cart mt-4 mb-2">
                     <span>Añadir al Carrito</span>
@@ -148,10 +159,9 @@ require_once "controllers/fichaProductoController.php";
 
 <script>
     const tallasProducto = <?php echo $tallasJson; ?>;
-    
 </script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.4.0/gsap.min.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin3.min.js"></script>
 
 <script src="public/js/producto.js"></script>
