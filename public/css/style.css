@@ -37,6 +37,16 @@ a{
 }
 
 /* --- FOOTER --- */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
+main {
+    flex: 1; 
+}
+
 footer {
   background-color: var(--color-principal);
   color: var(--color-detalle);

@@ -111,10 +111,10 @@ function seleccionarColor(colorId, elementoClicado) {
     // ==========================================
     // MAGIA PARA EL BOTÓN DE FAVORITOS
     // ==========================================
-    
+
     // 1. Buscamos el botón de favoritos en el HTML
     let btnFav = document.getElementById('btn-favorito-ficha');
-    
+
     if (btnFav) {
         // 2. Le cambiamos el "data-color" fantasma por el color que acabas de clicar
         btnFav.setAttribute('data-color', colorId);
@@ -123,7 +123,7 @@ function seleccionarColor(colorId, elementoClicado) {
         let idPrenda = btnFav.getAttribute('data-id');
         let comboActual = idPrenda + '-' + colorId; // Ej: "1-3"
         let iconoCorazon = btnFav.querySelector('i');
-        
+
         if (typeof listaFavoritosJS !== 'undefined') {
             if (listaFavoritosJS.includes(comboActual)) {
                 // Si es favorito, rellenamos el corazón
@@ -261,3 +261,60 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
         });
     });
 }
+
+
+
+//funcion para almacenar en el localstorage las prendas vistas reciente
+
+function guardarPrendasRecientes() {
+
+    const mainProducto = document.getElementById("mainProducto");
+
+
+//objeto de prenda reciente
+if (!mainProducto) return;
+
+
+    let prendaActual = {
+        id: mainProducto.dataset.id,
+        nombre: mainProducto.dataset.nombre,
+        precio: mainProducto.dataset.precio,
+        imagen: mainProducto.dataset.imagen,
+        colorPrenda: mainProducto.dataset.colorPrenda
+    }
+
+
+
+    console.log("Prenda capturada: ", prendaActual);
+
+    let aPrendasRecientes = [];
+    let datosLocal = localStorage.getItem('prendasRecientes');
+
+    try {
+        if (datosLocal) {
+             aPrendasRecientes = JSON.parse(datosLocal);
+        }
+
+    } catch (error) {
+         aPrendasRecientes = [];
+    }
+
+    aPrendasRecientes = aPrendasRecientes.filter(function (prendaGuardada) {
+        let prendaIgual = ( prendaGuardada.id === prendaActual.id && prendaGuardada.colorPrenda !== prendaActual.colorPrenda);
+
+        return !prendaIgual;
+    });
+
+    aPrendasRecientes.unshift(prendaActual);
+
+    if(aPrendasRecientes.length > 8){
+        aPrendasRecientes.pop();
+    }
+
+    localStorage.setItem('prendasRecientes', JSON.stringify(aPrendasRecientes));
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    guardarPrendasRecientes();
+});
