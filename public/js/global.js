@@ -60,17 +60,58 @@ function inicializarBuscadorEnVivo() {
                             contenedorResultados.innerHTML = '';
                             datos.forEach(producto => {
 
-                                let htmlProducto = `
-                                        <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
-                                            <div class="d-flex align-items-center">
-                                                <img src="${producto.url_imagen}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 border border-dark border-1">
-                                                <div>
-                                                    <span class="fw-bold d-block text-uppercase" style="font-size: 0.9rem;">${producto.nombre}</span>
-                                                    <span class="text-muted fw-bold">${producto.precio} €</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        `;
+                                // 1. Comprobamos si la prenda está en favoritos (Si existe el array en la página actual)
+        let iconoCorazon = 'bi-heart';
+        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.color)) {
+            iconoCorazon = 'bi-heart-fill';
+        }
+
+        // 2. Inyectamos la tarjeta con el NUEVO diseño, bordes rectos (rounded-0) y sin enlaces rotos
+        htmlAcumulado += `
+            <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
+                <div class="card product-card border-0 bg-transparent position-relative">
+                    
+                    <div class="img-wrapper position-relative overflow-hidden">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                        </a>
+                        
+                        <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
+                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id})"></button>
+                            </div>
+                            <div id="contenedor-botones-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body text-center px-0 pb-1 mt-2">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                            <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${prenda.nombre}</h5>
+                            <p class="card-text mb-0">${prenda.precio} €</p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
+                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
+                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
+                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.color})">
+                        Añadir <i class="bi bi-plus-lg ms-1"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
+                            style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
+                            data-id="${prenda.id}" 
+                            data-color="${prenda.color}"
+                            onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
+                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
+                        <i class="bi ${iconoCorazon}"></i>
+                    </button>
+                </div>
+            </div>
+        `;
 
                                 contenedorResultados.innerHTML += htmlProducto;
                             }
@@ -335,20 +376,56 @@ function pintarPrendasRecientes() {
             let activeClass = index === 0 ? "active" : ""; // Solo el primer grupo lleva la clase 'active'
             htmlAcumulado += `<div class="carousel-item ${activeClass}" data-bs-interval="3000"><div class="row">`;
         }
+// 1. Comprobamos si la prenda está en favoritos (Si existe el array en la página actual)
+        let iconoCorazon = 'bi-heart';
+        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.color)) {
+            iconoCorazon = 'bi-heart-fill';
+        }
 
+        // 2. Inyectamos la tarjeta con el NUEVO diseño, bordes rectos (rounded-0) y sin enlaces rotos
         htmlAcumulado += `
-            <div class="col-6 col-md-3 position-relative">
-                <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark">
-                    <div class="card product-card border-0 bg-transparent">
-                        <div class="img-wrapper">
-                            <img src="${prenda.imagen}" class="card-img-top" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
-                        </div>
-                        <div class="card-body text-center px-0">
-                            <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1 text-truncate">${prenda.nombre}</h5>
-                            <p class="card-text">${prenda.precio} €</p>
+            <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
+                <div class="card product-card border-0 bg-transparent position-relative">
+                    
+                    <div class="img-wrapper position-relative overflow-hidden">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                        </a>
+                        
+                        <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
+                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id})"></button>
+                            </div>
+                            <div id="contenedor-botones-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
+                            </div>
                         </div>
                     </div>
-                </a>
+                    
+                    <div class="card-body text-center px-0 pb-1 mt-2">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                            <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${prenda.nombre}</h5>
+                            <p class="card-text mb-0">${prenda.precio} €</p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
+                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
+                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
+                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.color})">
+                        Añadir <i class="bi bi-plus-lg ms-1"></i>
+                    </button>
+
+                    <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
+                            style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
+                            data-id="${prenda.id}" 
+                            data-color="${prenda.color}"
+                            onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
+                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
+                        <i class="bi ${iconoCorazon}"></i>
+                    </button>
+                </div>
             </div>
         `;
 
@@ -417,28 +494,51 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
 
 function cerrarOverlayTallas(event, idPrenda) {
     event.preventDefault();
-    event.stopPropagation();
+
     const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
     if(overlay) overlay.classList.add('d-none');
 }
 
 function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
     event.preventDefault();
-    event.stopPropagation();
+
     
-    // Creamos un formulario fantasma igual que el de la fichaProducto
-    let form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'controllers/carritoController.php'; // Tu controlador de siempre
+    // 1. Preparamos los datos para enviarlos por debajo de la mesa (AJAX)
+    let datos = new FormData();
+    datos.append('accion', 'agregar');
+    datos.append('idPrenda', idPrenda);
+    datos.append('color_id', idColor);
+    datos.append('talla', talla);
 
-    form.innerHTML = `
-        <input type="hidden" name="accion" value="agregar">
-        <input type="hidden" name="idPrenda" value="${idPrenda}">
-        <input type="hidden" name="color_id" value="${idColor}">
-        <input type="hidden" name="talla" value="${talla}">
-    `;
+    // 2. Cerramos el menú de tallas visualmente de inmediato
+    cerrarOverlayTallas(event, idPrenda);
 
-    // Lo adjuntamos al cuerpo de la web y lo enviamos
-    document.body.appendChild(form);
-    form.submit();
+    // 3. Enviamos la petición al controlador sin recargar la página
+    fetch('controllers/carritoController.php', {
+        method: 'POST',
+        body: datos
+    })
+    .then(respuesta => {
+        // Como el controlador devuelve una redirección, fetch la procesa en silencio.
+        // ¡La pantalla del usuario NO se mueve!
+        
+        // 4. Mostramos una alerta elegante de éxito
+        Swal.fire({
+            icon: 'success',
+            title: '¡Añadido al carrito!',
+            text: `Talla ${talla} añadida correctamente.`,
+            confirmButtonColor: 'var(--color-principal, #000)',
+            timer: 2000, // Se cierra sola en 2 segundos
+            showConfirmButton: false
+        });
+    })
+    .catch(error => {
+        console.error("Error al añadir:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Ups...',
+            text: 'Hubo un problema al añadir la prenda.',
+            confirmButtonColor: 'var(--color-principal, #000)'
+        });
+    });
 }
