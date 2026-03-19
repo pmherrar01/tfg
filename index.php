@@ -33,21 +33,18 @@ include './includes/header.php';
                             ?>
                             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
 
-    <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>" class="text-decoration-none text-dark">
+    <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda["color_id"] ?>" class="text-decoration-none text-dark">
         <div class="card product-card border-0 bg-transparent position-relative">
             <div class="img-wrapper position-relative overflow-hidden">
                 <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>" style="height: 380px; object-fit: cover;">
                 
-                <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center" style="backdrop-filter: blur(8px); transition: all 0.3s ease;">
+                <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
                         <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, <?= $prenda['id'] ?>)"></button>
                     </div>
                     
                     <div id="contenedor-botones-<?= $prenda['id'] ?>" class="d-flex justify-content-center flex-wrap gap-2">
-                        <button class="btn btn-outline-dark rounded-0 px-3 py-1 fw-bold">S</button>
-                        <button class="btn btn-outline-dark rounded-0 px-3 py-1 fw-bold">M</button>
-                        <button class="btn btn-outline-dark rounded-0 px-3 py-1 fw-bold" disabled>L</button>
                     </div>
                 </div>
             </div>
@@ -61,9 +58,9 @@ include './includes/header.php';
 
     <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
         
-        <button type="button" class="btn btn-dark rounded-0 flex-grow-1 text-uppercase fw-bold" 
+        <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
                 style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                onclick="abrirOverlayTallas(event, <?= $prenda['id'] ?>)">
+                onclick="abrirOverlayTallas(event, <?= $prenda['id'] ?>, <?= $prenda['color_id'] ?>)">
             Añadir <i class="bi bi-plus-lg ms-1"></i>
         </button>
 

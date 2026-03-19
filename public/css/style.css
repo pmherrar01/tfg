@@ -769,3 +769,34 @@ footer a:hover {
     z-index: 5;
     position: relative;
 }
+
+
+/* --- ESTILOS AÑADIR RÁPIDO (QUICK ADD) --- */
+
+/* Botón corporativo (Usa tu variable de color) */
+.btn-principal {
+    background-color: var(--color-principal, #5c3a21);
+    color: #ffffff;
+    border: 2px solid var(--color-principal, #5c3a21);
+    transition: all 0.3s ease;
+}
+
+.btn-principal:hover {
+    background-color: transparent;
+    color: var(--color-principal, #5c3a21);
+}
+
+/* El fondo borroso del menú de tallas */
+.overlay-tallas {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px); /* Para Safari */
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Talla sin stock (Tachada y transparente) */
+.talla-agotada {
+    text-decoration: line-through;
+    opacity: 0.4;
+    cursor: not-allowed !important;
+}

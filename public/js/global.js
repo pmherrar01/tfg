@@ -364,3 +364,79 @@ function pintarPrendasRecientes() {
         pintarPrendasRecientes();
     });
 
+// ==========================================
+// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS
+// ==========================================
+
+function abrirOverlayTallas(event, idPrenda, idColor) {
+    event.preventDefault(); // Evitamos que la página salte arriba
+    
+    const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
+    const contenedor = document.getElementById(`contenedor-botones-${idPrenda}`);
+    
+    if(!overlay || !contenedor) return;
+
+    // Quitamos el d-none y ponemos un mensaje de carga
+    overlay.classList.remove('d-none');
+    contenedor.innerHTML = '<span class="small fw-bold text-muted mt-2">Cargando tallas...</span>';
+
+    // Preguntamos al servidor por las tallas de ese color
+    fetch(`controllers/apiTallasController.php?idPrenda=${idPrenda}&idColor=${idColor}`)
+        .then(respuesta => respuesta.json())
+        .then(tallas => {
+            contenedor.innerHTML = ''; // Limpiamos el "Cargando..."
+            
+            if(tallas.length === 0) {
+                contenedor.innerHTML = '<span class="small text-danger fw-bold mt-2">Agotado</span>';
+                return;
+            }
+
+            // Dibujamos los botones de talla
+            tallas.forEach(tallaObj => {
+                let btn = document.createElement('button');
+                btn.className = 'btn btn-outline-dark rounded-0 px-3 py-1 fw-bold';
+                btn.textContent = tallaObj.talla;
+
+                if(tallaObj.stock <= 0) {
+                    // Si no hay stock, le metemos la clase del CSS que la tacha
+                    btn.classList.add('talla-agotada');
+                    btn.disabled = true;
+                } else {
+                    // Si hay stock, al hacer clic, al carrito!
+                    btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla);
+                }
+                
+                contenedor.appendChild(btn);
+            });
+        })
+        .catch(error => {
+            console.error("Error cargando tallas:", error);
+            contenedor.innerHTML = '<span class="small text-danger mt-2">Error al cargar</span>';
+        });
+}
+
+function cerrarOverlayTallas(event, idPrenda) {
+    event.preventDefault();
+    const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
+    if(overlay) overlay.classList.add('d-none');
+}
+
+function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
+    event.preventDefault();
+    
+    // Creamos un formulario fantasma igual que el de la fichaProducto
+    let form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'controllers/carritoController.php'; // Tu controlador de siempre
+
+    form.innerHTML = `
+        <input type="hidden" name="accion" value="agregar">
+        <input type="hidden" name="idPrenda" value="${idPrenda}">
+        <input type="hidden" name="color_id" value="${idColor}">
+        <input type="hidden" name="talla" value="${talla}">
+    `;
+
+    // Lo adjuntamos al cuerpo de la web y lo enviamos
+    document.body.appendChild(form);
+    form.submit();
+}
