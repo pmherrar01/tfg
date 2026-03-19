@@ -342,7 +342,7 @@ function pintarPrendasRecientes() {
                     </div>
 
                     <div class="card-body px-1 py-3 text-start">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark stretched-link">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark stretched-link">
                             <h6 class="text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.9rem; letter-spacing: 1px;">
                                 ${prenda.nombre}
                             </h6>
@@ -354,7 +354,7 @@ function pintarPrendasRecientes() {
             </div>
         `;
 
-        seccionRecientes.innerHTML += htmlPrendaReciente;
+        carruselPrendas.innerHTML += htmlPrendaReciente;
     });
 
 }
@@ -362,3 +362,15 @@ function pintarPrendasRecientes() {
     document.addEventListener("DOMContentLoaded", function () {
         pintarPrendasRecientes();
     });
+
+
+    // Función para mover el carrusel de prendas recientes con las flechas
+function moverCarruselRecientes(distancia) {
+    const carrusel = document.getElementById('carrusel-recientes');
+    if (carrusel) {
+        carrusel.scrollBy({
+            left: distancia,
+            behavior: 'smooth' // Movimiento suave y elegante
+        });
+    }
+}
