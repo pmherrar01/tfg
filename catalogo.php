@@ -219,4 +219,10 @@ include './includes/header.php';
 
 <script src="public/js/catalogo.js"></script>
 
-<?php include './includes/footer.php'; ?>
+<?php
+
+include './includes/prendasRecientes.php';
+
+include './includes/footer.php';
+
+?>

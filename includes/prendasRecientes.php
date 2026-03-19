@@ -1,24 +1,18 @@
-<section id="seccionRecientes" class="container my-5 d-none position-relative">
-    <h3 class="fw-bold text-uppercase mb-4" style="letter-spacing: 2px;">Visto Recientemente</h3>
-    
-    <button class="btn position-absolute top-50 start-0 translate-middle-y bg-white rounded-circle shadow-sm d-none d-md-block" 
-            style="width: 45px; height: 45px; z-index: 10; margin-left: -20px;" 
-            onclick="moverCarruselRecientes(-300)">
-        <i class="bi bi-chevron-left fs-5"></i>
-    </button>
+<section id="seccionRecientes" class="container my-5 py-5 d-none overflow-hidden">
+    <h3 class="text-center fw-bold text-uppercase mb-5" style="letter-spacing: 4px;">Visto Recientemente</h3>
 
-    <div id="carruselRecientes" class="row flex-row flex-nowrap overflow-auto pb-3" style="scrollbar-width: none; scroll-behavior: smooth;">
+    <div id="carruselPrendasRecientes" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-pause="hover">
+        
+        <div class="carousel-inner px-5" id="carruselRecientesInner">
         </div>
 
-    <button class="btn position-absolute top-50 end-0 translate-middle-y bg-white rounded-circle shadow-sm d-none d-md-block" 
-            style="width: 45px; height: 45px; z-index: 10; margin-right: -20px;" 
-            onclick="moverCarruselRecientes(300)">
-        <i class="bi bi-chevron-right fs-5"></i>
-    </button>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carruselPrendasRecientes" data-bs-slide="prev" style="width: 5%;">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carruselPrendasRecientes" data-bs-slide="next" style="width: 5%;">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
 </section>
-
-<style>
-    #carrusel-recientes::-webkit-scrollbar {
-        display: none;
-    }
-</style>

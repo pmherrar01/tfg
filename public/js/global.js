@@ -304,73 +304,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function pintarPrendasRecientes() {
-    const carruselPrendas = document.getElementById('carruselRecientes');
+    const carruselInner = document.getElementById('carruselRecientesInner');
     const seccionRecientes = document.getElementById('seccionRecientes');
 
-    if(!carruselPrendas || !seccionRecientes) return;
+    if(!carruselInner || !seccionRecientes) return;
 
-  let aPrendasRecientes = [];
-  let datosLocal = localStorage.getItem('prendasRecientes');
+    let aPrendasRecientes = [];
+    let datosLocal = localStorage.getItem('prendasRecientes');
 
-  if(datosLocal){
-    try {
-           aPrendasRecientes = JSON.parse(datosLocal);
-    } catch (error) {
-         aPrendasRecientes = [];
+    if(datosLocal){
+        try {
+            aPrendasRecientes = JSON.parse(datosLocal);
+        } catch (error) {
+            aPrendasRecientes = [];
+        }
     }
-}
+
     if(aPrendasRecientes.length > 0){
         seccionRecientes.classList.remove("d-none");
-    }else{
+    } else {
         return;
     }
 
-    carruselPrendas.innerHTML = "";
+    carruselInner.innerHTML = "";
+    let htmlAcumulado = "";
 
-    aPrendasRecientes.forEach(prenda => {
-        let htmlPrendaReciente = `
-            <div class="col-8 col-sm-6 col-md-4 col-lg-3 flex-shrink-0">
-                <div class="card h-100 border-0 rounded-0 bg-transparent">
-                    
-                    <div class="position-relative overflow-hidden border border-1 border-dark rounded-0">
-                        <img src="${prenda.imagen}" 
-                             class="w-100 rounded-0" 
-                             alt="${prenda.nombre}" 
-                             style="height: 320px; object-fit: cover; transition: transform 0.4s ease;" 
-                             onmouseover="this.style.transform='scale(1.05)'" 
-                             onmouseout="this.style.transform='scale(1)'">
+    aPrendasRecientes.forEach((prenda, index) => {
+        
+        if (index % 4 === 0) {
+            let activeClass = index === 0 ? "active" : ""; // Solo el primer grupo lleva la clase 'active'
+            htmlAcumulado += `<div class="carousel-item ${activeClass}" data-bs-interval="3000"><div class="row">`;
+        }
+
+        htmlAcumulado += `
+            <div class="col-6 col-md-3 position-relative">
+                <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark">
+                    <div class="card product-card border-0 bg-transparent">
+                        <div class="img-wrapper">
+                            <img src="${prenda.imagen}" class="card-img-top" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                        </div>
+                        <div class="card-body text-center px-0">
+                            <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1 text-truncate">${prenda.nombre}</h5>
+                            <p class="card-text">${prenda.precio} €</p>
+                        </div>
                     </div>
-
-                    <div class="card-body px-1 py-3 text-start">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark stretched-link">
-                            <h6 class="text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.9rem; letter-spacing: 1px;">
-                                ${prenda.nombre}
-                            </h6>
-                            <span class="fs-6 fw-light">${prenda.precio} €</span>
-                        </a>
-                    </div>
-
-                </div>
+                </a>
             </div>
         `;
 
-        carruselPrendas.innerHTML += htmlPrendaReciente;
+        if (index % 4 === 3 || index === aPrendasRecientes.length - 1) {
+            htmlAcumulado += `</div></div>`;
+        }
     });
 
+    carruselInner.innerHTML = htmlAcumulado;
 }
 
     document.addEventListener("DOMContentLoaded", function () {
         pintarPrendasRecientes();
     });
 
-
-    // Función para mover el carrusel de prendas recientes con las flechas
-function moverCarruselRecientes(distancia) {
-    const carrusel = document.getElementById('carrusel-recientes');
-    if (carrusel) {
-        carrusel.scrollBy({
-            left: distancia,
-            behavior: 'smooth' // Movimiento suave y elegante
-        });
-    }
-}
