@@ -1,3 +1,8 @@
+//inicializar el main de la ficha producto para los productod recientes
+const mainProducto = document.getElementById("mainProducto");
+
+
+
 // --- FUNCIONES DE LA FICHA DE PRODUCTO ---
 
 function cambiarFoto(elementoClicado, urlNuevaFoto) {
@@ -48,6 +53,9 @@ function cambiarConFlechas(direccion) {
 
 
 function seleccionarColor(colorId, elementoClicado) {
+
+
+
     let envolturas = document.querySelectorAll('.color-swatch-wrapper');
     envolturas.forEach(function (env) {
         env.classList.remove('border-dark', 'p-1');
@@ -136,9 +144,27 @@ function seleccionarColor(colorId, elementoClicado) {
             }
         }
     }
+
+
+    //actualicar los datos de color y img para prendas recientes
+
+    if (mainProducto) {
+        mainProducto.dataset.colorPrenda = colorId;
+        
+        if (primeraVisible) {
+            mainProducto.dataset.imagen = primeraVisible.src; 
+        }
+        
+        if (typeof guardarPrendasRecientes === "function") {
+            guardarPrendasRecientes();
+        }
+    }
+
+
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+
 
     const urlParams = new URLSearchParams(window.location.search);
     const colorIdUrl = urlParams.get('color');
@@ -268,8 +294,6 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
 
 function guardarPrendasRecientes() {
 
-    const mainProducto = document.getElementById("mainProducto");
-
 
 //objeto de prenda reciente
 if (!mainProducto) return;
@@ -315,6 +339,8 @@ if (!mainProducto) return;
 
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    guardarPrendasRecientes();
-});
+
+function pintarPrendasRecientes() {
+    
+}
+

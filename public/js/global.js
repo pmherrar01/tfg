@@ -301,3 +301,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 });
+
+
+function pintarPrendasRecientes() {
+    const carruselPrendas = document.getElementById('carruselRecientes');
+    const seccionRecientes = document.getElementById('seccionRecientes');
+
+    if(!carruselPrendas || !seccionRecientes) return;
+
+  let aPrendasRecientes = [];
+  let datosLocal = localStorage.getItem('prendasRecientes');
+
+  if(datosLocal){
+    try {
+           aPrendasRecientes = JSON.parse(datosLocal);
+    } catch (error) {
+         aPrendasRecientes = [];
+    }
+}
+    if(aPrendasRecientes.length > 0){
+        seccionRecientes.classList.remove("d-none");
+    }else{
+        return;
+    }
+
+    carruselPrendas.innerHTML = "";
+
+    aPrendasRecientes.forEach(prenda => {
+        let htmlPrendaReciente = `
+            <div class="col-8 col-sm-6 col-md-4 col-lg-3 flex-shrink-0">
+                <div class="card h-100 border-0 rounded-0 bg-transparent">
+                    
+                    <div class="position-relative overflow-hidden border border-1 border-dark rounded-0">
+                        <img src="${prenda.imagen}" 
+                             class="w-100 rounded-0" 
+                             alt="${prenda.nombre}" 
+                             style="height: 320px; object-fit: cover; transition: transform 0.4s ease;" 
+                             onmouseover="this.style.transform='scale(1.05)'" 
+                             onmouseout="this.style.transform='scale(1)'">
+                    </div>
+
+                    <div class="card-body px-1 py-3 text-start">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark stretched-link">
+                            <h6 class="text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.9rem; letter-spacing: 1px;">
+                                ${prenda.nombre}
+                            </h6>
+                            <span class="fs-6 fw-light">${prenda.precio} €</span>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        `;
+
+        seccionRecientes.innerHTML += htmlPrendaReciente;
+    });
+
+}
+
+    document.addEventListener("DOMContentLoaded", function () {
+        pintarPrendasRecientes();
+    });

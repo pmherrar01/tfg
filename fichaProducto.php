@@ -9,8 +9,8 @@ include './includes/header.php';
 <main id="mainProducto" class="container my-5 py-5 mt-5" data-id="<?php echo $datosPrenda['id']; ?>"
       data-nombre="<?php echo $datosPrenda['nombre']; ?>"
       data-precio="<?php echo $datosPrenda['precio']; ?>"
-      data-imagen="<?php echo $galeria[0]['url_imagen']; ?>"
-      data-color-prenda="<?php echo !empty($colorPorDefecto) ? $coloresProducto[0]["id"] : 0; ?>"> 
+      data-imagen=""
+      data-color-prenda=""> 
     <div class="row">
 
         <div class="col-md-6 mb-4 mb-md-0">
@@ -184,6 +184,8 @@ include './includes/header.php';
 
 <script src="public/js/producto.js"></script>
 <?php
+
+include './includes/prendasRecientes.php';
 
 include './includes/footer.php';
 
