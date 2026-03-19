@@ -55,21 +55,17 @@ function inicializarBuscadorEnVivo() {
                             contenedorResultados.innerHTML = '';
                             
                             datos.forEach(producto => {
-                                // HTML ORIGINAL LIMPIO: Solo enlace, foto, título y precio
+                                // TU HTML ORIGINAL Y PERFECTO CON FOTOS DE 50x50
                                 let htmlProducto = `
-                                    <div class="col-6 col-md-4 position-relative mb-4">
-                                        <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
-                                            <div class="card product-card border-0 bg-transparent">
-                                                <div class="img-wrapper overflow-hidden">
-                                                    <img src="${producto.url_imagen}" class="card-img-top rounded-0" alt="${producto.nombre}" style="height: 380px; object-fit: cover;">
-                                                </div>
-                                                <div class="card-body text-center px-0 pb-1 mt-2">
-                                                    <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${producto.nombre}</h5>
-                                                    <p class="card-text mb-0">${producto.precio} €</p>
-                                                </div>
+                                    <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
+                                        <div class="d-flex align-items-center">
+                                            <img src="${producto.url_imagen}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 border border-dark border-1">
+                                            <div>
+                                                <span class="fw-bold d-block text-uppercase" style="font-size: 0.9rem;">${producto.nombre}</span>
+                                                <span class="text-muted fw-bold">${producto.precio} €</span>
                                             </div>
-                                        </a>
-                                    </div>
+                                        </div>
+                                    </a>
                                 `;
                                 contenedorResultados.innerHTML += htmlProducto;
                             });
@@ -296,6 +292,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+// ==========================================
+// PINTAR PRENDAS RECIENTES (Footer)
+// ==========================================
 function pintarPrendasRecientes() {
     const carruselInner = document.getElementById('carruselRecientesInner');
     const seccionRecientes = document.getElementById('seccionRecientes');
@@ -329,14 +328,13 @@ function pintarPrendasRecientes() {
             htmlAcumulado += `<div class="carousel-item ${activeClass}" data-bs-interval="3000"><div class="row">`;
         }
 
-        // 1. Comprobamos con prenda.colorPrenda
         let iconoCorazon = 'bi-heart';
         if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.colorPrenda)) {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // 2. Inyectamos usando prenda.colorPrenda
-htmlAcumulado += `
+        // HTML ORIGINAL LIMPIO (Sin sufijos raros)
+        htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
@@ -345,12 +343,12 @@ htmlAcumulado += `
                             <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
                         
-                        <div id="overlay-tallas-reciente-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                        <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
-                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id}, 'reciente')"></button>
+                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id})"></button>
                             </div>
-                            <div id="contenedor-botones-reciente-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
+                            <div id="contenedor-botones-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
                             </div>
                         </div>
                     </div>
@@ -366,7 +364,7 @@ htmlAcumulado += `
                 <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
                     <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
                             style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda}, 'reciente')">
+                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda})">
                         Añadir <i class="bi bi-plus-lg ms-1"></i>
                     </button>
 
@@ -390,27 +388,21 @@ htmlAcumulado += `
     carruselInner.innerHTML = htmlAcumulado;
 }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        pintarPrendasRecientes();
-    });
 
 // ==========================================
-// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS
+// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS (VERSIÓN LIMPIA)
 // ==========================================
 
-// ==========================================
-// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS
-// ==========================================
-
-function abrirOverlayTallas(event, idPrenda, idColor, sufijo = '') {
+function abrirOverlayTallas(event, idPrenda, idColor) {
     event.preventDefault(); 
     
-    // Si hay sufijo (ej: 'reciente'), el ID será overlay-tallas-reciente-15
-    let idOverlay = sufijo ? `overlay-tallas-${sufijo}-${idPrenda}` : `overlay-tallas-${idPrenda}`;
-    let idContenedor = sufijo ? `contenedor-botones-${sufijo}-${idPrenda}` : `contenedor-botones-${idPrenda}`;
-    
-    const overlay = document.getElementById(idOverlay);
-    const contenedor = document.getElementById(idContenedor);
+    // MAGIA INVISIBLE: Buscamos la tarjeta exacta donde se ha hecho clic
+    const tarjeta = event.target.closest('.col-6');
+    if (!tarjeta) return;
+
+    // Buscamos el menú oculto DENTRO de esa tarjeta exacta
+    const overlay = tarjeta.querySelector('.overlay-tallas');
+    const contenedor = tarjeta.querySelector('[id^="contenedor-botones-"]');
     
     if(!overlay || !contenedor) return;
 
@@ -436,8 +428,7 @@ function abrirOverlayTallas(event, idPrenda, idColor, sufijo = '') {
                     btn.classList.add('talla-agotada');
                     btn.disabled = true;
                 } else {
-                    // Pasamos el sufijo para que el carrito sepa cuál cerrar
-                    btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla, sufijo);
+                    btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla);
                 }
                 
                 contenedor.appendChild(btn);
@@ -449,14 +440,16 @@ function abrirOverlayTallas(event, idPrenda, idColor, sufijo = '') {
         });
 }
 
-function cerrarOverlayTallas(event, idPrenda, sufijo = '') {
+function cerrarOverlayTallas(event, idPrenda) {
     event.preventDefault();
-    let idOverlay = sufijo ? `overlay-tallas-${sufijo}-${idPrenda}` : `overlay-tallas-${idPrenda}`;
-    const overlay = document.getElementById(idOverlay);
-    if(overlay) overlay.classList.add('d-none');
+    const tarjeta = event.target.closest('.col-6');
+    if (tarjeta) {
+        const overlay = tarjeta.querySelector('.overlay-tallas');
+        if (overlay) overlay.classList.add('d-none');
+    }
 }
 
-function anadirDirectoCarrito(event, idPrenda, idColor, talla, sufijo = '') {
+function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
     event.preventDefault();
     
     let datos = new FormData();
@@ -465,8 +458,8 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla, sufijo = '') {
     datos.append('color_id', idColor);
     datos.append('talla', talla);
 
-    // Cerramos el menú correcto usando el sufijo
-    cerrarOverlayTallas(event, idPrenda, sufijo);
+    // Cierra el menú de la tarjeta correcta
+    cerrarOverlayTallas(event, idPrenda);
 
     fetch('controllers/carritoController.php', {
         method: 'POST',
