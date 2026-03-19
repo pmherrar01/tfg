@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //funcion para el ajax de la lupa 
-//funcion para el ajax de la lupa 
 function inicializarBuscadorEnVivo() {
     let prendaABuscar = document.getElementById("inputBuscador");
     let contenedorResultados = document.getElementById("cajaResultados");
@@ -56,56 +55,20 @@ function inicializarBuscadorEnVivo() {
                             contenedorResultados.innerHTML = '';
                             
                             datos.forEach(producto => {
-                                // 1. Corazón en el buscador
-                                let iconoCorazon = 'bi-heart';
-                                if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(producto.id + '-' + producto.color_id)) {
-                                    iconoCorazon = 'bi-heart-fill';
-                                }
-
-                                // 2. HTML del buscador (usa producto.color_id y producto.url_imagen)
+                                // HTML ORIGINAL LIMPIO: Solo enlace, foto, título y precio
                                 let htmlProducto = `
-                                    <div class="col-6 col-md-4 position-relative d-flex flex-column mb-4">
-                                        <div class="card product-card border-0 bg-transparent position-relative">
-                                            
-                                            <div class="img-wrapper position-relative overflow-hidden">
-                                                <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
+                                    <div class="col-6 col-md-4 position-relative mb-4">
+                                        <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
+                                            <div class="card product-card border-0 bg-transparent">
+                                                <div class="img-wrapper overflow-hidden">
                                                     <img src="${producto.url_imagen}" class="card-img-top rounded-0" alt="${producto.nombre}" style="height: 380px; object-fit: cover;">
-                                                </a>
-                                                
-                                                <div id="overlay-tallas-${producto.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
-                                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                                        <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
-                                                        <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${producto.id})"></button>
-                                                    </div>
-                                                    <div id="contenedor-botones-${producto.id}" class="d-flex justify-content-center flex-wrap gap-2">
-                                                    </div>
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="card-body text-center px-0 pb-1 mt-2">
-                                                <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
+                                                <div class="card-body text-center px-0 pb-1 mt-2">
                                                     <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${producto.nombre}</h5>
                                                     <p class="card-text mb-0">${producto.precio} €</p>
-                                                </a>
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
-                                            <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
-                                                    style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                                                    onclick="abrirOverlayTallas(event, ${producto.id}, ${producto.color_id})">
-                                                Añadir <i class="bi bi-plus-lg ms-1"></i>
-                                            </button>
-
-                                            <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
-                                                    style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
-                                                    data-id="${producto.id}" 
-                                                    data-color="${producto.color_id}"
-                                                    onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
-                                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
-                                                <i class="bi ${iconoCorazon}"></i>
-                                            </button>
-                                        </div>
+                                        </a>
                                     </div>
                                 `;
                                 contenedorResultados.innerHTML += htmlProducto;
@@ -373,7 +336,7 @@ function pintarPrendasRecientes() {
         }
 
         // 2. Inyectamos usando prenda.colorPrenda
-        htmlAcumulado += `
+htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
@@ -382,12 +345,12 @@ function pintarPrendasRecientes() {
                             <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
                         
-                        <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                        <div id="overlay-tallas-reciente-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
-                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id})"></button>
+                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id}, 'reciente')"></button>
                             </div>
-                            <div id="contenedor-botones-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
+                            <div id="contenedor-botones-reciente-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
                             </div>
                         </div>
                     </div>
@@ -403,7 +366,7 @@ function pintarPrendasRecientes() {
                 <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
                     <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
                             style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda})">
+                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda}, 'reciente')">
                         Añadir <i class="bi bi-plus-lg ms-1"></i>
                     </button>
 
@@ -435,42 +398,46 @@ function pintarPrendasRecientes() {
 // AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS
 // ==========================================
 
-function abrirOverlayTallas(event, idPrenda, idColor) {
-    event.preventDefault(); // Evitamos que la página salte arriba
+// ==========================================
+// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS
+// ==========================================
+
+function abrirOverlayTallas(event, idPrenda, idColor, sufijo = '') {
+    event.preventDefault(); 
     
-    const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
-    const contenedor = document.getElementById(`contenedor-botones-${idPrenda}`);
+    // Si hay sufijo (ej: 'reciente'), el ID será overlay-tallas-reciente-15
+    let idOverlay = sufijo ? `overlay-tallas-${sufijo}-${idPrenda}` : `overlay-tallas-${idPrenda}`;
+    let idContenedor = sufijo ? `contenedor-botones-${sufijo}-${idPrenda}` : `contenedor-botones-${idPrenda}`;
+    
+    const overlay = document.getElementById(idOverlay);
+    const contenedor = document.getElementById(idContenedor);
     
     if(!overlay || !contenedor) return;
 
-    // Quitamos el d-none y ponemos un mensaje de carga
     overlay.classList.remove('d-none');
     contenedor.innerHTML = '<span class="small fw-bold text-muted mt-2">Cargando tallas...</span>';
 
-    // Preguntamos al servidor por las tallas de ese color
     fetch(`controllers/apiTallasController.php?idPrenda=${idPrenda}&idColor=${idColor}`)
         .then(respuesta => respuesta.json())
         .then(tallas => {
-            contenedor.innerHTML = ''; // Limpiamos el "Cargando..."
+            contenedor.innerHTML = ''; 
             
             if(tallas.length === 0) {
                 contenedor.innerHTML = '<span class="small text-danger fw-bold mt-2">Agotado</span>';
                 return;
             }
 
-            // Dibujamos los botones de talla
             tallas.forEach(tallaObj => {
                 let btn = document.createElement('button');
                 btn.className = 'btn btn-outline-dark rounded-0 px-3 py-1 fw-bold';
                 btn.textContent = tallaObj.talla;
 
                 if(tallaObj.stock <= 0) {
-                    // Si no hay stock, le metemos la clase del CSS que la tacha
                     btn.classList.add('talla-agotada');
                     btn.disabled = true;
                 } else {
-                    // Si hay stock, al hacer clic, al carrito!
-                    btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla);
+                    // Pasamos el sufijo para que el carrito sepa cuál cerrar
+                    btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla, sufijo);
                 }
                 
                 contenedor.appendChild(btn);
@@ -482,43 +449,36 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
         });
 }
 
-function cerrarOverlayTallas(event, idPrenda) {
+function cerrarOverlayTallas(event, idPrenda, sufijo = '') {
     event.preventDefault();
-
-    const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
+    let idOverlay = sufijo ? `overlay-tallas-${sufijo}-${idPrenda}` : `overlay-tallas-${idPrenda}`;
+    const overlay = document.getElementById(idOverlay);
     if(overlay) overlay.classList.add('d-none');
 }
 
-function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
+function anadirDirectoCarrito(event, idPrenda, idColor, talla, sufijo = '') {
     event.preventDefault();
-
     
-    // 1. Preparamos los datos para enviarlos por debajo de la mesa (AJAX)
     let datos = new FormData();
     datos.append('accion', 'agregar');
     datos.append('idPrenda', idPrenda);
     datos.append('color_id', idColor);
     datos.append('talla', talla);
 
-    // 2. Cerramos el menú de tallas visualmente de inmediato
-    cerrarOverlayTallas(event, idPrenda);
+    // Cerramos el menú correcto usando el sufijo
+    cerrarOverlayTallas(event, idPrenda, sufijo);
 
-    // 3. Enviamos la petición al controlador sin recargar la página
     fetch('controllers/carritoController.php', {
         method: 'POST',
         body: datos
     })
     .then(respuesta => {
-        // Como el controlador devuelve una redirección, fetch la procesa en silencio.
-        // ¡La pantalla del usuario NO se mueve!
-        
-        // 4. Mostramos una alerta elegante de éxito
         Swal.fire({
             icon: 'success',
             title: '¡Añadido al carrito!',
             text: `Talla ${talla} añadida correctamente.`,
             confirmButtonColor: 'var(--color-principal, #000)',
-            timer: 2000, // Se cierra sola en 2 segundos
+            timer: 2000, 
             showConfirmButton: false
         });
     })
