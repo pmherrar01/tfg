@@ -36,7 +36,7 @@ include './includes/header.php';
     <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda["color_id"] ?>" class="text-decoration-none text-dark">
         <div class="card product-card border-0 bg-transparent position-relative">
             <div class="img-wrapper position-relative overflow-hidden">
-                <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>" style="height: 380px; object-fit: cover;">
+                <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top rounded-0" alt="<?= $prenda['nombre'] ?>" style="height: 380px; object-fit: cover;">
                 
                 <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
                     <div class="d-flex justify-content-between align-items-center mb-2">
