@@ -485,3 +485,8 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
         });
     });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Encendemos el carrusel de prendas recientes
+    pintarPrendasRecientes();
+});
