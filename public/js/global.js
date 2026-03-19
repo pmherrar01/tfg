@@ -39,102 +39,91 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //funcion para el ajax de la lupa 
+//funcion para el ajax de la lupa 
 function inicializarBuscadorEnVivo() {
     let prendaABuscar = document.getElementById("inputBuscador");
     let contenedorResultados = document.getElementById("cajaResultados");
-
 
     if (prendaABuscar && contenedorResultados) {
         prendaABuscar.addEventListener("input", function () {
             let texto = this.value.trim();
 
             if (texto.length >= 2) {
-
                 fetch('controllers/apiBuscarController.php?q=' + texto)
                     .then(respuesta => respuesta.json())
                     .then(datos => {
-
                         if (datos.length > 0) {
-
-                            console.log(datos)
                             contenedorResultados.innerHTML = '';
+                            
                             datos.forEach(producto => {
+                                // 1. Corazón en el buscador
+                                let iconoCorazon = 'bi-heart';
+                                if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(producto.id + '-' + producto.color_id)) {
+                                    iconoCorazon = 'bi-heart-fill';
+                                }
 
-                                // 1. Comprobamos si la prenda está en favoritos (Si existe el array en la página actual)
-        let iconoCorazon = 'bi-heart';
-        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.color)) {
-            iconoCorazon = 'bi-heart-fill';
-        }
+                                // 2. HTML del buscador (usa producto.color_id y producto.url_imagen)
+                                let htmlProducto = `
+                                    <div class="col-6 col-md-4 position-relative d-flex flex-column mb-4">
+                                        <div class="card product-card border-0 bg-transparent position-relative">
+                                            
+                                            <div class="img-wrapper position-relative overflow-hidden">
+                                                <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
+                                                    <img src="${producto.url_imagen}" class="card-img-top rounded-0" alt="${producto.nombre}" style="height: 380px; object-fit: cover;">
+                                                </a>
+                                                
+                                                <div id="overlay-tallas-${producto.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
+                                                        <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${producto.id})"></button>
+                                                    </div>
+                                                    <div id="contenedor-botones-${producto.id}" class="d-flex justify-content-center flex-wrap gap-2">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="card-body text-center px-0 pb-1 mt-2">
+                                                <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block">
+                                                    <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${producto.nombre}</h5>
+                                                    <p class="card-text mb-0">${producto.precio} €</p>
+                                                </a>
+                                            </div>
+                                        </div>
 
-        // 2. Inyectamos la tarjeta con el NUEVO diseño, bordes rectos (rounded-0) y sin enlaces rotos
-        htmlAcumulado += `
-            <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
-                <div class="card product-card border-0 bg-transparent position-relative">
-                    
-                    <div class="img-wrapper position-relative overflow-hidden">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
-                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
-                        </a>
-                        
-                        <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
-                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, ${prenda.id})"></button>
-                            </div>
-                            <div id="contenedor-botones-${prenda.id}" class="d-flex justify-content-center flex-wrap gap-2">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-body text-center px-0 pb-1 mt-2">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
-                            <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${prenda.nombre}</h5>
-                            <p class="card-text mb-0">${prenda.precio} €</p>
-                        </a>
-                    </div>
-                </div>
+                                        <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
+                                            <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
+                                                    style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
+                                                    onclick="abrirOverlayTallas(event, ${producto.id}, ${producto.color_id})">
+                                                Añadir <i class="bi bi-plus-lg ms-1"></i>
+                                            </button>
 
-                <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
-                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
-                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.color})">
-                        Añadir <i class="bi bi-plus-lg ms-1"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
-                            style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
-                            data-id="${prenda.id}" 
-                            data-color="${prenda.color}"
-                            onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
-                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
-                        <i class="bi ${iconoCorazon}"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-
+                                            <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
+                                                    style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
+                                                    data-id="${producto.id}" 
+                                                    data-color="${producto.color_id}"
+                                                    onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
+                                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
+                                                <i class="bi ${iconoCorazon}"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                `;
                                 contenedorResultados.innerHTML += htmlProducto;
-                            }
-                            );
+                            });
 
                             contenedorResultados.classList.remove('d-none');
                         } else {
                             contenedorResultados.innerHTML = '<div class="p-4 text-center text-muted fw-bold text-uppercase">No se encontraron prendas</div>';
                         }
-
                     });
 
             } else {
                 contenedorResultados.innerHTML = "";
                 contenedorResultados.classList.add('d-none');
-
             }
         });
     }
-
 }
-
-
 // ==========================================
 // ALERTAS SWEETALERT (LIMPIAS Y UNIFICADAS)
 // ==========================================
@@ -373,22 +362,23 @@ function pintarPrendasRecientes() {
     aPrendasRecientes.forEach((prenda, index) => {
         
         if (index % 4 === 0) {
-            let activeClass = index === 0 ? "active" : ""; // Solo el primer grupo lleva la clase 'active'
+            let activeClass = index === 0 ? "active" : ""; 
             htmlAcumulado += `<div class="carousel-item ${activeClass}" data-bs-interval="3000"><div class="row">`;
         }
-// 1. Comprobamos si la prenda está en favoritos (Si existe el array en la página actual)
+
+        // 1. Comprobamos con prenda.colorPrenda
         let iconoCorazon = 'bi-heart';
-        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.color)) {
+        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prenda.id + '-' + prenda.colorPrenda)) {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // 2. Inyectamos la tarjeta con el NUEVO diseño, bordes rectos (rounded-0) y sin enlaces rotos
+        // 2. Inyectamos usando prenda.colorPrenda
         htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
                     <div class="img-wrapper position-relative overflow-hidden">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
                         
@@ -403,7 +393,7 @@ function pintarPrendasRecientes() {
                     </div>
                     
                     <div class="card-body text-center px-0 pb-1 mt-2">
-                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.color}" class="text-decoration-none text-dark d-block">
+                        <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${prenda.nombre}</h5>
                             <p class="card-text mb-0">${prenda.precio} €</p>
                         </a>
@@ -413,14 +403,14 @@ function pintarPrendasRecientes() {
                 <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
                     <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
                             style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.color})">
+                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda})">
                         Añadir <i class="bi bi-plus-lg ms-1"></i>
                     </button>
 
                     <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
                             style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
                             data-id="${prenda.id}" 
-                            data-color="${prenda.color}"
+                            data-color="${prenda.colorPrenda}"
                             onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
                             onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
                         <i class="bi ${iconoCorazon}"></i>
