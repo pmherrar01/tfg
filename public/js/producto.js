@@ -300,7 +300,7 @@ if (!mainProducto) return;
     }
 
     aPrendasRecientes = aPrendasRecientes.filter(function (prendaGuardada) {
-        let prendaIgual = ( prendaGuardada.id === prendaActual.id && prendaGuardada.colorPrenda !== prendaActual.colorPrenda);
+        let prendaIgual = ( prendaGuardada.id === prendaActual.id && prendaGuardada.colorPrenda === prendaActual.colorPrenda);
 
         return !prendaIgual;
     });
