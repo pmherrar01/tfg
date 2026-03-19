@@ -135,6 +135,13 @@ include './includes/header.php';
     </div>
 </section>
 
+<?php
+
+include './includes/prendasRecientes.php';
+
+?>
+
+
 <section class="newsletter-section py-5">
     <div class="container text-center py-4">
         <h3 class="display-6 fw-bold text-uppercase mb-3 newsletter-title">Subscribete y consigue descuentos. </h3>
@@ -150,6 +157,7 @@ include './includes/header.php';
         </div>
     </div>
 </section>
+
 
 <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -181,7 +189,6 @@ include './includes/header.php';
 
 <?php
 
-include './includes/prendasRecientes.php';
 
 include './includes/footer.php';
 
