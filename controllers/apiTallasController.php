@@ -5,35 +5,38 @@ require_once '../models/producto.php';
 
 header('Content-Type: application/json');
 
-$db = new Database();
-
-
-
 if (isset($_GET['idPrenda']) && isset($_GET['idColor'])) {
     
     $idPrenda = $_GET['idPrenda'];
     $idColor = $_GET['idColor'];
 
-    try {
-        // 1. Conéctate a tu base de datos (Usa tu método habitual)
-        $conexion = $db->conectar(); 
-        
-        // 2. Haz la consulta. OJO: Cambia "stock_productos" por el nombre real de tu tabla
-        $sql = "SELECT talla, stock FROM stock_productos WHERE producto_id = :idPrenda AND color_id = :idColor";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bindParam(':idPrenda', $idPrenda, PDO::PARAM_INT);
-        $stmt->bindParam(':idColor', $idColor, PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $tallas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $db = new Database();
 
-        // 3. Devolvemos el array real a JavaScript
-        echo json_encode($tallas);
+    try {
+        // 1. Instanciamos la base de datos y tu modelo de forma limpia
+    
+        $productoObj = new Producto($db ->conectar());
         
-    } catch (PDOException $e) {
-        // Si la base de datos falla, devolvemos un error limpio para que JS no se rompa
+        // 2. REUTILIZAMOS tu método existente
+        $todasLasTallas = $productoObj->obtenerTallas($idPrenda);
+        
+        // 3. Filtramos solo las tallas del color que nos interesa
+        $tallasDelColor = [];
+        foreach ($todasLasTallas as $talla) {
+            if ($talla['color_id'] == $idColor) {
+                $tallasDelColor[] = [
+                    "talla" => $talla['talla'],
+                    "stock" => $talla['stock']
+                ];
+            }
+        }
+
+        // 4. Devolvemos el resultado al JavaScript
+        echo json_encode($tallasDelColor);
+        
+    } catch (Exception $e) {
         http_response_code(500);
-        echo json_encode(["error" => "Fallo en la base de datos"]);
+        echo json_encode(["error" => "Fallo al obtener las tallas"]);
     }
     
     exit;

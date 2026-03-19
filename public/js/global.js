@@ -417,12 +417,14 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
 
 function cerrarOverlayTallas(event, idPrenda) {
     event.preventDefault();
+    event.stopPropagation();
     const overlay = document.getElementById(`overlay-tallas-${idPrenda}`);
     if(overlay) overlay.classList.add('d-none');
 }
 
 function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
     event.preventDefault();
+    event.stopPropagation();
     
     // Creamos un formulario fantasma igual que el de la fichaProducto
     let form = document.createElement('form');

@@ -38,7 +38,7 @@ include './includes/header.php';
             <div class="img-wrapper position-relative overflow-hidden">
                 <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top rounded-0" alt="<?= $prenda['nombre'] ?>" style="height: 380px; object-fit: cover;">
                 
-                <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
+                <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center" onclick="event.preventDefault(); event.stopPropagation();">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Selecciona Talla</span>
                         <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, <?= $prenda['id'] ?>)"></button>
