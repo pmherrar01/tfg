@@ -461,6 +461,11 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
         body: datos
     })
         .then(respuesta => {
+
+            let iconoCesta = document.getElementById('contador-carrito');
+            if (iconoCesta) {
+                iconoCesta.innerText = parseInt(iconoCesta.innerText || 0) + 1;
+            }
             Swal.fire({
                 icon: 'success',
                 title: '¡Añadido al carrito!',

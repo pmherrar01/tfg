@@ -69,9 +69,9 @@
             </ul>
           </div>
         <?php }; ?>
-        <a href="carrito.php" class="text-reset position-relative">
+<a href="carrito.php" class="text-reset position-relative">
           <i class="bi bi-bag"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+          <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
             <?php
             if (isset($_SESSION['carrito'])) {
               $totalArticulos = 0;
