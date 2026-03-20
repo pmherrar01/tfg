@@ -150,11 +150,11 @@ function seleccionarColor(colorId, elementoClicado) {
 
     if (mainProducto) {
         mainProducto.dataset.colorPrenda = colorId;
-        
+
         if (primeraVisible) {
-            mainProducto.dataset.imagen = primeraVisible.src; 
+            mainProducto.dataset.imagen = primeraVisible.src;
         }
-        
+
         if (typeof guardarPrendasRecientes === "function") {
             guardarPrendasRecientes();
         }
@@ -163,20 +163,24 @@ function seleccionarColor(colorId, elementoClicado) {
     // ==========================================
     // ACTUALIZAR DINÁMICAMENTE "COMPLETA EL LOOK"
     // ==========================================
-    let idPrendaBase = mainProducto.dataset.id; // Ya lo tienes arriba en la página
+    let idPrendaBase = mainProducto.dataset.id;
     let botonOffcanvas = document.getElementById('btnCompletarLook');
     let contenedorPrendasLook = document.getElementById('contenedorPrendasLook');
 
     if (botonOffcanvas && contenedorPrendasLook) {
+
+        // ¡LA CLAVE ESTÁ AQUÍ! Ocultamos el botón al instante al cambiar de color.
+        botonOffcanvas.classList.add('d-none');
+
         fetch(`controllers/apiLookController.php?idPrenda=${idPrendaBase}&idColor=${colorId}`)
             .then(res => res.json())
             .then(datos => {
                 if (datos.exito && datos.productos.length > 0) {
-                    // 1. Mostrar el botón
+
+                    // Si todo va bien y SÍ hay look, lo volvemos a mostrar
                     botonOffcanvas.classList.remove('d-none');
-                    
-                    // 2. Limpiar y rellenar las prendas
-                    contenedorPrendasLook.innerHTML = ''; 
+
+                    contenedorPrendasLook.innerHTML = '';
 
                     datos.productos.forEach(prendaLook => {
                         let iconoCorazonLook = 'bi-heart';
@@ -216,12 +220,11 @@ function seleccionarColor(colorId, elementoClicado) {
                         `;
                         contenedorPrendasLook.innerHTML += htmlPrenda;
                     });
-                } else {
-                    // No hay look para este color, ocultamos el botón
-                    botonOffcanvas.classList.add('d-none');
                 }
             })
-            .catch(error => console.error('Error cargando el look:', error));
+            .catch(error => {
+                console.error('La comunicación falló, pero el botón se queda oculto:', error);
+            });
     }
 
 }
@@ -358,8 +361,8 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
 function guardarPrendasRecientes() {
 
 
-//objeto de prenda reciente
-if (!mainProducto) return;
+    //objeto de prenda reciente
+    if (!mainProducto) return;
 
 
     let prendaActual = {
@@ -379,22 +382,22 @@ if (!mainProducto) return;
 
     try {
         if (datosLocal) {
-             aPrendasRecientes = JSON.parse(datosLocal);
+            aPrendasRecientes = JSON.parse(datosLocal);
         }
 
     } catch (error) {
-         aPrendasRecientes = [];
+        aPrendasRecientes = [];
     }
 
     aPrendasRecientes = aPrendasRecientes.filter(function (prendaGuardada) {
-        let prendaIgual = ( prendaGuardada.id === prendaActual.id && prendaGuardada.colorPrenda === prendaActual.colorPrenda);
+        let prendaIgual = (prendaGuardada.id === prendaActual.id && prendaGuardada.colorPrenda === prendaActual.colorPrenda);
 
         return !prendaIgual;
     });
 
     aPrendasRecientes.unshift(prendaActual);
 
-    if(aPrendasRecientes.length > 8){
+    if (aPrendasRecientes.length > 8) {
         aPrendasRecientes.pop();
     }
 
@@ -404,6 +407,6 @@ if (!mainProducto) return;
 
 
 function pintarPrendasRecientes() {
-    
+
 }
 

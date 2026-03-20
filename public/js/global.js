@@ -53,7 +53,7 @@ function inicializarBuscadorEnVivo() {
                     .then(datos => {
                         if (datos.length > 0) {
                             contenedorResultados.innerHTML = '';
-                            
+
                             datos.forEach(producto => {
                                 // TU HTML ORIGINAL Y PERFECTO CON FOTOS DE 50x50
                                 let htmlProducto = `
@@ -84,64 +84,67 @@ function inicializarBuscadorEnVivo() {
     }
 }
 // ==========================================
-// ALERTAS SWEETALERT (LIMPIAS Y UNIFICADAS)
+// ALERTAS SWEETALERT (ULTRALIGERAS Y FLUIDAS)
 // ==========================================
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Configuración maestra para que TODAS las alertas vuelen y no den lag
+    const swalRapido = Swal.mixin({
+        confirmButtonColor: 'var(--color-principal, #000)',
+        showClass: {
+            popup: 'animate__animated animate__fadeIn animate__faster' // Aparece por opacidad (GPU), no por tamaño (CPU)
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOut animate__faster'
+        }
+    });
+
     // 1. ALERTAS DE ÉXITO O INFORMACIÓN (mensajeAlerta)
     if (typeof mensajeAlerta !== 'undefined') {
-
         if (mensajeAlerta === 'registro_exito') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'success',
                 title: '¡Bienvenido a HERROR!',
-                text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.'
             });
         }
         else if (mensajeAlerta === 'login_requerido') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'info',
                 title: '¡Inicia Sesión!',
-                text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.'
             });
         }
     }
 
     // 2. ALERTAS DE ERRORES (errorAlerta)
     if (typeof errorAlerta !== 'undefined') {
-
         if (errorAlerta === 'registro_fallo') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'error',
                 title: 'Ups...',
-                text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.'
             });
         }
         else if (errorAlerta === 'password_debil') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'warning',
                 title: 'Contraseña poco segura',
-                text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.'
             });
         }
         else if (errorAlerta === 'falta_talla') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'warning',
                 title: '¡Falta la talla!',
-                text: 'Por favor, selecciona una talla antes de añadir al carrito.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'Por favor, selecciona una talla antes de añadir al carrito.'
             });
         }
         else if (errorAlerta === 'no_stock') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'error',
                 title: 'Límite de stock',
-                text: 'No hay más unidades disponibles de este artículo en tu talla y color.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'No hay más unidades disponibles de este artículo en tu talla y color.'
             });
         }
     }
@@ -149,38 +152,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Alerta Especial: Bienvenida Login
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'success',
                 title: '¡Hola, ' + nombreUsuario + '!',
                 text: 'Has iniciado sesión correctamente.',
-                confirmButtonColor: 'var(--color-principal, #000)',
                 timer: 3000,
                 showConfirmButton: false
             });
         } else if (bienvenidoAlerta === 'false') {
-            Swal.fire({
+            swalRapido.fire({
                 icon: 'error',
                 title: 'Error de acceso',
-                text: 'El email o la contraseña son incorrectos.',
-                confirmButtonColor: 'var(--color-principal, #000)'
+                text: 'El email o la contraseña son incorrectos.'
             });
         }
     }
 
     // Alerta Especial: Sesión Cerrada
     if (typeof sesionCerradaAlerta !== 'undefined' && sesionCerradaAlerta === 'true') {
-        Swal.fire({
+        swalRapido.fire({
             icon: 'info',
             title: '¡Hasta pronto!',
             text: 'Has cerrado sesión correctamente de forma segura.',
-            confirmButtonColor: 'var(--color-principal, #000)',
             timer: 3000,
             showConfirmButton: false
         });
     }
 });
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const animContainer = document.querySelector('.anim-container');
     const loginLink = document.querySelector('.SignInLink');
@@ -299,12 +297,12 @@ function pintarPrendasRecientes() {
     const carruselInner = document.getElementById('carruselRecientesInner');
     const seccionRecientes = document.getElementById('seccionRecientes');
 
-    if(!carruselInner || !seccionRecientes) return;
+    if (!carruselInner || !seccionRecientes) return;
 
     let aPrendasRecientes = [];
     let datosLocal = localStorage.getItem('prendasRecientes');
 
-    if(datosLocal){
+    if (datosLocal) {
         try {
             aPrendasRecientes = JSON.parse(datosLocal);
         } catch (error) {
@@ -312,7 +310,7 @@ function pintarPrendasRecientes() {
         }
     }
 
-    if(aPrendasRecientes.length > 0){
+    if (aPrendasRecientes.length > 0) {
         seccionRecientes.classList.remove("d-none");
     } else {
         return;
@@ -322,9 +320,9 @@ function pintarPrendasRecientes() {
     let htmlAcumulado = "";
 
     aPrendasRecientes.forEach((prenda, index) => {
-        
+
         if (index % 4 === 0) {
-            let activeClass = index === 0 ? "active" : ""; 
+            let activeClass = index === 0 ? "active" : "";
             htmlAcumulado += `<div class="carousel-item ${activeClass}" data-bs-interval="3000"><div class="row">`;
         }
 
@@ -391,8 +389,8 @@ function pintarPrendasRecientes() {
 // ==========================================
 
 function abrirOverlayTallas(event, idPrenda, idColor) {
-    event.preventDefault(); 
-    
+    event.preventDefault();
+
     // MAGIA INVISIBLE: Buscamos la tarjeta exacta donde se ha hecho clic
     const tarjeta = event.target.closest('.col-6');
     if (!tarjeta) return;
@@ -400,8 +398,8 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
     // Buscamos el menú oculto DENTRO de esa tarjeta exacta
     const overlay = tarjeta.querySelector('.overlay-tallas');
     const contenedor = tarjeta.querySelector('[id^="contenedor-botones-"]');
-    
-    if(!overlay || !contenedor) return;
+
+    if (!overlay || !contenedor) return;
 
     overlay.classList.remove('d-none');
     contenedor.innerHTML = '<span class="small fw-bold text-muted mt-2">Cargando tallas...</span>';
@@ -409,9 +407,9 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
     fetch(`controllers/apiTallasController.php?idPrenda=${idPrenda}&idColor=${idColor}`)
         .then(respuesta => respuesta.json())
         .then(tallas => {
-            contenedor.innerHTML = ''; 
-            
-            if(tallas.length === 0) {
+            contenedor.innerHTML = '';
+
+            if (tallas.length === 0) {
                 contenedor.innerHTML = '<span class="small text-danger fw-bold mt-2">Agotado</span>';
                 return;
             }
@@ -421,13 +419,13 @@ function abrirOverlayTallas(event, idPrenda, idColor) {
                 btn.className = 'btn btn-outline-dark rounded-0 px-3 py-1 fw-bold';
                 btn.textContent = tallaObj.talla;
 
-                if(tallaObj.stock <= 0) {
+                if (tallaObj.stock <= 0) {
                     btn.classList.add('talla-agotada');
                     btn.disabled = true;
                 } else {
                     btn.onclick = (e) => anadirDirectoCarrito(e, idPrenda, idColor, tallaObj.talla);
                 }
-                
+
                 contenedor.appendChild(btn);
             });
         })
@@ -448,7 +446,7 @@ function cerrarOverlayTallas(event, idPrenda) {
 
 function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
     event.preventDefault();
-    
+
     let datos = new FormData();
     datos.append('accion', 'agregar');
     datos.append('idPrenda', idPrenda);
@@ -462,25 +460,39 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
         method: 'POST',
         body: datos
     })
-    .then(respuesta => {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Añadido al carrito!',
-            text: `Talla ${talla} añadida correctamente.`,
-            confirmButtonColor: 'var(--color-principal, #000)',
-            timer: 2000, 
-            showConfirmButton: false
+        .then(respuesta => {
+            Swal.fire({
+                icon: 'success',
+                title: '¡Añadido al carrito!',
+                text: `Talla ${talla} añadida correctamente.`,
+                confirmButtonColor: 'var(--color-principal, #000)',
+                timer: 2000,
+                showConfirmButton: false,
+                // --- OPTIMIZACIÓN DE RENDIMIENTO ---
+                showClass: {
+                    popup: 'animate__animated animate__fadeIn animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__faster'
+                }
+            });
+        })
+        .catch(error => {
+            console.error("Error al añadir:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Ups...',
+                text: 'Hubo un problema al añadir la prenda.',
+                confirmButtonColor: 'var(--color-principal, #000)',
+                // --- OPTIMIZACIÓN DE RENDIMIENTO ---
+                showClass: {
+                    popup: 'animate__animated animate__fadeIn animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOut animate__faster'
+                }
+            });
         });
-    })
-    .catch(error => {
-        console.error("Error al añadir:", error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Ups...',
-            text: 'Hubo un problema al añadir la prenda.',
-            confirmButtonColor: 'var(--color-principal, #000)'
-        });
-    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {

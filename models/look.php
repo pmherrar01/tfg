@@ -149,7 +149,7 @@ class Look{
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
 
-        } catch (PDOException) {
+        } catch (PDOException $e) {
             return [];
         }
     }

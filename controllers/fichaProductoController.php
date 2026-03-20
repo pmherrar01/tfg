@@ -55,5 +55,3 @@ if ($idColorActual > 0) {
         $productosLook =  $look->mostrarLook($idPrenda, $idColorActual);
     }
 }
-
-?>

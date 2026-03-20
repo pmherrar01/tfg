@@ -832,3 +832,29 @@ footer a:hover {
 /* Modificadores de Tamaño */
 .btn-favorito-std { width: 40px; height: 40px; }
 .btn-favorito-lg  { width: 60px; height: 50px; }
+
+/* ========================================== */
+/* OPTIMIZACIÓN DE RENDIMIENTO SWEETALERT2    */
+/* ========================================== */
+
+/* 1. Forzar Aceleración por Hardware (Tarjeta Gráfica) */
+.swal2-popup {
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    transform: translate3d(0, 0, 0) !important;
+    will-change: transform, opacity;
+    
+    animation-duration: 0.2s !important; 
+    border-radius: 0 !important; 
+    border: 3px solid var(--color-principal, #5c3a21);
+}
+
+/* 3. Optimizar la capa de fondo oscuro */
+.swal2-container.swal2-backdrop-show {
+    will-change: opacity;
+    animation-duration: 0.2s !important;
+}
+
+/* 4. Quitar el lag de los iconos (el check verde y la X roja) */
+.swal2-icon {
+    animation-duration: 0.3s !important;
+}

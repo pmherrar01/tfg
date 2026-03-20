@@ -7,10 +7,10 @@ include './includes/header.php';
 ?>
 
 <main id="mainProducto" class="container my-5 py-5 mt-5" data-id="<?php echo $datosPrenda['id']; ?>"
-      data-nombre="<?php echo $datosPrenda['nombre']; ?>"
-      data-precio="<?php echo $datosPrenda['precio']; ?>"
-      data-imagen=""
-      data-color-prenda=""> 
+    data-nombre="<?php echo $datosPrenda['nombre']; ?>"
+    data-precio="<?php echo $datosPrenda['precio']; ?>"
+    data-imagen=""
+    data-color-prenda="">
     <div class="row">
 
         <div class="col-md-6 mb-4 mb-md-0">
@@ -101,7 +101,7 @@ include './includes/header.php';
                 <?php } ?>
 
                 <div class="d-flex align-items-center gap-3 mt-4 mb-2">
-                    
+
                     <button type="submit" class="add-to-cart flex-grow-1 m-0">
                         <span>Añadir al Carrito</span>
                         <svg class="morph" viewBox="0 0 64 13">
@@ -147,20 +147,20 @@ include './includes/header.php';
                         </div>
                     </button>
 
-                    <?php 
+                    <?php
                     $colorPorDefecto = !empty($coloresProducto) ? $coloresProducto['id'] : 0;
-                    
+
                     $iconoCorazon = 'bi-heart';
                     if (isset($arrayFavoritos) && in_array($datosPrenda['id'] . '-' . $colorPorDefecto, $arrayFavoritos)) {
                         $iconoCorazon = 'bi-heart-fill';
-                    } 
-                    ?>   
-                    
-                    <button type="button" 
-                            id="btn-favorito-ficha"
-                            class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-lg d-flex justify-content-center align-items-center rounded-0" 
-                            data-id="<?php echo $datosPrenda['id']; ?>" 
-                            data-color="<?php echo $colorPorDefecto; ?>">
+                    }
+                    ?>
+
+                    <button type="button"
+                        id="btn-favorito-ficha"
+                        class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-lg d-flex justify-content-center align-items-center rounded-0"
+                        data-id="<?php echo $datosPrenda['id']; ?>"
+                        data-color="<?php echo $colorPorDefecto; ?>">
                         <i class="bi <?php echo $iconoCorazon ?> fs-4"></i>
                     </button>
 
@@ -176,28 +176,28 @@ include './includes/header.php';
     </div>
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasLook" aria-labelledby="offcanvasLookLabel" style="width: 450px;">
-        
+
         <div class="offcanvas-header border-bottom border-2 border-dark bg-light">
             <h5 class="offcanvas-title text-uppercase fw-bold" id="offcanvasLookLabel" style="letter-spacing: 2px;">
-                 Completa el Look
+                Completa el Look
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
         </div>
-        
+
         <div class="offcanvas-body">
             <p class="text-muted small mb-4 fw-bold text-uppercase">Combina tu prenda con estos artículos exclusivos:</p>
-            
+
             <div class="row" id="contenedorPrendasLook">
                 <?php if ($tieneLook && count($productosLook) > 0): ?>
                     <?php foreach ($productosLook as $prendaLook): ?>
                         <div class="col-6 position-relative d-flex flex-column mb-4">
                             <div class="card product-card border-0 bg-transparent position-relative">
-                                
+
                                 <div class="img-wrapper position-relative overflow-hidden">
                                     <a href="fichaProducto.php?idPrenda=<?= $prendaLook["id"] ?>&color=<?= $prendaLook["color_id"] ?>" class="text-decoration-none text-dark d-block">
                                         <img src="<?= $prendaLook['url_imagen'] ?>" class="card-img-top rounded-0" alt="<?= $prendaLook['nombre'] ?>" style="height: 250px; object-fit: cover;">
                                     </a>
-                                    
+
                                     <div id="overlay-tallas-<?= $prendaLook['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-2 text-center">
                                         <div class="d-flex justify-content-between align-items-center mb-2">
                                             <span class="small fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">Talla</span>
@@ -207,7 +207,7 @@ include './includes/header.php';
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="card-body text-center px-0 pb-1 mt-2">
                                     <a href="fichaProducto.php?idPrenda=<?= $prendaLook["id"] ?>&color=<?= $prendaLook["color_id"] ?>" class="text-decoration-none text-dark d-block">
                                         <h6 class="card-title text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.8rem;"><?= $prendaLook['nombre'] ?></h6>
@@ -217,21 +217,21 @@ include './includes/header.php';
                             </div>
 
                             <div class="d-flex align-items-center justify-content-between gap-1 mt-2 px-1">
-                                <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold py-1 px-0" 
-                                        style="font-size: 0.7rem;"
-                                        onclick="abrirOverlayTallas(event, <?= $prendaLook['id'] ?>, <?= $prendaLook['color_id'] ?>)">
+                                <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold py-1 px-0"
+                                    style="font-size: 0.7rem;"
+                                    onclick="abrirOverlayTallas(event, <?= $prendaLook['id'] ?>, <?= $prendaLook['color_id'] ?>)">
                                     Añadir
                                 </button>
 
                                 <?php
                                 $iconoCorazonLook = 'bi-heart';
                                 if (isset($arrayFavoritos) && in_array($prendaLook['id'] . '-' . $prendaLook['color_id'], $arrayFavoritos)) {
-                                    $iconoCorazonLook = 'bi-heart-fill'; 
+                                    $iconoCorazonLook = 'bi-heart-fill';
                                 }
                                 ?>
-                                <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-sm d-flex justify-content-center align-items-center rounded-0 p-1" 
-                                        data-id="<?= $prendaLook['id'] ?>" 
-                                        data-color="<?= $prendaLook['color_id'] ?>">
+                                <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-sm d-flex justify-content-center align-items-center rounded-0 p-1"
+                                    data-id="<?= $prendaLook['id'] ?>"
+                                    data-color="<?= $prendaLook['color_id'] ?>">
                                     <i class="bi <?= $iconoCorazonLook ?>" style="font-size: 0.9rem;"></i>
                                 </button>
                             </div>

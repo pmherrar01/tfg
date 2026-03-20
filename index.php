@@ -76,11 +76,11 @@ include './includes/header.php';
                                         $iconoCorazon = 'bi-heart-fill';
                                     }
                                     ?>
-<button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0" 
-        data-id="<?= $prenda['id'] ?>" 
-        data-color="<?= $prenda['color_id'] ?>">
-    <i class="bi <?= $iconoCorazon ?>"></i>
-</button>
+                                    <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0"
+                                        data-id="<?= $prenda['id'] ?>"
+                                        data-color="<?= $prenda['color_id'] ?>">
+                                        <i class="bi <?= $iconoCorazon ?>"></i>
+                                    </button>
                                 </div>
                             </div>
                             <?php
