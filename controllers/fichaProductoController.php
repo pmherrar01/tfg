@@ -28,6 +28,7 @@ $listaTallas = $producto->obtenerTallas($idPrenda);
 $tallasJson = json_encode($listaTallas);
 $coloresProducto = $producto->obtenerColoresPorProducto($idPrenda);
 
+// Faltaba el para que pille el ID del primer color de la lista
 $colorPorDefecto = !empty($coloresProducto) ? $coloresProducto['id'] : 0;
 
 $idColorActual = isset($_GET['color']) ? $_GET['color'] : $colorPorDefecto;
