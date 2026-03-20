@@ -20,26 +20,96 @@ class Producto
     }
 
     // ... (Tus Getters y Setters se mantienen igual) ...
-    public function getIdColecion() { return $this->idColecion; }
-    public function setIdColecion($idColecion) { $this->idColecion = $idColecion; return $this; }
-    public function getIdTipoProducto() { return $this->idTipoProducto; }
-    public function setIdTipoProducto($idTipoProducto) { $this->idTipoProducto = $idTipoProducto; return $this; }
-    public function getNombreProducto() { return $this->nombreProducto; }
-    public function setNombreProducto($nombreProducto) { $this->nombreProducto = $nombreProducto; return $this; }
-    public function getDescripcionProducto() { return $this->descripcionProducto; }
-    public function setDescripcionProducto($descripcionProducto) { $this->descripcionProducto = $descripcionProducto; return $this; }
-    public function getPrecioProducto() { return $this->precioProducto; }
-    public function setPrecioProducto($precioProducto) { $this->precioProducto = $precioProducto; return $this; }
-    public function getStock() { return $this->stock; }
-    public function setStock($stock) { $this->stock = $stock; return $this; }
-    public function getColorProducto() { return $this->colorProducto; }
-    public function setColorProducto($colorProducto) { $this->colorProducto = $colorProducto; return $this; }
-    public function getDestacado() { return $this->destacado; }
-    public function setDestacado($destacado) { $this->destacado = $destacado; return $this; }
-    public function getFechaProducto() { return $this->fechaProducto; }
-    public function setFechaProducto($fechaProducto) { $this->fechaProducto = $fechaProducto; return $this; }
-    public function getTallaProducto() { return $this->tallaProducto; }
-    public function setTallaProducto($tallaProducto) { $this->tallaProducto = $tallaProducto; return $this; }
+    public function getIdColecion()
+    {
+        return $this->idColecion;
+    }
+    public function setIdColecion($idColecion)
+    {
+        $this->idColecion = $idColecion;
+        return $this;
+    }
+    public function getIdTipoProducto()
+    {
+        return $this->idTipoProducto;
+    }
+    public function setIdTipoProducto($idTipoProducto)
+    {
+        $this->idTipoProducto = $idTipoProducto;
+        return $this;
+    }
+    public function getNombreProducto()
+    {
+        return $this->nombreProducto;
+    }
+    public function setNombreProducto($nombreProducto)
+    {
+        $this->nombreProducto = $nombreProducto;
+        return $this;
+    }
+    public function getDescripcionProducto()
+    {
+        return $this->descripcionProducto;
+    }
+    public function setDescripcionProducto($descripcionProducto)
+    {
+        $this->descripcionProducto = $descripcionProducto;
+        return $this;
+    }
+    public function getPrecioProducto()
+    {
+        return $this->precioProducto;
+    }
+    public function setPrecioProducto($precioProducto)
+    {
+        $this->precioProducto = $precioProducto;
+        return $this;
+    }
+    public function getStock()
+    {
+        return $this->stock;
+    }
+    public function setStock($stock)
+    {
+        $this->stock = $stock;
+        return $this;
+    }
+    public function getColorProducto()
+    {
+        return $this->colorProducto;
+    }
+    public function setColorProducto($colorProducto)
+    {
+        $this->colorProducto = $colorProducto;
+        return $this;
+    }
+    public function getDestacado()
+    {
+        return $this->destacado;
+    }
+    public function setDestacado($destacado)
+    {
+        $this->destacado = $destacado;
+        return $this;
+    }
+    public function getFechaProducto()
+    {
+        return $this->fechaProducto;
+    }
+    public function setFechaProducto($fechaProducto)
+    {
+        $this->fechaProducto = $fechaProducto;
+        return $this;
+    }
+    public function getTallaProducto()
+    {
+        return $this->tallaProducto;
+    }
+    public function setTallaProducto($tallaProducto)
+    {
+        $this->tallaProducto = $tallaProducto;
+        return $this;
+    }
 
     public function obtenerTallas($idPrenda)
     {
@@ -114,12 +184,24 @@ class Producto
     {
         $ordenSql = " ORDER BY p.creado_en DESC";
         switch ($accion) {
-            case 'precioAsc': $ordenSql = " ORDER BY p.precio ASC"; break;
-            case 'precioDesc': $ordenSql = " ORDER BY p.precio DESC"; break;
-            case 'nombreAsc': $ordenSql = " ORDER BY p.nombre ASC"; break;
-            case 'nombreDesc': $ordenSql = " ORDER BY p.nombre DESC"; break;
-            case 'fechaDesc': $ordenSql = " ORDER BY p.creado_en DESC"; break;
-            case 'fechaAsc': $ordenSql = " ORDER BY p.creado_en ASC"; break;
+            case 'precioAsc':
+                $ordenSql = " ORDER BY p.precio ASC";
+                break;
+            case 'precioDesc':
+                $ordenSql = " ORDER BY p.precio DESC";
+                break;
+            case 'nombreAsc':
+                $ordenSql = " ORDER BY p.nombre ASC";
+                break;
+            case 'nombreDesc':
+                $ordenSql = " ORDER BY p.nombre DESC";
+                break;
+            case 'fechaDesc':
+                $ordenSql = " ORDER BY p.creado_en DESC";
+                break;
+            case 'fechaAsc':
+                $ordenSql = " ORDER BY p.creado_en ASC";
+                break;
         }
         return $ordenSql;
     }
@@ -128,9 +210,15 @@ class Producto
     private function filtrarGenero($genero, $orden)
     {
         switch ($genero) {
-            case '1': $generoAFiltrar = 1; break;
-            case '2': $generoAFiltrar = 2; break;
-            default: $generoAFiltrar = 3; break;
+            case '1':
+                $generoAFiltrar = 1;
+                break;
+            case '2':
+                $generoAFiltrar = 2;
+                break;
+            default:
+                $generoAFiltrar = 3;
+                break;
         }
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -218,13 +306,20 @@ class Producto
     public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
     {
         switch ($filtrado) {
-            case 'genero': return $this->filtrarGenero($valor, $orden);
-            case 'coleccion': return $this->filtrarColeccion($valor, $orden);
-            case 'tipoPrenda': return $this->filtrarTipoPrenda($valor, $orden);
-            case 'color': return $this->filtrarColor($valor, $orden);
-            case 'talla': return $this->filtrarPorTalla($valor, $orden);
-            case 'precio': return $this->filtrarPorPrecio($valor, $valor2, $orden);
-            default: return $this->listarProductos();
+            case 'genero':
+                return $this->filtrarGenero($valor, $orden);
+            case 'coleccion':
+                return $this->filtrarColeccion($valor, $orden);
+            case 'tipoPrenda':
+                return $this->filtrarTipoPrenda($valor, $orden);
+            case 'color':
+                return $this->filtrarColor($valor, $orden);
+            case 'talla':
+                return $this->filtrarPorTalla($valor, $orden);
+            case 'precio':
+                return $this->filtrarPorPrecio($valor, $valor2, $orden);
+            default:
+                return $this->listarProductos();
         }
     }
 
@@ -284,26 +379,27 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function actualizarStock($idPrenda, $idColor, $talla, $cantidad){
+    public function actualizarStock($idPrenda, $idColor, $talla, $cantidad)
+    {
 
-    try {
-        $sql = "UPDATE producto_tallas SET stock = stock - :cantidad WHERE producto_id = :idPrenda AND color_id = :idColor AND talla = :talla";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([
-            ":cantidad" => $cantidad,
-            ":idPrenda" => $idPrenda,
-            ":idColor" => $idColor,
-            ":talla" => $talla
-        ]); 
-        return true;
-    } catch (PDOException) {
-        return false;
+        try {
+            $sql = "UPDATE producto_tallas SET stock = stock - :cantidad WHERE producto_id = :idPrenda AND color_id = :idColor AND talla = :talla";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":cantidad" => $cantidad,
+                ":idPrenda" => $idPrenda,
+                ":idColor" => $idColor,
+                ":talla" => $talla
+            ]);
+            return true;
+        } catch (PDOException) {
+            return false;
+        }
     }
 
-    }
 
-
-public function buscarPorNombre($nombreABuscar){
+    public function buscarPorNombre($nombreABuscar)
+    {
         $sql = "SELECT p.id, p.nombre, p.precio, c.id AS color_id, c.nombre AS color_nombre, MIN(i.url_imagen) AS url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
@@ -311,7 +407,7 @@ public function buscarPorNombre($nombreABuscar){
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
                 WHERE p.activo = 1 AND p.nombre LIKE :nombreABuscar
                 GROUP BY p.id, c.id
-                LIMIT 6"; 
+                LIMIT 6";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":nombreABuscar" => "%" . $nombreABuscar . "%"]);
@@ -319,5 +415,6 @@ public function buscarPorNombre($nombreABuscar){
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
 }
-?>
