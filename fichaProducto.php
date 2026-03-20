@@ -156,16 +156,13 @@ include './includes/header.php';
                     } 
                     ?>   
                     
-                    <button type="button" 
-                            id="btn-favorito-ficha"
-                            class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
-                            style="width: 60px; height: 50px; flex-shrink: 0; transition: all 0.3s; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
-                            data-id="<?php echo $datosPrenda['id']; ?>" 
-                            data-color="<?php echo $colorPorDefecto; ?>"
-                            onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
-                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
-                        <i class="bi <?php echo $iconoCorazon ?> fs-4"></i>
-                    </button>
+<button type="button" 
+        id="btn-favorito-ficha"
+        class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-lg d-flex justify-content-center align-items-center rounded-0" 
+        data-id="<?php echo $datosPrenda['id']; ?>" 
+        data-color="<?php echo $colorPorDefecto; ?>">
+    <i class="bi <?php echo $iconoCorazon ?> fs-4"></i>
+</button>
 
                 </div>
 

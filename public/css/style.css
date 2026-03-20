@@ -812,7 +812,24 @@ footer a:hover {
     transition: all 0.3s ease;
 }
 
-.btn-favorito-sm:hover {
-    background-color: var(--color-principal, #5c3a21);
-    color: #fff;
+/* ========================================== */
+/* BOTONES DE FAVORITOS (Diseño Unificado)    */
+/* ========================================== */
+.btn-favorito-custom {
+    flex-shrink: 0;
+    border: 2px solid var(--color-principal, #5c3a21);
+    color: var(--color-principal, #5c3a21);
+    background-color: transparent;
+    transition: all 0.3s ease;
 }
+
+/* El !important asegura que sobreescriba cualquier estilo nativo de Bootstrap al pasar el ratón */
+.btn-favorito-custom:hover {
+    background-color: var(--color-principal, #5c3a21) !important;
+    color: #fff !important;
+}
+
+/* Modificadores de Tamaño */
+.btn-favorito-std { width: 40px; height: 40px; }
+.btn-favorito-lg  { width: 60px; height: 50px; }
+.btn-favorito-sm  { width: 32px; height: 32px; }

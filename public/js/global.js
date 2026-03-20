@@ -368,14 +368,11 @@ function pintarPrendasRecientes() {
                         Añadir <i class="bi bi-plus-lg ms-1"></i>
                     </button>
 
-                    <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0" 
-                            style="width: 40px; height: 40px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
-                            data-id="${prenda.id}" 
-                            data-color="${prenda.colorPrenda}"
-                            onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
-                            onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21)';">
-                        <i class="bi ${iconoCorazon}"></i>
-                    </button>
+<button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0" 
+        data-id="${prenda.id}" 
+        data-color="${prenda.colorPrenda}">
+    <i class="bi ${iconoCorazon}"></i>
+</button>
                 </div>
             </div>
         `;
