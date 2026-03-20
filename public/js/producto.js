@@ -160,6 +160,69 @@ function seleccionarColor(colorId, elementoClicado) {
         }
     }
 
+    // ==========================================
+    // ACTUALIZAR DINÁMICAMENTE "COMPLETA EL LOOK"
+    // ==========================================
+    let idPrendaBase = mainProducto.dataset.id; // Ya lo tienes arriba en la página
+    let botonOffcanvas = document.getElementById('btnCompletarLook');
+    let contenedorPrendasLook = document.getElementById('contenedorPrendasLook');
+
+    if (botonOffcanvas && contenedorPrendasLook) {
+        fetch(`controllers/apiLookController.php?idPrenda=${idPrendaBase}&idColor=${colorId}`)
+            .then(res => res.json())
+            .then(datos => {
+                if (datos.exito && datos.productos.length > 0) {
+                    // 1. Mostrar el botón
+                    botonOffcanvas.classList.remove('d-none');
+                    
+                    // 2. Limpiar y rellenar las prendas
+                    contenedorPrendasLook.innerHTML = ''; 
+
+                    datos.productos.forEach(prendaLook => {
+                        let iconoCorazonLook = 'bi-heart';
+                        if (typeof listaFavoritosJS !== 'undefined' && listaFavoritosJS.includes(prendaLook.id + '-' + prendaLook.color_id)) {
+                            iconoCorazonLook = 'bi-heart-fill';
+                        }
+
+                        let htmlPrenda = `
+                            <div class="col-6 position-relative d-flex flex-column mb-4">
+                                <div class="card product-card border-0 bg-transparent position-relative">
+                                    <div class="img-wrapper position-relative overflow-hidden">
+                                        <a href="fichaProducto.php?idPrenda=${prendaLook.id}&color=${prendaLook.color_id}" class="text-decoration-none text-dark d-block">
+                                            <img src="${prendaLook.url_imagen}" class="card-img-top rounded-0" alt="${prendaLook.nombre}" style="height: 250px; object-fit: cover;">
+                                        </a>
+                                        <div id="overlay-tallas-${prendaLook.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-2 text-center">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">Talla</span>
+                                                <button type="button" class="btn-close" style="font-size: 0.6rem;" onclick="cerrarOverlayTallas(event, ${prendaLook.id})"></button>
+                                            </div>
+                                            <div id="contenedor-botones-${prendaLook.id}" class="d-flex justify-content-center flex-wrap gap-1"></div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body text-center px-0 pb-1 mt-2">
+                                        <a href="fichaProducto.php?idPrenda=${prendaLook.id}&color=${prendaLook.color_id}" class="text-decoration-none text-dark d-block">
+                                            <h6 class="card-title text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.8rem;">${prendaLook.nombre}</h6>
+                                            <p class="card-text mb-0 small">${prendaLook.precio} €</p>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between gap-1 mt-2 px-1">
+                                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold py-1 px-0" style="font-size: 0.7rem;" onclick="abrirOverlayTallas(event, ${prendaLook.id}, ${prendaLook.color_id})">Añadir</button>
+                                    <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0 p-1 btn-favorito-custom btn-favorito-sm" data-id="${prendaLook.id}" data-color="${prendaLook.color_id}">
+                                        <i class="bi ${iconoCorazonLook}" style="font-size: 0.9rem;"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        contenedorPrendasLook.innerHTML += htmlPrenda;
+                    });
+                } else {
+                    // No hay look para este color, ocultamos el botón
+                    botonOffcanvas.classList.add('d-none');
+                }
+            })
+            .catch(error => console.error('Error cargando el look:', error));
+    }
 
 }
 

@@ -166,11 +166,11 @@ include './includes/header.php';
 
                 </div>
 
-                <?php if ($tieneLook && count($productosLook) > 0): ?>
-                    <button class="btn btn-outline-dark rounded-0 w-100 mt-3 text-uppercase fw-bold py-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLook" aria-controls="offcanvasLook" style="letter-spacing: 2px;">
-                        Completar el Look
-                    </button>
-                <?php endif; ?>
+
+<button id="btnCompletarLook" class="btn btn-outline-dark rounded-0 w-100 mt-3 text-uppercase fw-bold py-2 <?php echo ($tieneLook && count($productosLook) > 0) ? '' : 'd-none'; ?>" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLook" aria-controls="offcanvasLook" style="letter-spacing: 2px;">
+    Completar el Look
+</button>
+
             </form>
 
         </div>
@@ -189,55 +189,11 @@ include './includes/header.php';
     <div class="offcanvas-body">
         <p class="text-muted small mb-4 fw-bold text-uppercase">Combina tu prenda con estos artículos exclusivos:</p>
         
-        <div class="row">
-            <?php foreach ($productosLook as $prendaLook): ?>
-                <div class="col-6 position-relative d-flex flex-column mb-4">
-                    <div class="card product-card border-0 bg-transparent position-relative">
-                        
-                        <div class="img-wrapper position-relative overflow-hidden">
-                            <a href="fichaProducto.php?idPrenda=<?= $prendaLook["id"] ?>&color=<?= $prendaLook["color_id"] ?>" class="text-decoration-none text-dark d-block">
-                                <img src="<?= $prendaLook['url_imagen'] ?>" class="card-img-top rounded-0" alt="<?= $prendaLook['nombre'] ?>" style="height: 250px; object-fit: cover;">
-                            </a>
-                            
-                            <div id="overlay-tallas-<?= $prendaLook['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-2 text-center">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <span class="small fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">Talla</span>
-                                    <button type="button" class="btn-close" style="font-size: 0.6rem;" onclick="cerrarOverlayTallas(event, <?= $prendaLook['id'] ?>)"></button>
-                                </div>
-                                <div id="contenedor-botones-<?= $prendaLook['id'] ?>" class="d-flex justify-content-center flex-wrap gap-1">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card-body text-center px-0 pb-1 mt-2">
-                            <a href="fichaProducto.php?idPrenda=<?= $prendaLook["id"] ?>&color=<?= $prendaLook["color_id"] ?>" class="text-decoration-none text-dark d-block">
-                                <h6 class="card-title text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.8rem;"><?= $prendaLook['nombre'] ?></h6>
-                                <p class="card-text mb-0 small"><?= $prendaLook['precio'] ?> €</p>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="d-flex align-items-center justify-content-between gap-1 mt-2 px-1">
-                        <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold py-1 px-0" 
-                                style="font-size: 0.7rem;"
-                                onclick="abrirOverlayTallas(event, <?= $prendaLook['id'] ?>, <?= $prendaLook['color_id'] ?>)">
-                            Añadir
-                        </button>
-
-                        <?php
-                        $iconoCorazonLook = 'bi-heart';
-                        if (isset($arrayFavoritos) && in_array($prendaLook['id'] . '-' . $prendaLook['color_id'], $arrayFavoritos)) {
-                            $iconoCorazonLook = 'bi-heart-fill'; 
-                        }
-                        ?>
-<button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0 p-1 btn-favorito-sm" 
-        data-id="<?= $prendaLook['id'] ?>" 
-        data-color="<?= $prendaLook['color_id'] ?>">
-    <i class="bi <?= $iconoCorazonLook ?>" style="font-size: 0.9rem;"></i>
-</button>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+        <div class="row" id="contenedorPrendasLook">
+            <?php if ($tieneLook && count($productosLook) > 0): ?>
+                <?php foreach ($productosLook as $prendaLook): ?>
+                    <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>
