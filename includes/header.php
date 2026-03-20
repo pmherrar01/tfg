@@ -69,7 +69,7 @@
             </ul>
           </div>
         <?php }; ?>
-<a href="carrito.php" class="text-reset position-relative">
+        <a href="carrito.php" class="text-reset position-relative">
           <i class="bi bi-bag"></i>
           <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
             <?php
@@ -91,7 +91,7 @@
 
   </nav>
 
-  <?php if (!isset($_SESSION['usuario_id'])): ?>
+  <?php if (!isset($_SESSION['usuario_id'])){ ?>
     <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
         <div class="modal-content rounded-0 border-0 p-0 overflow-hidden shadow-lg">
@@ -163,4 +163,4 @@
         </div>
       </div>
     </div>
-  <?php endif; ?>
+  <?php }; ?>

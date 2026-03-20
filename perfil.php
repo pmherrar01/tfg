@@ -202,25 +202,52 @@ include './includes/header.php';
                 <?php } else { ?>
                     <div class="row g-4">
                         <?php foreach ($listaFavoritos as $prenda) { ?>
-                            <div class="col-6 col-md-4">
-                                <div class="card product-card border-0 bg-transparent h-100 position-relative">
-                                    
-                                    <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['id'] ?>" data-color="<?= $prenda['color_id'] ?>">
-                                        <i class="bi bi-heart-fill"></i>
-                                    </button>
+                           <div class="col-6 col-md-4">
+    <div class="card product-card border-0 bg-transparent h-100 position-relative d-flex flex-column">
 
-                                    <a href="fichaProducto.php?idPrenda=<?= $prenda['id'] ?>&color=<?= $prenda['color_id'] ?>" class="text-decoration-none text-dark">
-                                        <div class="img-wrapper">
-                                            <img src="<?= !empty($prenda['url_imagen']) ? $prenda['url_imagen'] : 'public/img/fondo.jpg' ?>" class="card-img-top" alt="<?= $prenda['nombre'] ?>">
-                                        </div>
-                                        <div class="card-body text-center px-0">
-                                            <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1"><?= $prenda['nombre'] ?></h5>
-                                            <p class="small text-muted mb-1"><?= $prenda['color_nombre'] ?></p>
-                                            <p class="card-text fw-bold"><?= $prenda['precio'] ?> €</p>
-                                        </div>
-                                    </a>
+        <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>" class="text-decoration-none text-dark d-block flex-grow-1">
 
-                                </div>
+            <div class="img-wrapper position-relative">
+                <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal" alt="Prenda">
+                <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
+                
+                <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center" style="z-index: 20;" onclick="event.preventDefault();">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Talla</span>
+                        <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, <?= $prenda['id'] ?>)"></button>
+                    </div>
+                    <div id="contenedor-botones-<?= $prenda['id'] ?>" class="d-flex justify-content-center flex-wrap gap-2">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card-body text-center px-0">
+                <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1"><?php echo $prenda["nombre"] ?></h5>
+                <p class="card-text"><?php echo $prenda["precio"] ?> €</p>
+            </div>
+        </a>
+
+        <div class="d-flex align-items-center justify-content-between gap-2 mt-auto px-1 pt-2">
+            <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
+                    style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
+                    onclick="abrirOverlayTallas(event, <?= $prenda['id'] ?>, <?= $prenda['color_id'] ?>)">
+                Añadir
+            </button>
+
+            <?php
+            // Como estamos en el Perfil > Favoritos, el corazón SIEMPRE va relleno
+            $iconoCorazon = 'bi-heart-fill';
+            ?>
+            <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0 m-0" 
+                    data-id="<?= $prenda['id'] ?>" 
+                    data-color="<?= $prenda['color_id'] ?>">
+                <i class="bi <?= $iconoCorazon ?>"></i>
+            </button>
+        </div>
+
+    </div>
+</div>
                             </div>
                         <?php } ?>
                     </div>
