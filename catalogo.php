@@ -361,23 +361,6 @@ include './includes/header.php';
 
 
 
-                                <?php
-
-                                $iconoCorazon = 'bi-heart';
-
-                                if (isset($arrayFavoritos) && in_array($prenda['id'] . '-' . $prenda['color_id'], $arrayFavoritos)) {
-
-                                    $iconoCorazon = 'bi-heart-fill';
-                                }
-
-                                ?>
-
-                                <button type="button" class="btn btn-favorito btn-toggle-favorito position-absolute top-0 end-0 m-2" style="z-index: 10;" data-id="<?= $prenda['id'] ?>" data-color="<?= $prenda['color_id'] ?>">
-
-                                    <i class="bi <?= $iconoCorazon ?>"></i>
-
-                                </button>
-
 
                                 <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>">
 
