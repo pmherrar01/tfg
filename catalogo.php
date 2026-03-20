@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once 'controllers/catalogoController.php'; 
+require_once 'controllers/catalogoController.php';
 
 include './includes/header.php';
 ?>
@@ -20,12 +20,14 @@ include './includes/header.php';
     <div class="row">
         <aside class="col-lg-3 d-none d-lg-block mb-4">
             <div class="sticky-top" style="top: 100px; z-index: 1;">
+
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
                     <h5 class="fw-bold text-uppercase m-0">Filtros</h5>
                     <a href="catalogo.php" class="text-muted small text-decoration-underline">Limpiar</a>
                 </div>
 
                 <div class="accordion accordion-flush" id="acordeonFiltros">
+
                     <div class="accordion-item bg-transparent border-bottom">
                         <h2 class="accordion-header">
                             <button class="accordion-button bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroOrdenar">
@@ -165,41 +167,40 @@ include './includes/header.php';
                 if (!empty($listaProductos)) {
                     foreach ($listaProductos as $prenda) {
                         
-                        // CORRECCIÓN DE LA LÍNEA 91: Se ha añadido el que faltaba
+                        // TU LÓGICA ORIGINAL INTACTA
                         $listaImagenesColor = $imagen->listarImagenesPorColor($prenda["id"], $prenda["color_id"]);
-                        $fotoHover = (is_array($listaImagenesColor) && count($listaImagenesColor) > 1) ? $listaImagenesColor["url_imagen"] : $prenda["url_imagen"];
+                        $fotoHover = count($listaImagenesColor) > 1 ? $listaImagenesColor["url_imagen"] : $prenda["url_imagen"];
                 ?>
 
                         <div class="col-6 col-md-4">
                             <div class="card product-card border-0 bg-transparent h-100 position-relative d-flex flex-column">
 
                                 <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>" class="text-decoration-none text-dark d-block flex-grow-1">
-                                    <div class="img-wrapper position-relative">
+                                    <div class="img-wrapper position-relative overflow-hidden">
                                         <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal" alt="Prenda">
                                         <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
                                         
-                                        <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center" style="z-index: 20;" onclick="event.preventDefault();">
+                                        <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-2 text-center" style="z-index: 20;" onclick="event.preventDefault();">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px;">Talla</span>
-                                                <button type="button" class="btn-close" style="font-size: 0.7rem;" onclick="cerrarOverlayTallas(event, <?= $prenda['id'] ?>)"></button>
+                                                <span class="small fw-bold text-uppercase" style="letter-spacing: 1px; font-size: 0.7rem;">Talla</span>
+                                                <button type="button" class="btn-close" style="font-size: 0.6rem;" onclick="cerrarOverlayTallas(event, <?= $prenda['id'] ?>)"></button>
                                             </div>
-                                            <div id="contenedor-botones-<?= $prenda['id'] ?>" class="d-flex justify-content-center flex-wrap gap-2">
+                                            <div id="contenedor-botones-<?= $prenda['id'] ?>" class="d-flex justify-content-center flex-wrap gap-1">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="card-body text-center px-0 pb-0">
-                                        <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1"><?php echo $prenda["nombre"] ?></h5>
+                                    <div class="card-body text-center px-0 pb-1 mt-2">
+                                        <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate"><?php echo $prenda["nombre"] ?></h5>
                                         <p class="card-text mb-2"><?php echo $prenda["precio"] ?> €</p>
                                     </div>
                                 </a>
 
-                                <div class="d-flex align-items-center justify-content-between gap-2 mt-auto px-0 pt-2">
-                                    
-                                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold m-0" 
-                                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
+                                <div class="d-flex align-items-center justify-content-between gap-1 mt-auto px-1">
+                                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold py-1 px-0" 
+                                            style="font-size: 0.75rem;"
                                             onclick="abrirOverlayTallas(event, <?= $prenda['id'] ?>, <?= $prenda['color_id'] ?>)">
-                                        Añadir <i class="bi bi-plus-lg ms-1"></i>
+                                        Añadir
                                     </button>
 
                                     <?php
@@ -208,12 +209,11 @@ include './includes/header.php';
                                         $iconoCorazon = 'bi-heart-fill';
                                     }
                                     ?>
-                                    <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0 m-0" 
+                                    <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0 p-1" 
                                             data-id="<?= $prenda['id'] ?>" 
                                             data-color="<?= $prenda['color_id'] ?>">
                                         <i class="bi <?= $iconoCorazon ?>"></i>
                                     </button>
-
                                 </div>
 
                             </div>
@@ -235,9 +235,6 @@ include './includes/header.php';
 <script src="public/js/catalogo.js"></script>
 
 <?php
-
 include './includes/prendasRecientes.php';
-
 include './includes/footer.php';
-
 ?>
