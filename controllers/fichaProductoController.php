@@ -27,7 +27,10 @@ $galeria = $imagen->listarImagenes($idPrenda);
 $listaTallas = $producto->obtenerTallas($idPrenda);
 $tallasJson = json_encode($listaTallas);
 $coloresProducto = $producto->obtenerColoresPorProducto($idPrenda);
+
 $colorPorDefecto = !empty($coloresProducto) ? $coloresProducto['id'] : 0;
+
+$idColorActual = isset($_GET['color']) ? $_GET['color'] : $colorPorDefecto;
 
 $arrayFavoritos = [];
 
@@ -40,14 +43,15 @@ if (isset($_SESSION['usuario_id'])) {
     }
 }
 
-$tieneLook = $look->comprobarLook($idPrenda, $idColor);
-$prendasLook = false;
 
-if ($colorPorDefecto > 0) {
-    $tieneLook = $look->comprobarLook($idPrenda, $colorPorDefecto);
+$productosLook = [];
+$tieneLook = false;
+
+if ($idColorActual > 0) {
+    $tieneLook = $look->comprobarLook($idPrenda, $idColorActual);
 
     if ($tieneLook) {
-        $prendasLook =  $look->mostrarLook($idPrenda, $idColor);
+        $productosLook =  $look->mostrarLook($idPrenda, $idColorActual);
     }
 }
 

@@ -171,7 +171,7 @@ include './includes/header.php';
 
                 <?php if ($tieneLook && count($productosLook) > 0): ?>
                     <button class="btn btn-outline-dark rounded-0 w-100 mt-3 text-uppercase fw-bold py-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasLook" aria-controls="offcanvasLook" style="letter-spacing: 2px;">
-                        <i class="bi bi-stars"></i> Completar el Look
+                        Completar el Look
                     </button>
                 <?php endif; ?>
             </form>
@@ -184,7 +184,7 @@ include './includes/header.php';
     
     <div class="offcanvas-header border-bottom border-2 border-dark bg-light">
         <h5 class="offcanvas-title text-uppercase fw-bold" id="offcanvasLookLabel" style="letter-spacing: 2px;">
-            <i class="bi bi-stars"></i> Completa el Look
+             Completa el Look
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
     </div>
@@ -233,14 +233,11 @@ include './includes/header.php';
                             $iconoCorazonLook = 'bi-heart-fill'; 
                         }
                         ?>
-                        <button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0 p-1" 
-                                style="width: 32px; height: 32px; flex-shrink: 0; border: 2px solid var(--color-principal, #5c3a21); color: var(--color-principal, #5c3a21); background-color: transparent;"
-                                data-id="<?= $prendaLook['id'] ?>" 
-                                data-color="<?= $prendaLook['color_id'] ?>"
-                                onmouseover="this.style.backgroundColor='var(--color-principal, #5c3a21)'; this.style.color='#fff';"
-                                onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--color-principal, #5c3a21';">
-                            <i class="bi <?= $iconoCorazonLook ?>" style="font-size: 0.9rem;"></i>
-                        </button>
+<button type="button" class="btn btn-toggle-favorito d-flex justify-content-center align-items-center rounded-0 p-1 btn-favorito-sm" 
+        data-id="<?= $prendaLook['id'] ?>" 
+        data-color="<?= $prendaLook['color_id'] ?>">
+    <i class="bi <?= $iconoCorazonLook ?>" style="font-size: 0.9rem;"></i>
+</button>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -800,3 +800,19 @@ footer a:hover {
     opacity: 0.4;
     cursor: not-allowed !important;
 }
+
+/* Botón de favoritos pequeño (Completa el Look) */
+.btn-favorito-sm {
+    width: 32px; 
+    height: 32px; 
+    flex-shrink: 0; 
+    border: 2px solid var(--color-principal, #5c3a21); 
+    color: var(--color-principal, #5c3a21); 
+    background-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-favorito-sm:hover {
+    background-color: var(--color-principal, #5c3a21);
+    color: #fff;
+}
