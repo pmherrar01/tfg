@@ -858,3 +858,59 @@ footer a:hover {
 .swal2-icon {
     animation-duration: 0.3s !important;
 }
+
+
+
+/* SECCIÓN ACCESO ANTICIPADO ANTICIPADO*/
+
+.vip-countdown {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1a1a1a;
+}
+
+.vip-overlay {
+    background: url('../img/fondo.jpg') center/cover no-repeat;
+    filter: brightness(0.35);
+    z-index: 0;
+}
+
+.vip-title {
+    letter-spacing: 5px;
+}
+
+.vip-reloj-container {
+    background-color: var(--color-secundario);
+    padding: 2rem 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-width: 800px; 
+}
+
+
+.vip-number {
+    font-size: 3.5rem;
+    color: var(--color-principal);
+    line-height: 1;
+}
+
+
+.vip-separator {
+    font-size: 3rem;
+    color: var(--color-principal);
+    padding-bottom: 25px; 
+}
+
+
+.vip-label {
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #333333; 
+    margin-top: 5px;
+    display: block;
+}
+
+.vip-btn-espaciado {
+    letter-spacing: 1px;
+}

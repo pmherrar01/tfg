@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once 'includes/auth.php';
 require_once 'controllers/perfilController.php';
 
@@ -246,12 +250,13 @@ include './includes/header.php';
 
                                 </div>
                             </div>
-                        <?php } ?>
+                        <?php } // Fin del foreach ?>
+                    </div>
+                <?php } // Fin del else de favoritos ?>
 
-                    </div> <?php }  ?>
 
-<?php } elseif ($seccion == 'citas') { ?>
-                
+            <?php } elseif ($seccion == 'citas') { ?>
+
                 <h3 class="fw-bold text-uppercase mb-4">Mis Citas</h3>
                 
                 <?php if (empty($listaCitas)) { ?>
@@ -289,14 +294,13 @@ include './includes/header.php';
                                     </div>
                                 </div>
                             </div>
-                        <?php } ?>
+                        <?php } // Fin foreach citas ?>
                     </div>
-                <?php }
-                } ?>
-    </div>
+                <?php } // Fin else citas ?>
 
+            <?php } // Fin if principal ?>
 
-    </section>
+        </section>
     </div>
 </main>
 

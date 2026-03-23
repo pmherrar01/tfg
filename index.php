@@ -5,10 +5,53 @@ require_once 'controllers/indexController.php';
 include './includes/header.php';
 ?>
 
-<section class="hero-section d-flex align-items-center justify-content-center text-center">
-    <div class="hero-content">
-        <h2 class="display-1 fw-bold text-uppercase hero-title">New Collection</h2>
-        <a href="#" class="btn btn-custom mt-4">Descubrir</a>
+<section class="vip-countdown position-relative text-center py-5 overflow-hidden text-white">
+    
+    <div class="vip-overlay position-absolute w-100 h-100 top-0 start-0"></div>
+    
+    <div class="container position-relative z-1">
+        
+        <h2 class="vip-title display-4 fw-bold text-uppercase mb-3">Acceso Anticipado</h2>
+        <p class="fs-5 mb-5 text-light fw-light">Nuestra colección más exclusiva está a punto de salir. Consigue tu acceso anticipado.</p>
+        
+        <div class="vip-reloj-container mb-5 mx-auto">
+            <div id="reloj-vip" class="d-flex justify-content-center align-items-center gap-3 gap-md-5">
+                
+                <div class="text-center">
+                    <span id="dias" class="vip-number fw-bold d-block">00</span>
+                    <span class="vip-label text-uppercase fw-bold">Días</span>
+                </div>
+                <span class="vip-separator fw-bold">:</span>
+                
+                <div class="text-center">
+                    <span id="horas" class="vip-number fw-bold d-block">00</span>
+                    <span class="vip-label text-uppercase fw-bold">Horas</span>
+                </div>
+                <span class="vip-separator fw-bold">:</span>
+                
+                <div class="text-center">
+                    <span id="minutos" class="vip-number fw-bold d-block">00</span>
+                    <span class="vip-label text-uppercase fw-bold">Min</span>
+                </div>
+                <span class="vip-separator fw-bold d-none d-sm-block">:</span>
+                
+                <div class="text-center d-none d-sm-block">
+                    <span id="segundos" class="vip-number fw-bold d-block">00</span>
+                    <span class="vip-label text-uppercase fw-bold">Seg</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <button class="btn btn-outline-light rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado">
+                Solicitar Código
+            </button>
+            <button class="btn btn-principal rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado">
+                 Ya tengo mi pase
+            </button>
+        </div>
+        
     </div>
 </section>
 
