@@ -4,11 +4,15 @@ require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/favorito.php";
+require_once __DIR__ . "/../models/cita.php"; 
 
 $db = new Database();
-$user = new Usuario($db->conectar());
-$pedido = new Pedido($db->conectar());
-$favoritoModel = new Favorito($db->conectar());
+$conexion = $db->conectar();
+
+$user = new Usuario($conexion);
+$pedido = new Pedido($conexion);
+$favoritoModel = new Favorito($conexion);
+$citaModel = new Cita($conexion); 
 
 $idUsuarioSession = $_SESSION["usuario_id"];
 
@@ -36,6 +40,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 
 $listaPedidos = $pedido->listarPedidos($_SESSION["usuario_id"]);
-// ¡Aquí cargamos las prendas favoritas reales!
 $listaFavoritos = $favoritoModel->listarFavoritos($_SESSION["usuario_id"]);
+$listaCitas = $citaModel->obtenerCitasUsuario($_SESSION["usuario_id"]); 
 ?>

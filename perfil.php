@@ -26,6 +26,7 @@ include './includes/header.php';
                             Puntos de Fidelidad
                             <span class="badge bg-success rounded-pill"><?php echo isset($datosUsu['puntos_fidelidad']) ? $datosUsu['puntos_fidelidad'] : '0'; ?> pts</span>
                         </a>
+                        <a href="perfil.php?seccion=citas" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'citas' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Citas</a>
                         <a href="controllers/usuarioController.php?accion=logout" class="list-group-item list-group-item-action p-3 text-danger fw-bold mt-2 border-top">Cerrar Sesión</a>
                     </div>
                 </div>
@@ -200,9 +201,9 @@ include './includes/header.php';
                         </div>
                     </div>
                 <?php } else { ?>
-                    
+
                     <div class="row g-4">
-                        
+
                         <?php foreach ($listaFavoritos as $prenda) { ?>
                             <div class="col-6 col-md-4 col-lg-3 mb-4">
                                 <div class="card product-card border-0 bg-transparent h-100 position-relative d-flex flex-column">
@@ -246,15 +247,57 @@ include './includes/header.php';
                                 </div>
                             </div>
                         <?php } ?>
-                    
+
                     </div> <?php }  ?>
 
-            <?php }; ?>
+<?php } elseif ($seccion == 'citas') { ?>
+                
+                <h3 class="fw-bold text-uppercase mb-4">Mis Citas</h3>
+                
+                <?php if (empty($listaCitas)) { ?>
+                    <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
+                        <div>
+                            <i class="bi bi-calendar-x text-muted display-1 mb-3 d-block"></i>
+                            <h4 class="fw-bold text-uppercase">No tienes citas programadas</h4>
+                            <p class="text-muted">Aún no has reservado ninguna visita a nuestro showroom exclusivo.</p>
+                            <a href="citas.php" class="btn btn-outline-dark rounded-0 px-5 py-2 text-uppercase fw-bold mt-3">Reserva ahora</a>
+                        </div>
+                    </div>
+                <?php } else { ?>
+                    <div class="row g-4">
+                        <?php foreach ($listaCitas as $cita) { ?>
+                            <div class="col-12 col-md-6">
+                                <div class="card border-dark border-1 rounded-0 h-100 bg-transparent">
+                                    <div class="card-header border-bottom border-dark border-1 bg-transparent p-3 d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold text-uppercase fs-6">
+                                            <i class="bi bi-calendar-event me-2"></i><?php echo date('d / m / Y', strtotime($cita['fecha_cita'])); ?>
+                                        </span>
+                                        <span class="fw-bold text-dark bg-light px-3 py-1 border border-dark border-1">
+                                            <?php echo date('H:i', strtotime($cita['fecha_cita'])); ?> h
+                                        </span>
+                                    </div>
+                                    <div class="card-body p-4">
+                                        <p class="mb-1 text-muted small text-uppercase fw-bold">Motivo de la visita</p>
+                                        <p class="mb-4 fw-bold fs-6"><?php echo $cita['motivo']; ?></p>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                                            <p class="mb-0 text-muted small text-uppercase fw-bold">Estado</p>
+                                            <p class="mb-0 fw-bold fs-6 text-uppercase <?php echo ($cita['estado'] == 'pendiente') ? 'text-warning' : (($cita['estado'] == 'cancelada') ? 'text-danger' : 'text-success'); ?>">
+                                                <?php echo $cita['estado']; ?>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                <?php }
+                } ?>
     </div>
 
 
-</section>
-</div>
+    </section>
+    </div>
 </main>
 
 <?php include './includes/footer.php'; ?>

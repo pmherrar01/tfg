@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmtInsert->execute()) {
         // Redirigimos al perfil para que vea su cita guardada
-        header("Location: ../perfil.php?seccion=citas&mensaje=cita_confirmada");
+        header("Location: ../reservaConfirmada.php");
         exit();
     } else {
         header("Location: ../citas.php?error=error_bd");
