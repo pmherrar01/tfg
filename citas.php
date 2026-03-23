@@ -14,15 +14,21 @@ include './includes/header.php';
 <main class="container my-5 py-4">
     <div class="row g-5">
 
-        <div class="col-lg-5">
+<div class="col-lg-5 d-flex flex-column">
             <h2 class="fw-bold text-uppercase mb-4">La Experiencia HERROR</h2>
             <p class="text-muted mb-4">
-                Queremos ofrecerte una atención completamente personalizada. Reserva tu cita para descubrir nuestra nueva colección,
+                Queremos ofrecerte una atención completamente personalizada. Reserva tu cita para descubrir nuestra nueva colección, 
                 recibir asesoramiento de estilo exclusivo o recoger tus pedidos online en un entorno único.
             </p>
-
+            
             <div class="flex-grow-1 bg-light position-relative" style="min-height: 350px;">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.892891541217!2d-3.7068462882110267!3d40.433370554506986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422889dc61cd51%3A0x7d87718fe6a0552f!2sCalle%20de%20Fuencarral%2C%20Madrid!5e0!3m2!1ses!2ses!4v1774262493975!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.284206037134!2d-3.689626323490729!3d40.42470737143734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4228913985d1e7%3A0xc3419992d9d1b098!2sC.%20de%20Serrano%2C%20Madrid!5e0!3m2!1ses!2ses!4v1716382947192!5m2!1ses!2ses" 
+                    class="position-absolute top-0 start-0 w-100 h-100 border-0" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
             </div>
 
             <div class="bg-light p-4 text-center mt-5">
