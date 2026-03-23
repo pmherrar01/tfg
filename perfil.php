@@ -200,7 +200,9 @@ include './includes/header.php';
                         </div>
                     </div>
                 <?php } else { ?>
+                    
                     <div class="row g-4">
+                        
                         <?php foreach ($listaFavoritos as $prenda) { ?>
                             <div class="col-6 col-md-4 col-lg-3 mb-4">
                                 <div class="card product-card border-0 bg-transparent h-100 position-relative d-flex flex-column">
@@ -243,12 +245,12 @@ include './includes/header.php';
 
                                 </div>
                             </div>
-                    </div>
-                <?php } ?>
-    </div>
-<?php } ?>
+                        <?php } ?>
+                    
+                    </div> <?php }  ?>
 
-<?php }; ?>
+            <?php }; ?>
+    </div>
 
 
 </section>
