@@ -13,16 +13,16 @@ include './includes/header.php';
 
 <main class="container my-5 py-4">
     <div class="row g-5">
-        
+
         <div class="col-lg-5">
             <h2 class="fw-bold text-uppercase mb-4">La Experiencia HERROR</h2>
             <p class="text-muted mb-4">
-                Queremos ofrecerte una atención completamente personalizada. Reserva tu cita para descubrir nuestra nueva colección, 
+                Queremos ofrecerte una atención completamente personalizada. Reserva tu cita para descubrir nuestra nueva colección,
                 recibir asesoramiento de estilo exclusivo o recoger tus pedidos online en un entorno único.
             </p>
-            
-<div class="flex-grow-1 bg-light position-relative" style="min-height: 350px;">
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.892891541217!2d-3.7068462882110267!3d40.433370554506986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422889dc61cd51%3A0x7d87718fe6a0552f!2sCalle%20de%20Fuencarral%2C%20Madrid!5e0!3m2!1ses!2ses!4v1774262493975!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+            <div class="flex-grow-1 bg-light position-relative" style="min-height: 350px;">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.892891541217!2d-3.7068462882110267!3d40.433370554506986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422889dc61cd51%3A0x7d87718fe6a0552f!2sCalle%20de%20Fuencarral%2C%20Madrid!5e0!3m2!1ses!2ses!4v1774262493975!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
 
             <div class="bg-light p-4 text-center mt-5">
@@ -34,9 +34,9 @@ include './includes/header.php';
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm rounded-0 p-4 p-md-5">
                 <h3 class="fw-bold text-uppercase mb-4">Reserva tu visita</h3>
-                
+
                 <form id="form-cita" action="controllers/citasController.php" method="POST">
-                    
+
                     <div class="mb-4">
                         <label class="form-label fw-bold text-uppercase small text-muted">¿Cuál es el motivo de tu visita?</label>
                         <select name="motivo" class="form-select rounded-0 py-2" required>
@@ -53,7 +53,7 @@ include './includes/header.php';
                             <label class="form-label fw-bold text-uppercase small text-muted">Fecha de la cita</label>
                             <input type="date" id="fecha-cita" name="fecha" class="form-control rounded-0 py-2" min="<?php echo date('Y-m-d', strtotime('+1 day')); ?>" required>
                         </div>
-                        
+
                         <div class="col-md-6">
                             <label class="form-label fw-bold text-uppercase small text-muted">Hora</label>
                             <select id="hora-cita" name="hora" class="form-select rounded-0 py-2" required disabled>
@@ -92,10 +92,10 @@ include './includes/header.php';
         let selectHora = document.getElementById('hora-cita');
         let horaHelp = document.getElementById('hora-help');
 
-        if(fechaSeleccionada) {
+        if (fechaSeleccionada) {
             // Habilitamos el desplegable mientras cargamos
             selectHora.disabled = false;
-            
+
             // Reseteamos todas las opciones para que vuelvan a estar disponibles
             Array.from(selectHora.options).forEach(opt => opt.disabled = false);
             horaHelp.classList.add('d-none');
@@ -105,12 +105,12 @@ include './includes/header.php';
                 .then(response => response.json())
                 .then(horasLlenas => {
                     // horasLlenas será un array con las horas que ya tienen 10 reservas, ej: ["10:00", "18:00"]
-                    if(horasLlenas.length > 0) {
+                    if (horasLlenas.length > 0) {
                         horaHelp.classList.remove('d-none'); // Mostramos el aviso
-                        
+
                         // Deshabilitamos las horas que nos diga el backend
                         Array.from(selectHora.options).forEach(opt => {
-                            if(horasLlenas.includes(opt.value)) {
+                            if (horasLlenas.includes(opt.value)) {
                                 opt.disabled = true;
                                 opt.text = opt.value + " (Aforo Completo)";
                             } else if (opt.value !== "") {
