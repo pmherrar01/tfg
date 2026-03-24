@@ -28,6 +28,7 @@
           <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=1">Hombre</a></li>
           <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=2">Mujer</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="../citas.php">Pide Cita</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="../segundaMano.php">Segunda Mano</a></li>
         </ul>
       </div>
 
@@ -62,6 +63,7 @@
               <li><a class="dropdown-item" href="perfil.php">Mi Perfil</a></li>
               <li><a class="dropdown-item" href="perfil.php?seccion=pedidos">Mis Pedidos</a></li>
               <li><a class="dropdown-item" href="perfil.php?seccion=favoritos">Mis Favoritos</a></li>
+
               <li>
                 <hr class="dropdown-divider">
               </li>

@@ -46,9 +46,9 @@ $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
 if (isset($_GET["coleccion"]) && $_GET["coleccion"] === 'vip') {
     
-    if (isset($_SESSION['acceso_vip']) && $_SESSION['acceso_vip'] === true) {
+    if (isset($_SESSION['acceso']) && $_SESSION['acceso'] === true) {
         $listaProductos = $producto->listarProductos(3);
-        $mensajeFiltrado = "Drop 002: Colección Exclusiva";
+        $mensajeFiltrado = "Colección Exclusiva";
     } else {
         header("Location: index.php?error=acceso_denegado");
         exit();
