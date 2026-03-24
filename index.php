@@ -233,6 +233,8 @@ include './includes/prendasRecientes.php';
     </div>
 </div>
 
+<script src="public/js/index.js"></script>
+
 <?php
 
 
