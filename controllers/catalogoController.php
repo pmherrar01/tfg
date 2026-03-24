@@ -44,7 +44,17 @@ function crearUrl($clave, $valor)
 
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
-if (isset($_GET["genero"])) {
+if (isset($_GET["coleccion"]) && $_GET["coleccion"] === 'vip') {
+    
+    if (isset($_SESSION['acceso_vip']) && $_SESSION['acceso_vip'] === true) {
+        $listaProductos = $producto->listarProductos(3);
+        $mensajeFiltrado = "Drop 002: Colección Exclusiva";
+    } else {
+        header("Location: index.php?error=acceso_denegado");
+        exit();
+    }
+
+}elseif (isset($_GET["genero"])) {
     $listaProductos = $producto->filtrar("genero", $_GET["genero"], null, $ordenActual);
     $mensajeFiltrado = $_GET['genero'];
     if ($mensajeFiltrado == "1") {
@@ -75,7 +85,7 @@ if (isset($_GET["genero"])) {
     $listaProductos = $producto->ordenar($_GET["orden"]);
     $mensajeFiltrado = "Ordenado por selección";
 } else {
-    $listaProductos = $producto->listarProductos();
+    $listaProductos = $producto->listarProductos(1);
     $mensajeFiltrado = "Todos los productos";
 }
 

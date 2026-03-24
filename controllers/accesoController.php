@@ -24,7 +24,7 @@ if ($resultaado){
 
     $_SESSION["acceso"] = true;
 
-    header("Location: catalogo.php?activo=3");
+    header("Location: ../catalogo.php?coleccion=vip");
     exit();
 
 }else{
