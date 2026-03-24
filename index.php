@@ -89,7 +89,7 @@ include './includes/header.php';
                 <h3 class="fw-bold text-uppercase mb-3">Acceso Exclusivo</h3>
                 <p class="text-muted small mb-4">Introduce el código secreto que has recibido por email.</p>
                 
-                <form id="form-entrar-vip" action="controllers/vipController.php" method="POST">
+                <form id="form-entrar-vip" action="controllers/accesoController.php" method="POST">
                     <input type="text" name="codigo" class="form-control rounded-0 text-center mb-4 py-3 text-uppercase fw-bold fs-3 input-codigo-acceso" placeholder="XXXXXX" maxlength="6" required>
                     
                     <button type="submit" class="btn btn-principal w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Desbloquear Colección</button>

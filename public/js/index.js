@@ -28,6 +28,17 @@ formularioAcceso.addEventListener('submit', function (e) {
     console.log("Correo Acesso anticipado:  " + correo);
 
 
+    Swal.fire({
+        icon: 'success',
+        title: '¡Solicitud recibida!',
+        text: 'Revisa tu bandeja de entrada (y la carpeta de Spam). Te hemos enviado tu pase secreto.',
+        confirmButtonColor: 'var(--color-principal, #000)',
+        showClass: { popup: 'animate__animated animate__fadeIn animate__faster' },
+        hideClass: { popup: 'animate__animated animate__fadeOut animate__faster' }
+    });
+    
+    formularioAcceso.reset();
+
 
     const modal = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarAcceso'));
     modal.hide();
