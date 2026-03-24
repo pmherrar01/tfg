@@ -120,14 +120,14 @@ class Producto
     }
 
     // CORREGIDO: Añadidos los INNER JOIN para poder agrupar por c.id
-    public function listarProductos($limite = null)
+    public function listarProductos($estadoActivo, $limite = null)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
-                WHERE p.activo = 1
+                WHERE p.activo = :estadoActivo
                 GROUP BY p.id, c.id
                 ORDER BY p.creado_en DESC";
 
@@ -135,8 +135,8 @@ class Producto
             $sql .= " LIMIT " . $limite;
         }
 
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute();
+        $sentencia = $this->conexionDataBase->prepare($sql); 
+        $sentencia->execute([":estadoActivo" => $estadoActivo]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -319,7 +319,7 @@ class Producto
             case 'precio':
                 return $this->filtrarPorPrecio($valor, $valor2, $orden);
             default:
-                return $this->listarProductos();
+                return $this->listarProductos(1);
         }
     }
 
