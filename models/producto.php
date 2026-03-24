@@ -13,101 +13,274 @@ class Producto
     private $destacado;
     private $fechaProducto;
     private $tallaProducto;
+    private $esSegundaMano;
+    private $idUsuarioVendedor;
+    private $estadoRevision;
 
     public function __construct($db)
     {
         $this->conexionDataBase = $db;
     }
 
-    // ... (Tus Getters y Setters se mantienen igual) ...
+    /**
+     * Get the value of idColecion
+     */ 
     public function getIdColecion()
     {
         return $this->idColecion;
     }
+
+    /**
+     * Set the value of idColecion
+     *
+     * @return  self
+     */ 
     public function setIdColecion($idColecion)
     {
         $this->idColecion = $idColecion;
+
         return $this;
     }
+
+    /**
+     * Get the value of idTipoProducto
+     */ 
     public function getIdTipoProducto()
     {
         return $this->idTipoProducto;
     }
+
+    /**
+     * Set the value of idTipoProducto
+     *
+     * @return  self
+     */ 
     public function setIdTipoProducto($idTipoProducto)
     {
         $this->idTipoProducto = $idTipoProducto;
+
         return $this;
     }
+
+    /**
+     * Get the value of nombreProducto
+     */ 
     public function getNombreProducto()
     {
         return $this->nombreProducto;
     }
+
+    /**
+     * Set the value of nombreProducto
+     *
+     * @return  self
+     */ 
     public function setNombreProducto($nombreProducto)
     {
         $this->nombreProducto = $nombreProducto;
+
         return $this;
     }
+
+    /**
+     * Get the value of descripcionProducto
+     */ 
     public function getDescripcionProducto()
     {
         return $this->descripcionProducto;
     }
+
+    /**
+     * Set the value of descripcionProducto
+     *
+     * @return  self
+     */ 
     public function setDescripcionProducto($descripcionProducto)
     {
         $this->descripcionProducto = $descripcionProducto;
+
         return $this;
     }
+
+    /**
+     * Get the value of precioProducto
+     */ 
     public function getPrecioProducto()
     {
         return $this->precioProducto;
     }
+
+    /**
+     * Set the value of precioProducto
+     *
+     * @return  self
+     */ 
     public function setPrecioProducto($precioProducto)
     {
         $this->precioProducto = $precioProducto;
+
         return $this;
     }
+
+    /**
+     * Get the value of stock
+     */ 
     public function getStock()
     {
         return $this->stock;
     }
+
+    /**
+     * Set the value of stock
+     *
+     * @return  self
+     */ 
     public function setStock($stock)
     {
         $this->stock = $stock;
+
         return $this;
     }
+
+    /**
+     * Get the value of colorProducto
+     */ 
     public function getColorProducto()
     {
         return $this->colorProducto;
     }
+
+    /**
+     * Set the value of colorProducto
+     *
+     * @return  self
+     */ 
     public function setColorProducto($colorProducto)
     {
         $this->colorProducto = $colorProducto;
+
         return $this;
     }
-    public function getDestacado()
-    {
-        return $this->destacado;
-    }
-    public function setDestacado($destacado)
-    {
-        $this->destacado = $destacado;
-        return $this;
-    }
+
+    /**
+     * Get the value of fechaProducto
+     */ 
     public function getFechaProducto()
     {
         return $this->fechaProducto;
     }
+
+    /**
+     * Set the value of fechaProducto
+     *
+     * @return  self
+     */ 
     public function setFechaProducto($fechaProducto)
     {
         $this->fechaProducto = $fechaProducto;
+
         return $this;
     }
+
+    /**
+     * Get the value of destacado
+     */ 
+    public function getDestacado()
+    {
+        return $this->destacado;
+    }
+
+    /**
+     * Set the value of destacado
+     *
+     * @return  self
+     */ 
+    public function setDestacado($destacado)
+    {
+        $this->destacado = $destacado;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tallaProducto
+     */ 
     public function getTallaProducto()
     {
         return $this->tallaProducto;
     }
+
+    /**
+     * Set the value of tallaProducto
+     *
+     * @return  self
+     */ 
     public function setTallaProducto($tallaProducto)
     {
         $this->tallaProducto = $tallaProducto;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get the value of esSegundaMano
+     */ 
+    public function getEsSegundaMano()
+    {
+        return $this->esSegundaMano;
+    }
+
+    /**
+     * Set the value of esSegundaMano
+     *
+     * @return  self
+     */ 
+    public function setEsSegundaMano($esSegundaMano)
+    {
+        $this->esSegundaMano = $esSegundaMano;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of estadoRevision
+     */ 
+    public function getEstadoRevision()
+    {
+        return $this->estadoRevision;
+    }
+
+    /**
+     * Set the value of estadoRevision
+     *
+     * @return  self
+     */ 
+    public function setEstadoRevision($estadoRevision)
+    {
+        $this->estadoRevision = $estadoRevision;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of idUsuarioVendedor
+     */ 
+    public function getIdUsuarioVendedor()
+    {
+        return $this->idUsuarioVendedor;
+    }
+
+    /**
+     * Set the value of idUsuarioVendedor
+     *
+     * @return  self
+     */ 
+    public function setIdUsuarioVendedor($idUsuarioVendedor)
+    {
+        $this->idUsuarioVendedor = $idUsuarioVendedor;
+
         return $this;
     }
 
@@ -414,4 +587,9 @@ class Producto
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, ){
+
+    }
+
 }
