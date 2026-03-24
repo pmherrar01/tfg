@@ -17,3 +17,19 @@ const temporizador = setInterval(() => {
 
 
 }, 1000);
+
+const formularioAcceso = document.getElementById("formSolicitarAcceso");
+
+formularioAcceso.addEventListener('submit', function (e) {
+
+    e.preventDefault();
+    const correo = document.getElementById("emailAcceso").value;
+
+    console.log("Correo Acesso anticipado:  " + correo);
+
+
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarAcceso'));
+    modal.hide();
+
+});

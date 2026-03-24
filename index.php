@@ -44,16 +44,61 @@ include './includes/header.php';
         </div>
 
         <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <button class="btn btn-outline-light rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado">
+            <button class="btn btn-outline-light rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalSolicitarAcceso">
                 Solicitar Código
             </button>
-            <button class="btn btn-principal rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado">
+            <button class="btn btn-principal rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalEntrarAcceso">
                  Ya tengo mi pase
             </button>
         </div>
         
     </div>
 </section>
+
+<div class="modal fade" id="modalSolicitarAcceso" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-0">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center p-4 p-md-5 pt-0">
+                <h3 class="fw-bold text-uppercase mb-3">Pase Anticipado</h3>
+                <p class="text-muted small mb-4">Introduce tu correo electrónico. Te enviaremos un código de un solo uso para acceder a la nueva colección antes de la apertura pública.</p>
+                
+                <form id="formSolicitarAcceso">
+                    <input type="email" id="emailAcceso" class="form-control rounded-0 text-center mb-3 py-3 bg-light border-0" placeholder="tu@email.com" required>
+                    <button type="submit" class="btn btn-dark w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Enviar solicitud</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEntrarAcceso" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-0 modal-acceso-bg border-0 shadow-lg">
+            
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body text-center p-4 p-md-5 pt-0">
+                <i class="bi bi-unlock fs-1 text-acento mb-3 d-block"></i>
+                
+                <h3 class="fw-bold text-uppercase mb-3">Acceso Exclusivo</h3>
+                <p class="text-muted small mb-4">Introduce el código secreto que has recibido por email.</p>
+                
+                <form id="form-entrar-vip" action="controllers/vipController.php" method="POST">
+                    <input type="text" name="codigo" class="form-control rounded-0 text-center mb-4 py-3 text-uppercase fw-bold fs-3 input-codigo-acceso" placeholder="XXXXXX" maxlength="6" required>
+                    
+                    <button type="submit" class="btn btn-principal w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Desbloquear Colección</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <section class="container my-5 py-5 overflow-hidden">
     <h3 class="text-center fw-bold text-uppercase mb-5" style="letter-spacing: 4px;">Novedades</h3>
