@@ -47,7 +47,7 @@ include './includes/header.php';
             <button class="btn btn-outline-light rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalSolicitarAcceso">
                 Solicitar Código
             </button>
-            <button class="btn btn-principal rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalEntrarAcceso">
+            <button class="btn btn-principal transicion-suave rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalEntrarAcceso">
                  Ya tengo mi pase
             </button>
         </div>
@@ -92,7 +92,7 @@ include './includes/header.php';
                 <form id="form-entrar-vip" action="controllers/accesoController.php" method="POST">
                     <input type="text" name="codigo" class="form-control rounded-0 text-center mb-4 py-3 text-uppercase fw-bold fs-3 input-codigo-acceso" placeholder="XXXXXX" maxlength="6" required>
                     
-                    <button type="submit" class="btn btn-principal w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Desbloquear Colección</button>
+                    <button type="submit" class="btn btn-principal transicion-suave w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Desbloquear Colección</button>
                 </form>
 
             </div>
@@ -152,7 +152,7 @@ include './includes/header.php';
 
                                 <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
 
-                                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold"
+                                    <button type="button" class="btn btn-principal transicion-suave rounded-0 flex-grow-1 text-uppercase fw-bold"
                                         style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
                                         onclick="abrirOverlayTallas(event, <?= $prenda['id'] ?>, <?= $prenda['color_id'] ?>)">
                                         Añadir <i class="bi bi-plus-lg ms-1"></i>
@@ -210,7 +210,7 @@ include './includes/header.php';
 
             <div class="collection-overlay d-flex flex-column align-items-center justify-content-center text-center">
                 <h3 class="display-4 fw-bold text-white text-uppercase collection-title">Hombre</h3>
-                <a href="catalogo.php?genero=1" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
+                <a href="catalogo.php?genero=1" class="btn btn-outline-light collection-btn transicion-suave mt-3">Ver Colección</a>
             </div>
         </div>
 
@@ -219,7 +219,7 @@ include './includes/header.php';
 
             <div class="collection-overlay d-flex flex-column align-items-center justify-content-center text-center">
                 <h3 class="display-4 fw-bold text-white text-uppercase collection-title">Mujer</h3>
-                <a href="catalogo.php?genero=2" class="btn btn-outline-light collection-btn mt-3">Ver Colección</a>
+                <a href="catalogo.php?genero=2" class="btn btn-outline-light collection-btn transicion-suave mt-3">Ver Colección</a>
             </div>
         </div>
 
@@ -241,8 +241,8 @@ include './includes/prendasRecientes.php';
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 <form action="#" method="POST" class="newsletter-form d-flex align-items-center justify-content-center flex-wrap gap-3">
-                    <input type="email" class="form-control newsletter-input flex-grow-1" placeholder="TU CORREO ELECTRÓNICO" required>
-                    <button type="submit" class="btn btn-newsletter">Subcribete</button>
+                    <input type="email" class="form-control newsletter-input transicion-suave flex-grow-1" placeholder="TU CORREO ELECTRÓNICO" required>
+                    <button type="submit" class="btn btn-newsletter transicion-suave">Subcribete</button>
                 </form>
             </div>
         </div>

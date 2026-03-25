@@ -82,17 +82,17 @@ include './includes/header.php';
 
                                 <ul class="list-unstyled mb-0">
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaDesc'); ?>" class="text-muted nav-filtro">Fecha: más reciente - más antiguo </a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaDesc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más reciente - más antiguo </a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaAsc'); ?>" class="text-muted nav-filtro">Fecha: más antiguo - más reciente</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaAsc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más antiguo - más reciente</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioAsc'); ?>" class="text-muted nav-filtro">Precio: Menor a Mayor</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioAsc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Menor a Mayor</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioDesc'); ?>" class="text-muted nav-filtro">Precio: Mayor a Menor</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioDesc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Mayor a Menor</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreAsc'); ?>" class="text-muted nav-filtro">Alfabéticamente: A - Z</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreAsc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: A - Z</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreDesc'); ?>" class="text-muted nav-filtro">Alfabéticamente: Z - A</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreDesc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: Z - A</a></li>
 
                                 </ul>
 
@@ -122,11 +122,11 @@ include './includes/header.php';
 
                                 <ul class="list-unstyled mb-0">
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '1'); ?>" class="text-muted nav-filtro">Hombre</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '1'); ?>" class="text-muted nav-filtro transicion-suave">Hombre</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '2'); ?>" class="text-muted nav-filtro">Mujer</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '2'); ?>" class="text-muted nav-filtro transicion-suave">Mujer</a></li>
 
-                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '3'); ?>" class="text-muted nav-filtro">Unisex</a></li>
+                                    <li class="mb-2"><a href="<?php echo crearUrl('genero', '3'); ?>" class="text-muted nav-filtro transicion-suave">Unisex</a></li>
 
                                 </ul>
 
@@ -158,7 +158,7 @@ include './includes/header.php';
 
                                     <?php foreach ($listaCategorias as $categoria) { ?>
 
-                                        <li class="mb-2"><a href="<?php echo crearUrl('coleccion', $categoria['id']); ?>" class="text-muted nav-filtro"><?php echo $categoria["nombre"] ?></a></li>
+                                        <li class="mb-2"><a href="<?php echo crearUrl('coleccion', $categoria['id']); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $categoria["nombre"] ?></a></li>
 
                                     <?php } ?>
 
@@ -192,7 +192,7 @@ include './includes/header.php';
 
                                     <?php foreach ($listaTiposProductos as $productoLista) { ?>
 
-                                        <li class="mb-2"><a href="<?php echo crearUrl('tipo', $productoLista["id"]); ?>" class="text-muted nav-filtro"><?php echo $productoLista["nombre"] ?></a></li>
+                                        <li class="mb-2"><a href="<?php echo crearUrl('tipo', $productoLista["id"]); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $productoLista["nombre"] ?></a></li>
 
                                     <?php } ?>
 
@@ -224,13 +224,13 @@ include './includes/header.php';
 
                                 <div class="d-flex flex-wrap gap-2">
 
-                                    <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro">S</a>
+                                    <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">S</a>
 
-                                    <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro">M</a>
+                                    <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">M</a>
 
-                                    <a href="<?php echo crearUrl('talla', 'L'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro">L</a>
+                                    <a href="<?php echo crearUrl('talla', 'L'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">L</a>
 
-                                    <a href="<?php echo crearUrl('talla', 'XL'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro">XL</a>
+                                    <a href="<?php echo crearUrl('talla', 'XL'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XL</a>
 
                                 </div>
 
@@ -365,8 +365,8 @@ include './includes/header.php';
                                 <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>">
 
 <div class="img-wrapper position-relative">
-    <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal" alt="Prenda">
-    <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
+    <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal transicion-suave" alt="Prenda">
+    <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover transicion-suave position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
     
     <div id="overlay-tallas-<?= $prenda['id'] ?>" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center" style="z-index: 20;" onclick="event.preventDefault();">
         <div class="d-flex justify-content-between align-items-center mb-2">
