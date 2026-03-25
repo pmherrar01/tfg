@@ -943,7 +943,7 @@ footer a:hover {
 /* Cuando el usuario hace clic en el input (Focus) */
 .input-codigo-acceso:focus {
     background-color: transparent;
-    border-color: TU_COLOR_ACENTO;
-    box-shadow: 0 0 0 0.25rem rgba(TU_COLOR_ACENTO, 0.25); /* Efecto de brillo al hacer clic */
+    border-color: var(--color-acento); 
+    box-shadow: 0 0 0 0.25rem rgba(var(--color-acento), 0.25); 
     color: inherit;
 }

@@ -1,5 +1,5 @@
 <?php
-// require_once 'controllers/segundaManoController.php'; // Este lo crearemos en la Fase 2
+
 
 include './includes/header.php';
 ?>

@@ -565,7 +565,8 @@ class Producto
                 ":talla" => $talla
             ]);
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            $errores = [$e];
             return false;
         }
     }
