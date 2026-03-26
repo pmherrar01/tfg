@@ -12,14 +12,12 @@ $conexion = $db->conectar();
 $productoModel = new Producto($conexion);
 $imagenModel = new Imagen($conexion);
 
-// --- 1. LÓGICA DE AÑADIR AL CARRITO (POST) ---
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     
     $idPrenda = $_POST['idPrenda'];
     $color_id = $_POST['color_id'];
     $cantidad = 1;
 
-    // PROTECCIÓN 1: Evitamos el Error 500 si no mandan talla
     if (!isset($_POST['talla']) || empty($_POST['talla'])) {
         header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=falta_talla");
         exit;
@@ -27,13 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     
     $talla = $_POST['talla'];
 
-    // PROTECCIÓN 2: Comprobamos el stock en la base de datos
     $stmt = $conexion->prepare("SELECT stock FROM producto_tallas WHERE producto_id = ? AND color_id = ? AND talla = ?");
     $stmt->execute([$idPrenda, $color_id, $talla]);
     $resultadoStock = $stmt->fetch(PDO::FETCH_ASSOC);
     $stockMaximo = $resultadoStock ? $resultadoStock['stock'] : 0;
 
-    // Si el stock directamente es 0 (Agotado)
     if ($stockMaximo < 1) {
         header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
         exit;
@@ -47,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     foreach ($_SESSION['carrito'] as &$item) {
         if ($item['idPrenda'] == $idPrenda && $item['talla'] == $talla && $item['color_id'] == $color_id) {
             
-            // Si al sumar 1 superamos el stock disponible, error
             if ($item['cantidad'] + $cantidad > $stockMaximo) {
                 header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
                 exit;
@@ -72,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     exit;
 }
 
-// --- LÓGICA DE MODIFICAR CARRITO (+, -, Eliminar) ---
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET['indice'])) {
     $indice = (int)$_GET['indice'];
 
@@ -109,7 +103,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET
     exit;
 }
 
-// --- 2. LÓGICA DE MOSTRAR EL CARRITO (GET normal) ---
 $carritoActual = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
 $carritoDetallado = [];
 $totalCarrito = 0;

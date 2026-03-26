@@ -292,7 +292,6 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // CORREGIDO: Añadidos los INNER JOIN para poder agrupar por c.id
     public function listarProductos($estadoActivo, $limite = null)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
@@ -379,7 +378,6 @@ class Producto
         return $ordenSql;
     }
 
-    // CORREGIDOS TODOS LOS FILTROS PARA UNIR LAS TABLAS DE COLORES
     private function filtrarGenero($genero, $orden)
     {
         switch ($genero) {
@@ -435,7 +433,6 @@ class Producto
 
     private function filtrarPorTalla($talla, $orden)
     {
-        // En este unimos la tabla de TALLAS para saber qué colores tienen stock en esa talla concreta
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_tallas pt ON p.id = pt.producto_id 
@@ -591,6 +588,14 @@ class Producto
 
     public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, ){
 
+    }
+
+    public function listarTodasTallas(){
+        $sql = "SELECT DISTINCT talla from productos_tallas ";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia -> execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

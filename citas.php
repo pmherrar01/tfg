@@ -1,5 +1,5 @@
 <?php
-require_once 'includes/auth.php'; // Protegemos la página: solo usuarios registrados
+require_once 'includes/auth.php';
 include './includes/header.php';
 ?>
 
@@ -92,35 +92,29 @@ include './includes/header.php';
 </main>
 
 <script>
-    // ESTA ES LA LÓGICA QUE COMPRUEBA EL AFORO DE LAS HORAS
     document.getElementById('fecha-cita').addEventListener('change', function() {
         let fechaSeleccionada = this.value;
         let selectHora = document.getElementById('hora-cita');
         let horaHelp = document.getElementById('hora-help');
 
         if (fechaSeleccionada) {
-            // Habilitamos el desplegable mientras cargamos
             selectHora.disabled = false;
 
-            // Reseteamos todas las opciones para que vuelvan a estar disponibles
             Array.from(selectHora.options).forEach(opt => opt.disabled = false);
             horaHelp.classList.add('d-none');
 
-            // Hacemos una petición silenciosa a nuestra API para saber qué horas están llenas
             fetch('controllers/apiCitasDisponibles.php?fecha=' + fechaSeleccionada)
                 .then(response => response.json())
                 .then(horasLlenas => {
-                    // horasLlenas será un array con las horas que ya tienen 10 reservas, ej: ["10:00", "18:00"]
                     if (horasLlenas.length > 0) {
-                        horaHelp.classList.remove('d-none'); // Mostramos el aviso
+                        horaHelp.classList.remove('d-none'); 
 
-                        // Deshabilitamos las horas que nos diga el backend
                         Array.from(selectHora.options).forEach(opt => {
                             if (horasLlenas.includes(opt.value)) {
                                 opt.disabled = true;
                                 opt.text = opt.value + " (Aforo Completo)";
                             } else if (opt.value !== "") {
-                                opt.text = opt.value + " - " + (parseInt(opt.value) + 1) + ":00"; // Restauramos el texto original
+                                opt.text = opt.value + " - " + (parseInt(opt.value) + 1) + ":00"; 
                             }
                         });
                     }

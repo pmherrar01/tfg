@@ -27,32 +27,24 @@ $direccionUsu = $datosUsu['direccion'] . ", " . $datosUsu['codigo_postal'] . " -
 
 
 try {
-    // 1. Empezamos la transacción (pausamos el guardado definitivo)
     $conexion->beginTransaction();
 
-    // 2. Aquí creas el pedido
     $idPedido = $pedido->crearPedido($idUsu, $totalPedido, $direccionUsu);
 
 
-    // 3. Aquí haces tu foreach del carrito
-    // foreach(...) { $pedidoModel->crearDetalle... ; $productoModel->restarStock... }
 
     foreach ($_SESSION["carrito"] as $productoCarrito) {
         $pedido->crearDetallesPedidos($idPedido, $productoCarrito["idPrenda"], $productoCarrito["color_id"], $productoCarrito["talla"], $productoCarrito["cantidad"]);
         $producto->actualizarStock($productoCarrito["idPrenda"], $productoCarrito["color_id"], $productoCarrito["talla"], $productoCarrito["cantidad"]);
     }
 
-    // 4. Si todo el bucle termina bien, confirmamos y guardamos de verdad:
     $conexion->commit();
 
-    // 5. Borras el carrito y rediriges con éxito
     unset($_SESSION['carrito']);
     header("Location: ../gracias.php");
 } catch (Exception $e) {
-    // Si cualquier consulta SQL de arriba falla, el código salta directamente aquí.
 
-    // 1. Cancelamos todo para no guardar datos a medias
-    $conexion->rollBack();
+$conexion->rollBack();
 
     header("Location: ../gracias.php");
 }

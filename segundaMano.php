@@ -2,6 +2,7 @@
 
 
 include './includes/header.php';
+require_once 'controllers/segundaManoController.php';
 ?>
 
 <main class="container my-5 py-5 min-vh-100">
@@ -44,12 +45,14 @@ include './includes/header.php';
                             <label for="tallaPrenda" class="form-label fw-bold small text-uppercase text-muted">Talla</label>
                             <select class="form-select rounded-0 p-2" id="tallaPrenda" name="tallaPrenda" required>
                                 <option value="" selected disabled>Elegir...</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="Única">Única</option>
+                                <?php
+                                foreach ($listaTallas as $talla) {
+                                                                    ?>
+                                     "<option value=" . $talla . ">XS</option>";
+                                
+                                <?php    }
+                                ?>
+
                             </select>
                         </div>
                     </div>

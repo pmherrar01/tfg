@@ -1,5 +1,4 @@
 <?php
-// controllers/apiTallasController.php
 require_once '../config/db.php';
 require_once '../models/producto.php'; 
 
@@ -13,14 +12,11 @@ if (isset($_GET['idPrenda']) && isset($_GET['idColor'])) {
     $db = new Database();
 
     try {
-        // 1. Instanciamos la base de datos y tu modelo de forma limpia
     
         $productoObj = new Producto($db ->conectar());
         
-        // 2. REUTILIZAMOS tu método existente
         $todasLasTallas = $productoObj->obtenerTallas($idPrenda);
         
-        // 3. Filtramos solo las tallas del color que nos interesa
         $tallasDelColor = [];
         foreach ($todasLasTallas as $talla) {
             if ($talla['color_id'] == $idColor) {
@@ -31,7 +27,6 @@ if (isset($_GET['idPrenda']) && isset($_GET['idColor'])) {
             }
         }
 
-        // 4. Devolvemos el resultado al JavaScript
         echo json_encode($tallasDelColor);
         
     } catch (Exception $e) {

@@ -1,4 +1,3 @@
-// Esperamos a que la página cargue entera
 document.addEventListener("DOMContentLoaded", function () {
 
     let promoModalElement = document.getElementById('promoModal');
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-//funcion para el ajax de la lupa 
 function inicializarBuscadorEnVivo() {
     let prendaABuscar = document.getElementById("inputBuscador");
     let contenedorResultados = document.getElementById("cajaResultados");
@@ -55,7 +53,6 @@ function inicializarBuscadorEnVivo() {
                             contenedorResultados.innerHTML = '';
 
                             datos.forEach(producto => {
-                                // TU HTML ORIGINAL Y PERFECTO CON FOTOS DE 50x50
                                 let htmlProducto = `
                                     <a href="fichaProducto.php?idPrenda=${producto.id}&color=${producto.color_id}" class="text-decoration-none text-dark d-block p-3 border-bottom bg-white" onmouseover="this.style.backgroundColor='#f8f9fa'" onmouseout="this.style.backgroundColor='#fff'">
                                         <div class="d-flex align-items-center">
@@ -83,23 +80,18 @@ function inicializarBuscadorEnVivo() {
         });
     }
 }
-// ==========================================
-// ALERTAS SWEETALERT (ULTRALIGERAS Y FLUIDAS)
-// ==========================================
 document.addEventListener("DOMContentLoaded", function () {
 
-    // Configuración maestra para que TODAS las alertas vuelen y no den lag
     const swalRapido = Swal.mixin({
         confirmButtonColor: 'var(--color-principal, #000)',
         showClass: {
-            popup: 'animate__animated animate__fadeIn animate__faster' // Aparece por opacidad (GPU), no por tamaño (CPU)
+            popup: 'animate__animated animate__fadeIn animate__faster' 
         },
         hideClass: {
             popup: 'animate__animated animate__fadeOut animate__faster'
         }
     });
 
-    // 1. ALERTAS DE ÉXITO O INFORMACIÓN (mensajeAlerta)
     if (typeof mensajeAlerta !== 'undefined') {
         if (mensajeAlerta === 'registro_exito') {
             swalRapido.fire({
@@ -117,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // 2. ALERTAS DE ERRORES (errorAlerta)
     if (typeof errorAlerta !== 'undefined') {
         if (errorAlerta === 'registro_fallo') {
             swalRapido.fire({
@@ -149,7 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Alerta Especial: Bienvenida Login
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
             swalRapido.fire({
@@ -168,7 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Alerta Especial: Sesión Cerrada
     if (typeof sesionCerradaAlerta !== 'undefined' && sesionCerradaAlerta === 'true') {
         swalRapido.fire({
             icon: 'info',
@@ -290,9 +279,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// ==========================================
-// PINTAR PRENDAS RECIENTES (Footer)
-// ==========================================
 function pintarPrendasRecientes() {
     const carruselInner = document.getElementById('carruselRecientesInner');
     const seccionRecientes = document.getElementById('seccionRecientes');
@@ -331,7 +317,6 @@ function pintarPrendasRecientes() {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // HTML ORIGINAL LIMPIO (Sin sufijos raros)
         htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
@@ -384,18 +369,13 @@ function pintarPrendasRecientes() {
 }
 
 
-// ==========================================
-// AÑADIR RÁPIDO (QUICK ADD) - MENÚ TALLAS (VERSIÓN LIMPIA)
-// ==========================================
 
 function abrirOverlayTallas(event, idPrenda, idColor) {
     event.preventDefault();
 
-    // MAGIA INVISIBLE: Buscamos la tarjeta exacta donde se ha hecho clic
     const tarjeta = event.target.closest('.col-6');
     if (!tarjeta) return;
 
-    // Buscamos el menú oculto DENTRO de esa tarjeta exacta
     const overlay = tarjeta.querySelector('.overlay-tallas');
     const contenedor = tarjeta.querySelector('[id^="contenedor-botones-"]');
 
@@ -453,7 +433,6 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
     datos.append('color_id', idColor);
     datos.append('talla', talla);
 
-    // Cierra el menú de la tarjeta correcta
     cerrarOverlayTallas(event, idPrenda);
 
     fetch('controllers/carritoController.php', {
@@ -473,7 +452,6 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
                 confirmButtonColor: 'var(--color-principal, #000)',
                 timer: 2000,
                 showConfirmButton: false,
-                // --- OPTIMIZACIÓN DE RENDIMIENTO ---
                 showClass: {
                     popup: 'animate__animated animate__fadeIn animate__faster'
                 },
@@ -489,7 +467,6 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
                 title: 'Ups...',
                 text: 'Hubo un problema al añadir la prenda.',
                 confirmButtonColor: 'var(--color-principal, #000)',
-                // --- OPTIMIZACIÓN DE RENDIMIENTO ---
                 showClass: {
                     popup: 'animate__animated animate__fadeIn animate__faster'
                 },
@@ -501,6 +478,5 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Encendemos el carrusel de prendas recientes
     pintarPrendasRecientes();
 });

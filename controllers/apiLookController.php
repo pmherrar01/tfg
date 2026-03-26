@@ -1,5 +1,4 @@
 <?php
-// 1. Apagamos errores para evitar que un simple "Warning" rompa el JSON
 error_reporting(0);
 session_start();
 
@@ -24,7 +23,6 @@ if ($idPrenda > 0 && $idColor > 0) {
     }
 }
 
-// 2. Limpiamos cualquier basura o espacio en blanco oculto
 ob_clean();
 header('Content-Type: application/json');
 echo json_encode($respuesta);

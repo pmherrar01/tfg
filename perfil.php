@@ -250,9 +250,9 @@ include './includes/header.php';
 
                                 </div>
                             </div>
-                        <?php } // Fin del foreach ?>
+                        <?php }  ?>
                     </div>
-                <?php } // Fin del else de favoritos ?>
+                <?php }  ?>
 
 
             <?php } elseif ($seccion == 'citas') { ?>
@@ -294,11 +294,11 @@ include './includes/header.php';
                                     </div>
                                 </div>
                             </div>
-                        <?php } // Fin foreach citas ?>
+                        <?php }  ?>
                     </div>
-                <?php } // Fin else citas ?>
+                <?php } ?>
 
-            <?php } // Fin if principal ?>
+            <?php } ?>
 
         </section>
     </div>

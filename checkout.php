@@ -1,8 +1,6 @@
 <?php
-// 1. Cargamos el controlador que has programado tú (el cerebro)
 require_once 'controllers/checkoutController.php';
 
-// 2. Cargamos la cabecera
 include './includes/header.php';
 ?>
 
@@ -19,7 +17,6 @@ include './includes/header.php';
             <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2">1. Dirección de Envío</h4>
 
             <?php
-            // COMPROBACIÓN VITAL: ¿Están vacíos la dirección o la ciudad?
             if (empty($datosComprador['direccion']) || empty($datosComprador['ciudad'])):
             ?>
                 <div class="border border-dark border-3 p-4 mb-4 bg-transparent">
@@ -65,7 +62,6 @@ include './includes/header.php';
                     <?php
                     $totalCheckout = 0;
                     if (isset($_SESSION['carrito'])):
-                        // Recorremos el carrito para mostrar los datos rápidos (asumo que tienes el modelo instanciado en el controlador)
                         foreach ($_SESSION['carrito'] as $item):
                             $producto = $productoModel->obtenerProducto($item['idPrenda']);
                             $subtotalItem = $producto['precio'] * $item['cantidad'];

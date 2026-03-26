@@ -42,7 +42,6 @@ class Pedido
 
     public function crearPedido($idUsu, $total, $direccionPedido)
     {
-        // ADAPTADO A TU BD: Solo insertamos las columnas que realmente existen en tu tabla 'pedidos'
         $sql = "INSERT INTO pedidos (usuario_id, total, estado, direccion_envio) 
                 VALUES (:usuarioId, :total, 'pendiente', :direccion)";
 
@@ -58,13 +57,11 @@ class Pedido
 
     public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad)
     {
-        // 1. Sacamos el precio unitario del producto actual
         $sqlPrecio = "SELECT precio FROM productos WHERE id = :idProducto";
         $stmtPrecio = $this->conexionDataBase->prepare($sqlPrecio);
         $stmtPrecio->execute([":idProducto" => $idPrenda]);
         $precioUnitario = $stmtPrecio->fetchColumn();
 
-        // 2. Insertamos la línea en la BD (AHORA SÍ incluye color_id y talla)
         $sql = "INSERT INTO lineas_pedido (pedido_id, producto_id, color_id, talla, cantidad, precio_unitario) 
                 VALUES (:idPedido, :idProducto, :idColor, :talla, :cantidad, :precio)";
 

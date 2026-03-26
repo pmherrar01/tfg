@@ -323,8 +323,6 @@ public function actualizarDatosUsu() {
 
             return true;
         } catch (PDOException $e) {
-            // TRUCO DE DEBUG: Si te vuelve a fallar, quita las barras '//' de la línea de abajo para ver el error exacto
-            // die("ERROR SQL CRÍTICO: " . $e->getMessage());
             return false;
         }
     }

@@ -1,5 +1,4 @@
 :root {
-  /* TUS COLORES DE MARCA */
   --color-principal: #4a3b32;
   --color-secundario: #f4f4f4;
   --color-acento: #b93632;
@@ -18,7 +17,6 @@ a{
   color: inherit;
 }
 
-/* --- HEADER  --- */
 .navbar-custom {
   background-color: var(--color-principal) !important;
   border-bottom: none;
@@ -36,7 +34,6 @@ a{
   opacity: 1;
 }
 
-/* --- FOOTER --- */
 body {
     display: flex;
     flex-direction: column;
@@ -62,7 +59,6 @@ footer a:hover {
 }
 
 
-/* Botón estilo Streetwear Premium */
 .btn-custom {
   background-color: transparent;
   color: var(--color-secundario);
@@ -73,22 +69,18 @@ footer a:hover {
   transition: all 0.4s ease;
   animation: fadeInUp 1.5s ease-out forwards;
   animation-delay: 0.3s;
-  /* El botón aparece un poquito después que el título */
   opacity: 0;
   border-radius:20px;
-  /* Empieza invisible para la animación */
 }
 
 .btn-custom:hover {
   background-color: var(--color-secundario);
   color: var(--color-principal);
   transform: translateY(-5px);
-  /* Efecto de flotar al pasar el ratón */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 
-/* --- TARJETAS DE PRODUCTO (CARRUSEL Y CATÁLOGO) --- */
 .product-card {
   cursor: pointer;
   color: var(--color-principal);
@@ -97,60 +89,53 @@ footer a:hover {
 .product-card .img-wrapper {
   overflow: hidden; 
   background-color: #ebebeb; 
-  position: relative; /* ¡Corregido! Tiene que ser relative, no absolute */
+  position: relative; 
 }
 
-/* Configuramos la foto principal */
 .product-card .img-principal {
   transition: opacity 0.5s ease, transform 0.6s ease;
 }
 
-/* Configuramos la foto secundaria (oculta por defecto) */
 .product-card .img-hover {
-  opacity: 0; /* Invisible al principio */
+  opacity: 0; 
   transition: opacity 0.5s ease, transform 0.6s ease;
-  object-fit: cover; /* Para que no se deforme */
+  object-fit: cover; 
 }
 
-/* LA MAGIA AL PASAR EL RATÓN */
 .product-card:hover .img-principal {
-  opacity: 0; /* Ocultamos la principal */
+  opacity: 0; 
 }
 
 .product-card:hover .img-hover {
-  opacity: 1; /* Mostramos la secundaria */
-  transform: scale(1.05); /* Zoom sutil a la segunda foto */
+  opacity: 1; 
+  transform: scale(1.05); 
 }
 
-/* --- CONTROLES DEL CARRUSEL --- */
 .carousel-control-prev,
 .carousel-control-next {
-  opacity: 0.5; /* Un poco transparentes por defecto */
+  opacity: 0.5; 
   transition: opacity 0.3s ease;
 }
 
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  opacity: 1; /* Al pasar el ratón se ven al 100% */
+  opacity: 1;
 }
 
-/* --- SECCIÓN COLECCIONES (SPLIT SCREEN) --- */
 .collection-box {
   cursor: pointer;
-  overflow: hidden; /* Vital para que el zoom de la foto no se salga de su caja */
+  overflow: hidden; 
 }
 
-/* La imagen de fondo */
 .collection-img {
   transition:
     transform 0.8s ease,
     filter 0.8s ease;
   filter: brightness(
     0.75
-  ); /* Oscurecemos un poquito la foto por defecto para leer bien el texto blanco */
+  ); 
 }
 
-/* La capa transparente que envuelve el texto */
 .collection-overlay {
   position: absolute;
   top: 0;
@@ -160,7 +145,6 @@ footer a:hover {
   transition: background-color 0.6s ease;
 }
 
-/* El título de la colección */
 .collection-title {
   letter-spacing: 4px;
   transition:
@@ -169,33 +153,31 @@ footer a:hover {
   text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 }
 
-/* El botón oculto por defecto */
 .collection-btn {
-  opacity: 0; /* Invisible */
-  transform: translateY(20px); /* Lo bajamos 20px para que luego suba */
+  opacity: 0; 
+  transform: translateY(20px); 
   transition: all 0.6s ease;
   border-width: 2px;
   padding: 10px 30px;
   letter-spacing: 2px;
 }
 
-/* === EFECTOS HOVER (Cuando el ratón pasa por encima) === */
 
 .collection-box:hover .collection-img {
-  transform: scale(1.1); /* Hacemos la foto un 10% más grande */
+  transform: scale(1.1); 
   filter: brightness(
     0.4
-  ); /* La oscurecemos más para que el texto resalte a tope */
+  ); 
 }
 
 .collection-box:hover .collection-title {
-  transform: translateY(-10px); /* El título sube un poco */
-  letter-spacing: 12px; /* ¡El texto se expande! Efecto súper chulo */
+  transform: translateY(-10px); 
+  letter-spacing: 12px; 
 }
 
 .collection-box:hover .collection-btn {
-  opacity: 1; /* El botón aparece */
-  transform: translateY(0); /* El botón sube a su posición original */
+  opacity: 1; 
+  transform: translateY(0);
 }
 
 .collection-btn:hover {
@@ -203,11 +185,10 @@ footer a:hover {
   color: #000;
 }
 
-/* --- SECCIÓN NEWSLETTER --- */
 .newsletter-section {
-  background-color: var(--color-principal); /* Fondo oscuro para destacar */
+  background-color: var(--color-principal); 
   color: var(--color-secundario);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Una línea sutil para separar del footer */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
 .newsletter-title {
@@ -220,19 +201,17 @@ footer a:hover {
   letter-spacing: 1px;
 }
 
-/* El truco para un input premium: quitar bordes y fondo, dejar solo la línea de abajo */
 .newsletter-input {
   background-color: transparent !important;
   border: none;
   border-bottom: 2px solid var(--color-detalle);
   color: var(--color-secundario) !important;
   padding: 10px 5px;
-  box-shadow: none !important; /* Quita el borde azul por defecto de Bootstrap */
+  box-shadow: none !important; 
   transition: border-color 0.3s ease;
   min-width: 250px;
 }
 
-/* Cambiar el color del texto falso (placeholder) */
 .newsletter-input::placeholder {
   color: var(--color-detalle);
   opacity: 0.6;
@@ -240,12 +219,10 @@ footer a:hover {
   font-size: 0.85rem;
 }
 
-/* Cuando el usuario hace clic para escribir */
 .newsletter-input:focus {
   border-bottom: 2px solid var(--color-secundario);
 }
 
-/* Botón sólido */
 .btn-newsletter {
   background-color: var(--color-secundario);
   color: var(--color-principal);
@@ -259,38 +236,33 @@ footer a:hover {
   background-color: transparent;
   color: var(--color-secundario);
 }
-/* --- GALERÍA FICHA DE PRODUCTO --- */
 .miniatura-galeria {
     border: 2px solid transparent; 
-    opacity: 0.5; /* Más apagaditas para que destaquen más al seleccionarlas */
+    opacity: 0.5; 
 }
 
 .miniatura-galeria:hover {
     opacity: 1;
 }
 
-/* El ansiado recuadro negro sólido */
 .miniatura-galeria.borde-activo {
     border: 2px solid #000 !important; 
     opacity: 1;
 }
 
-/* Esta clase la pondremos y quitaremos con JS para hacer el efecto de fundido */
 .oculto-transicion {
     opacity: 0 !important;
 }
 
-/* --- FILTROS DEL CATÁLOGO --- */
 .nav-filtro {
     text-decoration: none;
 }
 
 .nav-filtro:hover {
     color: var(--color-principal) !important;
-    padding-left: 5px; /* Pequeño efecto de desplazamiento a la derecha */
+    padding-left: 5px;
 }
 
-/* Quitamos el fondo azul feo que pone Bootstrap por defecto al hacer clic en un desplegable */
 .accordion-button:focus {
     box-shadow: none;
     background-color: transparent;
@@ -302,21 +274,20 @@ footer a:hover {
 }
 
 
-/* --- CÍRCULOS DE COLOR (FILTROS) --- */
 .color-swatch {
     width: 28px;
     height: 28px;
-    border-radius: 50%; /* Esto los hace redondos */
+    border-radius: 50%; 
     display: inline-block;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .color-swatch:hover {
-    transform: scale(1.15); /* Crece un poquito al pasar el ratón */
+    transform: scale(1.15); 
     box-shadow: 0 0 6px rgba(0,0,0,0.4);
 }
 
-/* --- DUAL RANGE SLIDER DE PRECIO --- */
+
 .range-slider-container {
     height: 6px; 
     background-color: #e9ecef; 
@@ -328,7 +299,7 @@ footer a:hover {
 .slider-track {
     height: 100%;
     position: absolute;
-    background-color: var(--color-principal); /* <-- Tu color principal */
+    background-color: var(--color-principal); 
     border-radius: 5px;
     top: 0;
     bottom: 0;
@@ -340,20 +311,19 @@ footer a:hover {
     top: -6px;
     left: 0;
     width: 100%;
-    background-color: transparent; /* ¡ESTO MATA AL DISEÑO DE MAC! */
+    background-color: transparent; 
     pointer-events: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     margin: 0;
     z-index: 2;
-    outline: none; /* Quita el borde de selección */
+    outline: none; 
 }
 
-/* Ocultar cualquier rastro de la barra nativa */
 .custom-range::-webkit-slider-runnable-track {
     -webkit-appearance: none;
     height: 5px;
-    background: transparent; /* ¡ESTO TAMBIÉN ES VITAL! */
+    background: transparent;
     border: none;
 }
 
@@ -361,9 +331,9 @@ footer a:hover {
     height: 18px;
     width: 18px;
     border-radius: 50%;
-    background-color: var(--color-principal); /* <-- Tu color principal */
+    background-color: var(--color-principal);
     border: 2px solid #fff;
-    pointer-events: auto; /* Solo el tirador es clicable */
+    pointer-events: auto; 
     -webkit-appearance: none;
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
@@ -383,9 +353,6 @@ footer a:hover {
     position: relative;
     z-index: 3;
 }
-/* =========================================
-   ANIMACIÓN MODAL LOGIN/REGISTRO (PERSONALIZADO TFG)
-   ========================================= */
 .anim-container {
     position: relative;
     width: 100%;
@@ -395,7 +362,6 @@ footer a:hover {
     display: flex;
 }
 
-/* --- ESTILO DE LAS CAJAS BLANCAS (FORMULARIOS) --- */
 .anim-container .form-box {
     position: absolute;
     top: 0;
@@ -415,7 +381,6 @@ footer a:hover {
 .form-box.Register { right: 0; padding: 0 50px; transform: translateX(100%); opacity: 0; pointer-events: none; }
 .anim-container.active .form-box.Register { transform: translateX(0%); opacity: 1; pointer-events: auto; }
 
-/* --- ESTILO DE LOS PANELES DE IMAGEN (TEXTOS) --- */
 .anim-container .info-content {
     position: absolute;
     top: 0;
@@ -425,7 +390,6 @@ footer a:hover {
     justify-content: center;
     flex-direction: column;
     
-    /* MAGIA AQUÍ: Capa oscura (0.75 de opacidad) + Tu imagen de fondo */
     background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('../img/tu-imagen-aqui.jpg');
     background-size: cover;
     background-position: center;
@@ -442,8 +406,6 @@ footer a:hover {
 .info-content.Register { left: 0; padding: 0 40px; transform: translateX(-100%); opacity: 0; pointer-events: none; }
 .anim-container.active .info-content.Register { transform: translateX(0%); opacity: 1; pointer-events: auto; }
 
-/* --- TIPOGRAFÍA (Aplicando var(--color-principal)) --- */
-/* Títulos de los formularios en tu color principal */
 .form-box h2 { 
     font-size: 2rem; font-weight: 700; letter-spacing: 2px; 
     margin-bottom: 30px; text-align: center; 
@@ -452,20 +414,19 @@ footer a:hover {
 .info-content h2 { font-size: 2.2rem; font-weight: 700;  letter-spacing: 2px; margin-bottom: 20px; color: #fff; }
 .info-content p { font-size: 1.05rem; line-height: 1.6; color: #ddd; letter-spacing: 0.5px; }
 
-/* --- INPUTS FLOTANTES --- */
 .input-box { position: relative; width: 100%; margin-bottom: 30px; }
 .input-box input {
     width: 100%; height: 40px; background: transparent; border: none; outline: none;
     border-bottom: 1px solid #aaa; font-size: 15px; padding-right: 30px; transition: border-color 0.3s;
-    color: var(--color-principal); /* El texto que escribe el usuario */
+    color: var(--color-principal);
 }
-/* Al hacer click, la línea de abajo se pone de tu color */
+
 .input-box input:focus, .input-box input:valid { border-bottom-color: var(--color-principal); }
 
 .input-box label {
     position: absolute; top: 10px; left: 0; font-size: 15px; color: #888; transition: 0.3s; pointer-events: none;
 }
-/* El título pequeñito flota y se pone de tu color principal */
+
 .input-box input:focus ~ label, .input-box input:valid ~ label {
     top: -16px; font-size: 11px; font-weight: 700; letter-spacing: 1px;
     color: var(--color-principal);
@@ -474,17 +435,17 @@ footer a:hover {
 .input-box i { position: absolute; top: 12px; right: 5px; color: #888; transition: 0.3s; }
 .input-box input:focus ~ i, .input-box input:valid ~ i { color: var(--color-principal); }
 
-/* --- BOTÓN Y ENLACES --- */
+
 .btn-anim {
     width: 100%; height: 50px; border: none; outline: none; cursor: pointer;
     font-size: 14px; font-weight: 700; letter-spacing: 2px;
     margin-top: 5px; transition: filter 0.3s;
     
-    /* Fondo con tu color principal */
+    
     background: var(--color-principal);
     color: #fff;
 }
-/* Al pasar el ratón se oscurece un poquito la variable */
+
 .btn-anim:hover { filter: brightness(0.85); }
 
 .regi-link { text-align: center; margin-top: 25px; font-size: 13px; color: #666; }
@@ -494,9 +455,6 @@ footer a:hover {
 }
 .regi-link a:hover { filter: brightness(0.7); }
 
-/* =========================================
-   BOTÓN ANIMADO AÑADIR AL CARRITO
-   ========================================= */
 .add-to-cart {
     --background-default: var(--color-principal);
     --background-hover: #312721;
@@ -654,9 +612,6 @@ footer a:hover {
   }
 
 
-  /* =========================================
-   BUSCADOR EN VIVO ANIMADO (HEADER)
-   ========================================= */
 .search-wrapper {
     height: 40px;
     margin-right: 15px;
@@ -668,29 +623,24 @@ footer a:hover {
     overflow: hidden;
     transition: all 0.4s ease-in-out;
     position: absolute;
-    right: 30px; /* Se despliega hacia la izquierda desde el icono */
+    right: 30px; 
     top: 50%;
     transform: translateY(-50%);
 }
 
-/* El truco: Se abre al pasar el ratón por el icono, O cuando el usuario está escribiendo dentro (focus-within) */
 .search-wrapper:hover .search-input-container,
 .search-input-container:focus-within {
     width: 250px;
     opacity: 1;
-    overflow: visible; /* Vital para que se vean los resultados que cuelgan abajo */
+    overflow: visible; 
 }
 
-/* Evitamos que el icono del buscador haga cosas raras al hacerle clic */
 .search-icon-btn {
     z-index: 5;
     position: relative;
 }
 
 
-/* --- ESTILOS AÑADIR RÁPIDO (QUICK ADD) --- */
-
-/* Botón corporativo (Usa tu variable de color) */
 .btn-principal {
     background-color: var(--color-principal, #5c3a21);
     color: #ffffff;
@@ -702,21 +652,18 @@ footer a:hover {
     color: var(--color-principal, #5c3a21);
 }
 
-/* El fondo borroso del menú de tallas */
 .overlay-tallas {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px); /* Para Safari */
     z-index: 10;
 }
 
-/* Talla sin stock (Tachada y transparente) */
 .talla-agotada {
     text-decoration: line-through;
     opacity: 0.4;
     cursor: not-allowed !important;
 }
 
-/* Botón de favoritos pequeño (Completa el Look) */
 .btn-favorito-sm {
     width: 32px; 
     height: 32px; 
@@ -726,9 +673,6 @@ footer a:hover {
     background-color: transparent;
 }
 
-/* ========================================== */
-/* BOTONES DE FAVORITOS (Diseño Unificado)    */
-/* ========================================== */
 .btn-favorito-custom {
     flex-shrink: 0;
     border: 2px solid var(--color-principal, #5c3a21);
@@ -736,21 +680,14 @@ footer a:hover {
     background-color: transparent;
 }
 
-/* El !important asegura que sobreescriba cualquier estilo nativo de Bootstrap al pasar el ratón */
 .btn-favorito-custom:hover {
     background-color: var(--color-principal, #5c3a21) !important;
     color: #fff !important;
 }
 
-/* Modificadores de Tamaño */
 .btn-favorito-std { width: 40px; height: 40px; }
 .btn-favorito-lg  { width: 60px; height: 50px; }
 
-/* ========================================== */
-/* OPTIMIZACIÓN DE RENDIMIENTO SWEETALERT2    */
-/* ========================================== */
-
-/* 1. Forzar Aceleración por Hardware (Tarjeta Gráfica) */
 .swal2-popup {
     -webkit-transform: translate3d(0, 0, 0) !important;
     transform: translate3d(0, 0, 0) !important;
@@ -760,13 +697,11 @@ footer a:hover {
     border: 3px solid var(--color-principal, #5c3a21);
 }
 
-/* 3. Optimizar la capa de fondo oscuro */
 .swal2-container.swal2-backdrop-show {
     will-change: opacity;
     animation-duration: 0.2s !important;
 }
 
-/* 4. Quitar el lag de los iconos (el check verde y la X roja) */
 .swal2-icon {
     animation-duration: 0.3s !important;
 }
@@ -775,7 +710,6 @@ footer a:hover {
 .transicion-suave { transition: all 0.3s ease; }
 
 
-/* SECCIÓN ACCESO ANTICIPADO ANTICIPADO*/
 
 .vip-countdown {
     min-height: 50vh;
@@ -834,19 +768,15 @@ footer a:hover {
 }
 
 
-/* ESTILOS DEL MODAL DE ACCESO VIP*/
 
-/* Fondo del modal (Tu color secundario) */
 .modal-acceso-bg {
     background-color: var(--color-secundario); 
 }
 
-/* Color del icono del candado (Tu color acento) */
 .text-acento {
     color: var(--color-acento) ;
 }
 
-/* Estilo del input donde se escribe el código */
 .input-codigo-acceso {
     letter-spacing: 10px;
     background-color: transparent;
@@ -854,7 +784,6 @@ footer a:hover {
     color: inherit; 
 }
 
-/* Cuando el usuario hace clic en el input (Focus) */
 .input-codigo-acceso:focus {
     background-color: transparent;
     border-color: var(--color-acento); 

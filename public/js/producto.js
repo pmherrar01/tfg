@@ -1,23 +1,18 @@
-//inicializar el main de la ficha producto para los productod recientes
 const mainProducto = document.getElementById("mainProducto");
 
 
 
-// --- FUNCIONES DE LA FICHA DE PRODUCTO ---
 
 function cambiarFoto(elementoClicado, urlNuevaFoto) {
     let imgPrincipal = document.getElementById('imagenPrincipal');
 
-    // 1. Bajamos la opacidad a 0 (Se hace invisible suavemente)
     imgPrincipal.classList.add('oculto-transicion');
 
-    // 2. Esperamos un instante (150ms), cambiamos la foto y volvemos a subir la opacidad
     setTimeout(function () {
         imgPrincipal.src = urlNuevaFoto;
         imgPrincipal.classList.remove('oculto-transicion');
     }, 150);
 
-    // 3. Gestión del borde negro en las miniaturas
     let miniaturas = document.querySelectorAll('.miniatura-galeria');
     miniaturas.forEach(function (miniatura) {
         miniatura.classList.remove('borde-activo');
@@ -78,22 +73,17 @@ function seleccionarColor(colorId, elementoClicado) {
         }
     });
 
-    // Cambiamos automáticamente la foto grande a la primera del nuevo color
     if (primeraVisible) {
         primeraVisible.click();
     }
 
-    // 3. ACTUALIZAR EL STOCK Y LAS TALLAS DINÁMICAMENTE
     const selectTalla = document.getElementById('talla');
     if (selectTalla && typeof tallasProducto !== 'undefined') {
 
-        // Vaciamos el desplegable
         selectTalla.innerHTML = '<option value="" selected disabled>Selecciona tu talla</option>';
 
-        // Filtramos solo las tallas que coincidan con el color clicado
         const tallasDelColor = tallasProducto.filter(t => t.color_id == colorId);
 
-        // Creamos las opciones nuevas según el stock de la base de datos
         tallasDelColor.forEach(tallaObj => {
             let opcion = document.createElement('option');
             opcion.value = tallaObj.talla;
@@ -116,29 +106,20 @@ function seleccionarColor(colorId, elementoClicado) {
         inputColor.value = colorId;
     }
 
-    // ==========================================
-    // MAGIA PARA EL BOTÓN DE FAVORITOS
-    // ==========================================
-
-    // 1. Buscamos el botón de favoritos en el HTML
     let btnFav = document.getElementById('btn-favorito-ficha');
 
     if (btnFav) {
-        // 2. Le cambiamos el "data-color" fantasma por el color que acabas de clicar
         btnFav.setAttribute('data-color', colorId);
 
-        // 3. Comprobamos si este nuevo color está en la memoria de favoritos
         let idPrenda = btnFav.getAttribute('data-id');
-        let comboActual = idPrenda + '-' + colorId; // Ej: "1-3"
+        let comboActual = idPrenda + '-' + colorId; 
         let iconoCorazon = btnFav.querySelector('i');
 
         if (typeof listaFavoritosJS !== 'undefined') {
             if (listaFavoritosJS.includes(comboActual)) {
-                // Si es favorito, rellenamos el corazón
                 iconoCorazon.classList.remove('bi-heart');
                 iconoCorazon.classList.add('bi-heart-fill');
             } else {
-                // Si no es favorito, vaciamos el corazón
                 iconoCorazon.classList.remove('bi-heart-fill');
                 iconoCorazon.classList.add('bi-heart');
             }
@@ -146,7 +127,6 @@ function seleccionarColor(colorId, elementoClicado) {
     }
 
 
-    //actualicar los datos de color y img para prendas recientes
 
     if (mainProducto) {
         mainProducto.dataset.colorPrenda = colorId;
@@ -160,16 +140,12 @@ function seleccionarColor(colorId, elementoClicado) {
         }
     }
 
-    // ==========================================
-    // ACTUALIZAR DINÁMICAMENTE "COMPLETA EL LOOK"
-    // ==========================================
     let idPrendaBase = mainProducto.dataset.id;
     let botonOffcanvas = document.getElementById('btnCompletarLook');
     let contenedorPrendasLook = document.getElementById('contenedorPrendasLook');
 
     if (botonOffcanvas && contenedorPrendasLook) {
 
-        // ¡LA CLAVE ESTÁ AQUÍ! Ocultamos el botón al instante al cambiar de color.
         botonOffcanvas.classList.add('d-none');
 
         fetch(`controllers/apiLookController.php?idPrenda=${idPrendaBase}&idColor=${colorId}`)
@@ -177,7 +153,6 @@ function seleccionarColor(colorId, elementoClicado) {
             .then(datos => {
                 if (datos.exito && datos.productos.length > 0) {
 
-                    // Si todo va bien y SÍ hay look, lo volvemos a mostrar
                     botonOffcanvas.classList.remove('d-none');
 
                     contenedorPrendasLook.innerHTML = '';
@@ -250,7 +225,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// --- LÓGICA DEL BOTÓN ANIMADO ---
 if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
     gsap.registerPlugin(MorphSVGPlugin);
 
@@ -274,7 +248,7 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
                     text: 'Por favor, selecciona una talla antes de añadir al carrito.',
                     confirmButtonColor: 'var(--color-principal, #000)'
                 });
-                return; // Cortamos la ejecución de la función, la animación NO empieza
+                return; 
             }
 
             if (button.classList.contains('active')) { return; }
@@ -312,7 +286,6 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
                 }, {
                     '--cart-x': '52px', '--cart-rotate': '-15deg', duration: .2
                 }, {
-                    // AQUÍ ESTÁ EL TRUCO PARA EL BOTÓN ANCHO: movemos el carrito 200px para que desaparezca seguro
                     '--cart-x': '200px', '--cart-rotate': '0deg', duration: .3, clearProps: true, onComplete() {
                         button.style.overflow = 'hidden';
                         button.style.setProperty('--text-o', 0);
@@ -346,7 +319,6 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
                 }]
             });
 
-            // Enviar formulario tras la magia
             setTimeout(() => {
                 button.closest('form').submit();
             }, 1900);
@@ -356,12 +328,10 @@ if (typeof gsap !== 'undefined' && typeof MorphSVGPlugin !== 'undefined') {
 
 
 
-//funcion para almacenar en el localstorage las prendas vistas reciente
 
 function guardarPrendasRecientes() {
 
 
-    //objeto de prenda reciente
     if (!mainProducto) return;
 
 
