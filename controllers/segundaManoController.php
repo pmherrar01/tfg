@@ -12,6 +12,6 @@ $producto = new Producto($db->conectar());
 $listaTallas = $producto->listarTodasTallas();
 $listaColores = $producto->listaColores();
 $listaColeciones = $producto->listarColecciones();
-$listaTipoPrenda = $producto->listarTiposPrendas()
+$listaTipoPrenda = $producto->listarTiposPrendas();
 
 ?>

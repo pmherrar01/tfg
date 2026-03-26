@@ -591,7 +591,7 @@ class Producto
     }
 
     public function listarTodasTallas(){
-        $sql = "SELECT DISTINCT talla from productos_tallas ";
+        $sql = "SELECT DISTINCT talla from producto_tallas ";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia -> execute();
 
