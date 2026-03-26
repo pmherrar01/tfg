@@ -47,7 +47,7 @@ include './includes/header.php';
                                 <select class="form-select rounded-0 p-2" id="tallaPrenda" name="tallaPrenda" required>
                                     <option value="" selected disabled>Elegir...</option>
                                     <?php foreach ($listaTallas as $talla) { ?>
-                                        <option value="<?php echo $talla['talla']; ?>"><?php echo $talla['talla']; ?></option>
+                                        <option value="<?php echo $talla['id']; ?>"><?php echo $talla['talla']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
@@ -56,10 +56,21 @@ include './includes/header.php';
                         <div class="mb-3">
                             <label for="colorPrenda" class="form-label fw-bold small text-uppercase text-muted">Color</label>
                             <select class="form-select rounded-0 p-2" id="colorPrenda" name="colorPrenda" required>
-                             <option value="" selected disabled>Elegir...</option>
-                            <?php foreach ($listaColores as $color) { ?>
+                                <option value="" selected disabled>Elegir...</option>
+                                <?php foreach ($listaColores as $color) { ?>
 
-                                     <option value="<?php echo $color['nombre']; ?>"><?php echo $color['nombre']; ?></option>
+                                    <option value="<?php echo $color['id']; ?>"><?php echo $color['nombre']; ?></option>
+
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="colorPrenda" class="form-label fw-bold small text-uppercase text-muted">Tipo prenda</label>
+                            <select class="form-select rounded-0 p-2" id="tipoPrenda" name="tipoPrenda" required>
+                                <option value="" selected disabled>Elegir...</option>
+                                <?php foreach ($listaTipoPrenda as $tipoPrendda) { ?>
+
+                                    <option value="<?php echo $tipoPrendda['id']; ?>"><?php echo $tipoPrendda['nombre']; ?></option>
 
                                 <?php } ?>
                             </select>
@@ -68,7 +79,7 @@ include './includes/header.php';
                         <div class="mb-4 mt-2">
                             <label for="fotoPrenda" class="form-label fw-bold small text-uppercase text-muted">Foto del artículo</label>
                             <input class="form-control rounded-0" type="file" id="fotoPrenda" name="foto" accept="image/*" required>
-                            <div class="form-text" style="font-size: 0.75rem;">Sube una foto clara y con buena iluminación. Máximo 2MB.</div>
+                            <div class="form-text" style="font-size: 0.75rem;">Sube una foto clara y con buena iluminación.</div>
                         </div>
 
                         <div class="d-grid mt-4">

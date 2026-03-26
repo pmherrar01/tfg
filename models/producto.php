@@ -24,7 +24,7 @@ class Producto
 
     /**
      * Get the value of idColecion
-     */ 
+     */
     public function getIdColecion()
     {
         return $this->idColecion;
@@ -34,7 +34,7 @@ class Producto
      * Set the value of idColecion
      *
      * @return  self
-     */ 
+     */
     public function setIdColecion($idColecion)
     {
         $this->idColecion = $idColecion;
@@ -44,7 +44,7 @@ class Producto
 
     /**
      * Get the value of idTipoProducto
-     */ 
+     */
     public function getIdTipoProducto()
     {
         return $this->idTipoProducto;
@@ -54,7 +54,7 @@ class Producto
      * Set the value of idTipoProducto
      *
      * @return  self
-     */ 
+     */
     public function setIdTipoProducto($idTipoProducto)
     {
         $this->idTipoProducto = $idTipoProducto;
@@ -64,7 +64,7 @@ class Producto
 
     /**
      * Get the value of nombreProducto
-     */ 
+     */
     public function getNombreProducto()
     {
         return $this->nombreProducto;
@@ -74,7 +74,7 @@ class Producto
      * Set the value of nombreProducto
      *
      * @return  self
-     */ 
+     */
     public function setNombreProducto($nombreProducto)
     {
         $this->nombreProducto = $nombreProducto;
@@ -84,7 +84,7 @@ class Producto
 
     /**
      * Get the value of descripcionProducto
-     */ 
+     */
     public function getDescripcionProducto()
     {
         return $this->descripcionProducto;
@@ -94,7 +94,7 @@ class Producto
      * Set the value of descripcionProducto
      *
      * @return  self
-     */ 
+     */
     public function setDescripcionProducto($descripcionProducto)
     {
         $this->descripcionProducto = $descripcionProducto;
@@ -104,7 +104,7 @@ class Producto
 
     /**
      * Get the value of precioProducto
-     */ 
+     */
     public function getPrecioProducto()
     {
         return $this->precioProducto;
@@ -114,7 +114,7 @@ class Producto
      * Set the value of precioProducto
      *
      * @return  self
-     */ 
+     */
     public function setPrecioProducto($precioProducto)
     {
         $this->precioProducto = $precioProducto;
@@ -124,7 +124,7 @@ class Producto
 
     /**
      * Get the value of stock
-     */ 
+     */
     public function getStock()
     {
         return $this->stock;
@@ -134,7 +134,7 @@ class Producto
      * Set the value of stock
      *
      * @return  self
-     */ 
+     */
     public function setStock($stock)
     {
         $this->stock = $stock;
@@ -144,7 +144,7 @@ class Producto
 
     /**
      * Get the value of colorProducto
-     */ 
+     */
     public function getColorProducto()
     {
         return $this->colorProducto;
@@ -154,7 +154,7 @@ class Producto
      * Set the value of colorProducto
      *
      * @return  self
-     */ 
+     */
     public function setColorProducto($colorProducto)
     {
         $this->colorProducto = $colorProducto;
@@ -164,7 +164,7 @@ class Producto
 
     /**
      * Get the value of fechaProducto
-     */ 
+     */
     public function getFechaProducto()
     {
         return $this->fechaProducto;
@@ -174,7 +174,7 @@ class Producto
      * Set the value of fechaProducto
      *
      * @return  self
-     */ 
+     */
     public function setFechaProducto($fechaProducto)
     {
         $this->fechaProducto = $fechaProducto;
@@ -184,7 +184,7 @@ class Producto
 
     /**
      * Get the value of destacado
-     */ 
+     */
     public function getDestacado()
     {
         return $this->destacado;
@@ -194,7 +194,7 @@ class Producto
      * Set the value of destacado
      *
      * @return  self
-     */ 
+     */
     public function setDestacado($destacado)
     {
         $this->destacado = $destacado;
@@ -204,7 +204,7 @@ class Producto
 
     /**
      * Get the value of tallaProducto
-     */ 
+     */
     public function getTallaProducto()
     {
         return $this->tallaProducto;
@@ -214,7 +214,7 @@ class Producto
      * Set the value of tallaProducto
      *
      * @return  self
-     */ 
+     */
     public function setTallaProducto($tallaProducto)
     {
         $this->tallaProducto = $tallaProducto;
@@ -226,7 +226,7 @@ class Producto
 
     /**
      * Get the value of esSegundaMano
-     */ 
+     */
     public function getEsSegundaMano()
     {
         return $this->esSegundaMano;
@@ -236,7 +236,7 @@ class Producto
      * Set the value of esSegundaMano
      *
      * @return  self
-     */ 
+     */
     public function setEsSegundaMano($esSegundaMano)
     {
         $this->esSegundaMano = $esSegundaMano;
@@ -246,7 +246,7 @@ class Producto
 
     /**
      * Get the value of estadoRevision
-     */ 
+     */
     public function getEstadoRevision()
     {
         return $this->estadoRevision;
@@ -256,7 +256,7 @@ class Producto
      * Set the value of estadoRevision
      *
      * @return  self
-     */ 
+     */
     public function setEstadoRevision($estadoRevision)
     {
         $this->estadoRevision = $estadoRevision;
@@ -266,7 +266,7 @@ class Producto
 
     /**
      * Get the value of idUsuarioVendedor
-     */ 
+     */
     public function getIdUsuarioVendedor()
     {
         return $this->idUsuarioVendedor;
@@ -276,7 +276,7 @@ class Producto
      * Set the value of idUsuarioVendedor
      *
      * @return  self
-     */ 
+     */
     public function setIdUsuarioVendedor($idUsuarioVendedor)
     {
         $this->idUsuarioVendedor = $idUsuarioVendedor;
@@ -307,7 +307,7 @@ class Producto
             $sql .= " LIMIT " . $limite;
         }
 
-        $sentencia = $this->conexionDataBase->prepare($sql); 
+        $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":estadoActivo" => $estadoActivo]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -586,16 +586,62 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, ){
+    public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
+    {
 
+
+
+
+    try {
+
+        $this->conexionDataBase->beginTransaction();
+        $sql = "INSERT INTO productos (nombre, precio, tipo_id, activo, es_segunda_mano, id_usuario_vendedor, estado_revision) 
+        VALUES (:nombre, :precio, :idTipoPrenda, 0, 1, :idUsuario, 'Pendiente')";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia -> execute([
+            ":nombre" => $nombrePrenda,
+            ":precio" => $precioPrenda,
+            ":idTipoPrenda" => $idTipoPrenda,
+            ":idUsuario" => $idUsu
+        ]);
+
+        $idProductoInsertado = $this->conexionDataBase->lastInsertId();
+
+        $sqlImagen = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) 
+              VALUES (:idProducto, :idColor, :imagenUrl, 1)";
+
+        $sentenciaImg = $this->conexionDataBase->prepare($sqlImagen);
+        $sentenciaImg ->execute([
+            ":idProducto" => $idProductoInsertado,
+            ":idColor" => $idColor,
+            ":imagenUrl" => $imgPrenda
+        ]);
+
+        $sqlTalla =  "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) 
+             VALUES (:idProducto, :idColor, :talla, 1)";
+
+        $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
+        $sentenciaTalla -> execute([
+            ":idProducto" => $idProductoInsertado,
+            ":idColor" => $idColor,
+            ":talla" => $tallaPrenda
+        ]);
+
+        $this->conexionDataBase->commit();
+        return true;
+    } catch (Exception $e) {
+        $this->conexionDataBase->rollBack(); return false;
     }
 
-    public function listarTodasTallas(){
+        
+    }
+
+    public function listarTodasTallas()
+    {
         $sql = "SELECT DISTINCT talla from producto_tallas ";
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia -> execute();
+        $sentencia->execute();
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
-
 }

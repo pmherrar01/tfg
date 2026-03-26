@@ -480,3 +480,17 @@ function anadirDirectoCarrito(event, idPrenda, idColor, talla) {
 document.addEventListener("DOMContentLoaded", function () {
     pintarPrendasRecientes();
 });
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Comprobamos si existe el contenedor de la página "prendaSubida"
+    const contenedorPrendaSubida = document.getElementById('prendaSubida');
+    
+    if (contenedorPrendaSubida) {
+        setTimeout(function() {
+            window.location.href = 'perfil.php?mensaje=prenda_subida';
+        }, 4000); // 4 segundos de espera
+    }
+
+});

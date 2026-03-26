@@ -2,11 +2,16 @@
 
 session_start();
 
-if( $_SERVER['REQUEST_METHOD'] == 'POST' &&$_SESSION["usuario_id"]){
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../models/producto.php';
+
+if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
     
     $nombrePrenda = isset($_POST["nombrePrenda"]) ? trim($_POST["nombrePrenda"]) : "";
     $precioPrenda = isset($_POST["precioPrenda"]) ? $_POST["precioPrenda"] : -1;
     $tallaPrenda = isset($_POST["tallaPrenda"]) ? $_POST["tallaPrenda"] : "";
+    $colorPrenda  = isset($_POST["colorPrenda"]) ? $_POST["colorPrenda"] : "";
+    $tipoPrenda = isset($_POST["tipoPrenda"]) ? $_POST["tipoPrenda"] : "";
 
     $idUsu = $_SESSION["usuario_id"];
     $db = new Database();
@@ -21,6 +26,15 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' &&$_SESSION["usuario_id"]){
     $rutaFotosBaseDatos = "public/img/" . $nombreFoto;
 
     if(move_uploaded_file($_FILES["foto"]["tmp_name"], $rutaFotos) ){
+        $prendaSubida = $producto -> subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $rutaFotosBaseDatos, $colorPrenda, $tallaPrenda, $tipoPrenda);
+
+        if($prendaSubida){
+            header("Location: prendaSubida.php");
+            exit;
+        }else{
+            header("Location: ../perfil.php?mensaje=subido");
+            exit;
+        }
 
     }else{
         echo "error al guardar la foto";
