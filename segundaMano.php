@@ -47,7 +47,7 @@ include './includes/header.php';
                                 <select class="form-select rounded-0 p-2" id="tallaPrenda" name="tallaPrenda" required>
                                     <option value="" selected disabled>Elegir...</option>
                                     <?php foreach ($listaTallas as $talla) { ?>
-                                        <option value="<?php echo $talla['id']; ?>"><?php echo $talla['talla']; ?></option>
+                                        <option value="<?php echo $talla['talla']; ?>"><?php echo $talla['talla']; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>

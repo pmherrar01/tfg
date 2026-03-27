@@ -495,7 +495,7 @@ class Producto
 
     public function listaColores()
     {
-        $sql = "SELECT nombre, valor_hexadecimal from colores";
+        $sql = "SELECT id, nombre, valor_hexadecimal from colores";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -586,54 +586,55 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
+   public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
     {
+        try {
+            $this->conexionDataBase->beginTransaction();
 
+            $sql = "INSERT INTO productos (nombre, precio, tipo_id, activo, es_segunda_mano, id_usuario_vendedor, estado_revision) 
+            VALUES (:nombre, :precio, :idTipoPrenda, 0, 1, :idUsuario, 'Pendiente')";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia -> execute([
+                ":nombre" => $nombrePrenda,
+                ":precio" => $precioPrenda,
+                ":idTipoPrenda" => $idTipoPrenda,
+                ":idUsuario" => $idUsu
+            ]);
 
+            $idProductoInsertado = $this->conexionDataBase->lastInsertId();
 
+            $sqlColor = "INSERT INTO producto_colores (producto_id, color_id) VALUES (:idProducto, :idColor)";
+            $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
+            $sentenciaColor->execute([
+                ":idProducto" => $idProductoInsertado,
+                ":idColor" => $idColor
+            ]);
 
-    try {
+            $sqlImagen = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) 
+                  VALUES (:idProducto, :idColor, :imagenUrl, 1)";
+            $sentenciaImg = $this->conexionDataBase->prepare($sqlImagen);
+            $sentenciaImg ->execute([
+                ":idProducto" => $idProductoInsertado,
+                ":idColor" => $idColor,
+                ":imagenUrl" => $imgPrenda
+            ]);
 
-        $this->conexionDataBase->beginTransaction();
-        $sql = "INSERT INTO productos (nombre, precio, tipo_id, activo, es_segunda_mano, id_usuario_vendedor, estado_revision) 
-        VALUES (:nombre, :precio, :idTipoPrenda, 0, 1, :idUsuario, 'Pendiente')";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia -> execute([
-            ":nombre" => $nombrePrenda,
-            ":precio" => $precioPrenda,
-            ":idTipoPrenda" => $idTipoPrenda,
-            ":idUsuario" => $idUsu
-        ]);
+            $sqlTalla =  "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) 
+                 VALUES (:idProducto, :idColor, :talla, 1)";
+            $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
+            $sentenciaTalla -> execute([
+                ":idProducto" => $idProductoInsertado,
+                ":idColor" => $idColor,
+                ":talla" => $tallaPrenda
+            ]);
 
-        $idProductoInsertado = $this->conexionDataBase->lastInsertId();
+            $this->conexionDataBase->commit();
+            return true;
 
-        $sqlImagen = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) 
-              VALUES (:idProducto, :idColor, :imagenUrl, 1)";
-
-        $sentenciaImg = $this->conexionDataBase->prepare($sqlImagen);
-        $sentenciaImg ->execute([
-            ":idProducto" => $idProductoInsertado,
-            ":idColor" => $idColor,
-            ":imagenUrl" => $imgPrenda
-        ]);
-
-        $sqlTalla =  "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) 
-             VALUES (:idProducto, :idColor, :talla, 1)";
-
-        $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
-        $sentenciaTalla -> execute([
-            ":idProducto" => $idProductoInsertado,
-            ":idColor" => $idColor,
-            ":talla" => $tallaPrenda
-        ]);
-
-        $this->conexionDataBase->commit();
-        return true;
-    } catch (Exception $e) {
-        $this->conexionDataBase->rollBack(); return false;
-    }
-
-        
+        } catch (Exception $e) {
+           header("Location: ../segundaMano.php" );
+            return false;
+        }
     }
 
     public function listarTodasTallas()
@@ -642,6 +643,20 @@ class Producto
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
 
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerMisPrendasSegundaMano($idUsuario)
+    {
+        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen 
+                FROM productos p 
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
+                WHERE p.id_usuario_vendedor = :idUsuario 
+                GROUP BY p.id 
+                ORDER BY p.creado_en DESC";
+                
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":idUsuario" => $idUsuario]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 }
