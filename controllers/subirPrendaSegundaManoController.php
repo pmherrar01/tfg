@@ -29,7 +29,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
         $prendaSubida = $producto -> subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $rutaFotosBaseDatos, $colorPrenda, $tallaPrenda, $tipoPrenda);
 
         if($prendaSubida){
-            header("Location: prendaSubida.php");
+            header("Location: ../prendaSubida.php");
             exit;
         }else{
             header("Location: ../perfil.php?mensaje=subido");
@@ -43,7 +43,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
     }
 
 }else{
-    header("Location: index.php?mensaje=login_requerido");
+    header("Location: ../index.php?mensaje=login_requerido");
     exit();
 }
 
