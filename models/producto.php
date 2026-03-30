@@ -741,10 +741,8 @@ class Producto
                 LEFT JOIN colores c ON pc.color_id = c.id
                 LEFT JOIN producto_tallas pt ON p.id = pt.producto_id
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
-                WHERE p.es_segunda_mano = 1 
-                AND p.estado_revision = 'Aprobado' ";
+                WHERE p.es_segunda_mano = 1 AND p.estado_revision = 'Aprobado' AND pt.stock > 0";
         
-        // Si hay alguien logueado, ocultamos SUS propias prendas
         if ($idUsuarioActual !== null) {
             $sql .= " AND p.id_usuario_vendedor != :idUsuario ";
         }

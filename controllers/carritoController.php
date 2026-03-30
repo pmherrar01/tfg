@@ -15,11 +15,17 @@ $imagenModel = new Imagen($conexion);
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
     
     $idPrenda = $_POST['idPrenda'];
-    $color_id = $_POST['color_id'];
+    $color_id = isset($_POST['color_id']) ? $_POST['color_id'] : (isset($_POST['color']) ? $_POST['color'] : '');
     $cantidad = 1;
+    
+    $origen = isset($_POST['origen']) ? $_POST['origen'] : 'ficha';
 
     if (!isset($_POST['talla']) || empty($_POST['talla'])) {
-        header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=falta_talla");
+        if ($origen === 'segundaMano') {
+            header("Location: ../segundaMano.php?error=falta_talla");
+        } else {
+            header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=falta_talla");
+        }
         exit;
     }
     
@@ -31,7 +37,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     $stockMaximo = $resultadoStock ? $resultadoStock['stock'] : 0;
 
     if ($stockMaximo < 1) {
-        header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
+        if ($origen === 'segundaMano') {
+            header("Location: ../segundaMano.php?error=no_stock");
+        } else {
+            header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
+        }
         exit;
     }
 
@@ -44,7 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
         if ($item['idPrenda'] == $idPrenda && $item['talla'] == $talla && $item['color_id'] == $color_id) {
             
             if ($item['cantidad'] + $cantidad > $stockMaximo) {
-                header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
+                if ($origen === 'segundaMano') {
+                    header("Location: ../segundaMano.php?error=no_stock");
+                } else {
+                    header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id . "&error=no_stock");
+                }
                 exit;
             }
             
@@ -63,7 +77,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
         ];
     }
 
-    header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id );
+    if ($origen === 'segundaMano') {
+        header("Location: ../segundaMano.php?mensaje=agregado");
+    } else {
+        header("Location: ../fichaProducto.php?idPrenda=" . $idPrenda . "&color=" . $color_id );
+    }
     exit;
 }
 
