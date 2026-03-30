@@ -408,7 +408,7 @@ include './includes/header.php';
                                                                 <label class="form-label fw-bold small text-uppercase text-muted">Fotos actuales (Marca la casilla para eliminar)</label>
                                                                 <div class="d-flex flex-wrap gap-2">
                                                                     <?php
-                                                                    $fotosPrenda = $productoModel->obtenerImagenesProducto($prenda['id']);
+                                                                    $fotosPrenda = $producto->obtenerImagenesProducto($prenda['id']);
                                                                     foreach ($fotosPrenda as $foto) {
                                                                     ?>
                                                                         <div class="position-relative border border-2 border-dark p-1" style="width: 100px; height: 100px;">
@@ -424,14 +424,11 @@ include './includes/header.php';
                                                             <div class="mb-4 mt-3 border-top pt-3">
                                                                 <label class="form-label fw-bold small text-uppercase text-muted">Añadir más fotos</label>
                                                                 <input class="form-control rounded-0" type="file" name="fotosNuevas[]" accept="image/*" multiple>
-                                                                <div class="form-text text-muted" style="font-size: 0.75rem;">
-                                                                    <i class="bi bi-info-circle me-1"></i> Puedes seleccionar varios archivos a la vez manteniendo pulsada la tecla Ctrl / Cmd.
-                                                                </div>
                                                             </div>
 
                                                             <div class="d-grid mt-4">
                                                                 <button type="submit" class="btn btn-dark rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">
-                                                                    Guardar Cambios y Enviar a Revisión
+                                                                    Guardar Cambios
                                                                 </button>
                                                             </div>
 

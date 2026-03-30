@@ -669,4 +669,96 @@ class Producto
         $sentencia->execute([':id' => $idProducto]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function actualizarDatosPrendaSegundaMano($idPrenda, $nombrePrenda, $precioPrenda, $tipoPrenda, $idUsu, $idColor, $talla){
+        
+    try {
+             $this->conexionDataBase->beginTransaction();
+
+            $sql = "UPDATE productos SET nombre = :nombrePrenda, precio = :precioPrenda, tipo_id = :idTipoPrenda, estado_revision = 'Pendiente' WHERE id = :idPrenda AND id_usuario_vendedor = :idUsu";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([
+            ":nombrePrenda" => $nombrePrenda,
+            ":precioPrenda" => $precioPrenda,
+            ":idTipoPrenda" => $tipoPrenda,
+            ":idPrenda" => $idPrenda,
+            ":idUsu" => $idUsu
+        ]);
+
+        $sqlColor = "UPDATE producto_colores SET color_id = :idColor WHERE producto_id = :idPrenda";
+        $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
+        $sentenciaColor -> execute([
+            ":idColor" => $idColor,
+            ":idPrenda" => $idPrenda
+        ]);
+
+        $sqlTalla = "UPDATE producto_tallas SET talla = :talla, color_id = :idColor WHERE producto_id = :idPrenda";
+
+        $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
+        $sentenciaTalla -> execute([
+            ":talla" => $talla,
+            ":idColor" => $idColor,
+            ":idPrenda" => $idPrenda
+        ]);
+
+        $this->conexionDataBase->commit();
+
+        return true;
+    } catch (PDOException) {
+        header("Location: perfil.php?seccion=prendas");
+        return false;
+    }
+
+    }
+
+    public function borrarImagenPrenda($idImagen) {
+        $sql = "DELETE FROM imagenes_productos WHERE id = :idImagen";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([":idImagen" => $idImagen]);
+    }
+
+    public function anadirImagenPrenda($idPrenda, $idColor, $urlImagen) {
+        $sqlCheck = "SELECT count(*) FROM imagenes_productos WHERE producto_id = :id AND es_principal = 1";
+        $sentenciaCheck = $this->conexionDataBase->prepare($sqlCheck);
+        $sentenciaCheck->execute([":id" => $idPrenda]);
+        $esPrincipal = ($sentenciaCheck->fetchColumn() == 0) ? 1 : 0;
+
+        $sql = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:idPrenda, :idColor, :urlImagen, :esPrincipal)";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([
+            ":idPrenda" => $idPrenda,
+            ":idColor" => $idColor,
+            ":urlImagen" => $urlImagen,
+            ":esPrincipal" => $esPrincipal
+        ]);
+    }
+
+    public function obtenerCatalogoSegundaMano($idUsuarioActual = null)
+    {
+        $sql = "SELECT p.*, pc.color_id, c.nombre as color_nombre, pt.talla, MIN(i.url_imagen) as url_imagen 
+                FROM productos p 
+                LEFT JOIN producto_colores pc ON p.id = pc.producto_id
+                LEFT JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN producto_tallas pt ON p.id = pt.producto_id
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
+                WHERE p.es_segunda_mano = 1 
+                AND p.estado_revision = 'Aprobado' ";
+        
+        // Si hay alguien logueado, ocultamos SUS propias prendas
+        if ($idUsuarioActual !== null) {
+            $sql .= " AND p.id_usuario_vendedor != :idUsuario ";
+        }
+        
+        $sql .= " GROUP BY p.id, pc.color_id, pt.talla, c.nombre ORDER BY p.creado_en DESC";
+                
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        
+        if ($idUsuarioActual !== null) {
+            $sentencia->execute([":idUsuario" => $idUsuarioActual]);
+        } else {
+            $sentencia->execute();
+        }
+        
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

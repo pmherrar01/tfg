@@ -94,6 +94,60 @@ include './includes/header.php';
         </div>
     </div>
 
+    <div class="mt-5 pt-5 border-top border-dark border-2">
+        <h2 class="fw-bold text-uppercase mb-4">Recién llegados</h2>
+        
+        <?php if (empty($catalogoSegundaMano)) { ?>
+            <div class="text-center p-5 bg-light border border-dark border-1">
+                <i class="bi bi-emoji-frown display-1 text-muted mb-3 d-block"></i>
+                <h4 class="fw-bold text-uppercase">Aún no hay prendas disponibles</h4>
+                <p class="text-muted">¡Sé el primero en subir ropa a nuestro catálogo de segunda mano!</p>
+            </div>
+        <?php } else { ?>
+            <div class="row g-4">
+                <?php foreach ($catalogoSegundaMano as $prenda) { ?>
+                    <div class="col-6 col-md-4 col-lg-3">
+                        <div class="card product-card border-0 bg-transparent h-100 position-relative d-flex flex-column">
+                            
+                            <a href="fichaProducto.php?idPrenda=<?= $prenda['id'] ?>&color=<?= $prenda['color_id'] ?>" class="text-decoration-none text-dark d-block flex-grow-1">
+                                
+                                <div class="position-relative overflow-hidden border border-dark border-1" style="height: 350px;">
+                                    <img src="<?= !empty($prenda['url_imagen']) ? $prenda['url_imagen'] : 'public/img/fondo.jpg' ?>" 
+                                         class="w-100 h-100" alt="<?= $prenda['nombre'] ?>" style="object-fit: cover;">
+                                    
+                                    <span class="position-absolute top-0 end-0 m-2 badge bg-dark text-white rounded-0 fw-bold px-2 py-1" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                        2ª MANO
+                                    </span>
+                                </div>
+
+                                <div class="card-body px-0 pb-1 mt-2 text-center">
+                                    <h6 class="card-title text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.9rem;"><?= $prenda['nombre'] ?></h6>
+                                    <p class="text-muted small mb-1">Talla: <?= $prenda['talla'] ?? 'N/A' ?></p>
+                                    <p class="fw-bold fs-5 mb-2"><?= number_format($prenda['precio'], 2) ?> €</p>
+                                </div>
+                            </a>
+
+                            <div class="mt-auto px-1 pt-2">
+                                <form action="controllers/carritoController.php" method="POST">
+                                    <input type="hidden" name="accion" value="agregar">
+                                    <input type="hidden" name="idPrenda" value="<?= $prenda['id'] ?>">
+                                    <input type="hidden" name="color" value="<?= $prenda['color_id'] ?>">
+                                    <input type="hidden" name="talla" value="<?= $prenda['talla'] ?>">
+                                    <input type="hidden" name="cantidad" value="1">
+                                    
+                                    <button type="submit" class="btn btn-principal rounded-0 w-100 text-uppercase fw-bold py-2" style="font-size: 0.8rem; letter-spacing: 1px;">
+                                        Añadir al carrito
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php } ?>
+    </div>
+
 
 </main>
 

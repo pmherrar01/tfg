@@ -13,4 +13,8 @@ $listaTallas = $producto->listarTodasTallas();
 $listaColores = $producto->listaColores();
 $listaTipoPrenda = $producto->listarTiposPrendas();
 
+$idUsuarioActivo = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
+
+$catalogoSegundaMano = $producto->obtenerCatalogoSegundaMano($idUsuarioActivo); 
+
 ?>
