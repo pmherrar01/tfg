@@ -122,23 +122,35 @@ include './includes/header.php';
 
                                 <div class="card-body px-0 pb-1 mt-2 text-center">
                                     <h6 class="card-title text-uppercase fw-bold mb-1 text-truncate" style="font-size: 0.9rem;"><?= $prenda['nombre'] ?></h6>
-                                    <p class="text-muted small mb-1">Talla: <?= $prenda['talla'] ?? 'N/A' ?></p>
+                                    
+                                    <p class="text-dark small mb-1 fw-bold text-uppercase" style="letter-spacing: 1px;">
+                                        Talla: <?= $prenda['talla'] ?? 'N/A' ?>
+                                    </p>
+                                    
                                     <p class="fw-bold fs-5 mb-2"><?= number_format($prenda['precio'], 2) ?> €</p>
                                 </div>
-                            </a>
-
-                            <div class="mt-auto px-1 pt-2">
-                                <form action="controllers/carritoController.php" method="POST">
+                            </a> <div class="d-flex align-items-center justify-content-between gap-1 mt-auto px-1 pt-2">
+                                
+                                <form action="controllers/carritoController.php" method="POST" class="flex-grow-1 m-0">
                                     <input type="hidden" name="accion" value="agregar">
                                     <input type="hidden" name="idPrenda" value="<?= $prenda['id'] ?>">
                                     <input type="hidden" name="color" value="<?= $prenda['color_id'] ?>">
                                     <input type="hidden" name="talla" value="<?= $prenda['talla'] ?>">
                                     <input type="hidden" name="cantidad" value="1">
                                     
-                                    <button type="submit" class="btn btn-principal rounded-0 w-100 text-uppercase fw-bold py-2" style="font-size: 0.8rem; letter-spacing: 1px;">
-                                        Añadir al carrito
+                                    <button type="submit" class="btn btn-principal rounded-0 w-100 text-uppercase fw-bold py-1 px-0" 
+                                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;">
+                                        Añadir
                                     </button>
                                 </form>
+
+                                <button type="button" class="btn btn-outline-dark btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0 m-0"
+                                    style="height: 40px; width: 40px; padding: 0;"
+                                    data-id="<?= $prenda['id'] ?>"
+                                    data-color="<?= $prenda['color_id'] ?>">
+                                    <i class="bi bi-heart"></i>
+                                </button>
+
                             </div>
 
                         </div>
