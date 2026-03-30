@@ -31,6 +31,7 @@ include './includes/header.php';
                             <span class="badge bg-success rounded-pill"><?php echo isset($datosUsu['puntos_fidelidad']) ? $datosUsu['puntos_fidelidad'] : '0'; ?> pts</span>
                         </a>
                         <a href="perfil.php?seccion=citas" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'citas' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Citas</a>
+                        <a href="perfil.php?seccion=prendas" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'prendas' ? 'bg-dark text-white' : 'text-muted'; ?>">Mi Armario (Ventas)</a>
                         <a href="controllers/usuarioController.php?accion=logout" class="list-group-item list-group-item-action p-3 text-danger fw-bold mt-2 border-top">Cerrar Sesión</a>
                     </div>
                 </div>
@@ -258,7 +259,7 @@ include './includes/header.php';
             <?php } elseif ($seccion == 'citas') { ?>
 
                 <h3 class="fw-bold text-uppercase mb-4">Mis Citas</h3>
-                
+
                 <?php if (empty($listaCitas)) { ?>
                     <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
                         <div>
@@ -284,7 +285,7 @@ include './includes/header.php';
                                     <div class="card-body p-4">
                                         <p class="mb-1 text-muted small text-uppercase fw-bold">Motivo de la visita</p>
                                         <p class="mb-4 fw-bold fs-6"><?php echo $cita['motivo']; ?></p>
-                                        
+
                                         <div class="d-flex justify-content-between align-items-center border-top pt-3">
                                             <p class="mb-0 text-muted small text-uppercase fw-bold">Estado</p>
                                             <p class="mb-0 fw-bold fs-6 text-uppercase <?php echo ($cita['estado'] == 'pendiente') ? 'text-warning' : (($cita['estado'] == 'cancelada') ? 'text-danger' : 'text-success'); ?>">
@@ -295,6 +296,156 @@ include './includes/header.php';
                                 </div>
                             </div>
                         <?php }  ?>
+                    </div>
+                <?php } ?>
+
+            <?php } elseif ($seccion == 'prendas') { ?>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-bold text-uppercase mb-0">Mi Armario</h3>
+                    <a href="segundaMano.php" class="btn btn-dark rounded-0 px-4 py-2 text-uppercase fw-bold small">
+                        <i class="bi bi-plus-lg me-1"></i> Subir Prenda
+                    </a>
+                </div>
+
+                <?php if (empty($listaPrendasUsu)) { ?>
+                    <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
+                        <div>
+                            <i class="bi bi-tags text-muted display-1 mb-3 d-block"></i>
+                            <h4 class="fw-bold text-uppercase">Tu armario está vacío</h4>
+                            <p class="text-muted">Aún no has subido ninguna prenda para darle una segunda vida.</p>
+                        </div>
+                    </div>
+                <?php } else { ?>
+                    <div class="row g-4">
+                        <?php foreach ($listaPrendasUsu as $prenda) { ?>
+                            <div class="col-12 col-md-6 col-xl-4">
+                                <div class="card border-dark border-1 rounded-0 h-100 bg-transparent">
+
+                                    <div class="position-relative overflow-hidden border-bottom border-dark border-1" style="height: 250px;">
+                                        <img src="<?php echo !empty($prenda['url_imagen']) ? $prenda['url_imagen'] : 'public/img/fondo.jpg'; ?>"
+                                            class="w-100 h-100" style="object-fit: cover;" alt="<?php echo $prenda['nombre']; ?>">
+
+                                        <?php
+                                        $colorEstado = 'bg-warning text-dark';
+                                        if ($prenda['estado_revision'] == 'Aprobado') $colorEstado = 'bg-success text-white';
+                                        if ($prenda['estado_revision'] == 'Rechazado') $colorEstado = 'bg-danger text-white';
+                                        ?>
+                                        <span class="position-absolute top-0 start-0 m-2 badge <?php echo $colorEstado; ?> rounded-0 fw-bold text-uppercase px-2 py-1 border border-dark border-1" style="font-size: 0.7rem;">
+                                            <?php echo $prenda['estado_revision']; ?>
+                                        </span>
+                                    </div>
+
+                                    <div class="card-body p-3 d-flex flex-column">
+                                        <h6 class="fw-bold text-uppercase mb-1 text-truncate"><?php echo $prenda['nombre']; ?></h6>
+                                        <p class="text-muted mb-3 fs-5 fw-bold"><?php echo number_format($prenda['precio'], 2); ?> €</p>
+
+                                        <div class="mt-auto pt-3 border-top border-dark border-1">
+                                            <button type="button" class="btn btn-outline-dark rounded-0 w-100 fw-bold text-uppercase text-center"
+                                                style="font-size: 0.8rem; letter-spacing: 1px;"
+                                                data-bs-toggle="modal" data-bs-target="#modalEditar-<?php echo $prenda['id']; ?>"> Editar Prenda
+                                            </button>
+                                        </div>
+
+                                        <div class="modal fade text-start" id="modalEditar-<?php echo $prenda['id']; ?>" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content rounded-0 border-0 shadow">
+
+                                                    <div class="modal-header border-bottom-0 pb-0 mt-3 px-4">
+                                                        <h5 class="modal-title fw-bold text-uppercase fs-4">Editar Prenda</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body px-4 pb-4">
+                                                        <form action="controllers/editarPrendaController.php" method="POST" enctype="multipart/form-data">
+                                                            <input type="hidden" name="idPrenda" value="<?php echo $prenda['id']; ?>">
+
+                                                            <div class="row">
+                                                                <div class="col-md-8 mb-3">
+                                                                    <label class="form-label fw-bold small text-uppercase text-muted">Título de la prenda</label>
+                                                                    <input type="text" class="form-control rounded-0 p-2" name="nombrePrenda" value="<?php echo $prenda['nombre']; ?>" required>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label class="form-label fw-bold small text-uppercase text-muted">Precio (€)</label>
+                                                                    <input type="number" step="0.01" class="form-control rounded-0 p-2" name="precioPrenda" value="<?php echo $prenda['precio']; ?>" required>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="row">
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label class="form-label fw-bold small text-uppercase text-muted">Talla</label>
+                                                                    <select class="form-select rounded-0 p-2" name="tallaPrenda" required>
+                                                                        <?php foreach ($listaTallas as $talla) { ?>
+                                                                            <option value="<?php echo $talla['talla']; ?>" <?php echo ($prenda['talla'] == $talla['talla']) ? 'selected' : ''; ?>>
+                                                                                <?php echo $talla['talla']; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label class="form-label fw-bold small text-uppercase text-muted">Color</label>
+                                                                    <select class="form-select rounded-0 p-2" name="colorPrenda" required>
+                                                                        <?php foreach ($listaColores as $color) { ?>
+                                                                            <option value="<?php echo $color['id']; ?>" <?php echo ($prenda['color_id'] == $color['id']) ? 'selected' : ''; ?>>
+                                                                                <?php echo $color['nombre']; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label class="form-label fw-bold small text-uppercase text-muted">Tipo Prenda</label>
+                                                                    <select class="form-select rounded-0 p-2" name="tipoPrenda" required>
+                                                                        <?php foreach ($listaTipoPrenda as $tipo) { ?>
+                                                                            <option value="<?php echo $tipo['id']; ?>" <?php echo ($prenda['tipo_id'] == $tipo['id']) ? 'selected' : ''; ?>>
+                                                                                <?php echo $tipo['nombre']; ?>
+                                                                            </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-3 mt-2 border-top pt-3">
+                                                                <label class="form-label fw-bold small text-uppercase text-muted">Fotos actuales (Marca la casilla para eliminar)</label>
+                                                                <div class="d-flex flex-wrap gap-2">
+                                                                    <?php
+                                                                    $fotosPrenda = $productoModel->obtenerImagenesProducto($prenda['id']);
+                                                                    foreach ($fotosPrenda as $foto) {
+                                                                    ?>
+                                                                        <div class="position-relative border border-2 border-dark p-1" style="width: 100px; height: 100px;">
+                                                                            <img src="<?php echo $foto['url_imagen']; ?>" class="w-100 h-100" style="object-fit: cover;" alt="Foto prenda">
+                                                                            <div class="form-check position-absolute top-0 start-0 m-1 bg-white border border-dark px-2 py-1 shadow-sm">
+                                                                                <input class="form-check-input m-0" type="checkbox" name="fotosABorrar[]" value="<?php echo $foto['id']; ?>" title="Marcar para borrar">
+                                                                            </div>
+                                                                        </div>
+                                                                    <?php } ?>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-4 mt-3 border-top pt-3">
+                                                                <label class="form-label fw-bold small text-uppercase text-muted">Añadir más fotos</label>
+                                                                <input class="form-control rounded-0" type="file" name="fotosNuevas[]" accept="image/*" multiple>
+                                                                <div class="form-text text-muted" style="font-size: 0.75rem;">
+                                                                    <i class="bi bi-info-circle me-1"></i> Puedes seleccionar varios archivos a la vez manteniendo pulsada la tecla Ctrl / Cmd.
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="d-grid mt-4">
+                                                                <button type="submit" class="btn btn-dark rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">
+                                                                    Guardar Cambios y Enviar a Revisión
+                                                                </button>
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        <?php } ?>
                     </div>
                 <?php } ?>
 

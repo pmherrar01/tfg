@@ -5,6 +5,7 @@ require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/favorito.php";
 require_once __DIR__ . "/../models/cita.php"; 
+require_once __DIR__ . "/../models/producto.php"; 
 
 $db = new Database();
 $conexion = $db->conectar();
@@ -13,6 +14,7 @@ $user = new Usuario($conexion);
 $pedido = new Pedido($conexion);
 $favoritoModel = new Favorito($conexion);
 $citaModel = new Cita($conexion); 
+$producto = new Producto($conexion); 
 
 $idUsuarioSession = $_SESSION["usuario_id"];
 
@@ -42,4 +44,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 $listaPedidos = $pedido->listarPedidos($_SESSION["usuario_id"]);
 $listaFavoritos = $favoritoModel->listarFavoritos($_SESSION["usuario_id"]);
 $listaCitas = $citaModel->obtenerCitasUsuario($_SESSION["usuario_id"]); 
+$listaPrendasUsu = $producto->obtenerMisPrendasSegundaMano($_SESSION["usuario_id"]); 
+$listaTallas = $producto->listarTodasTallas();
+$listaColores = $producto->listaColores();
+$listaTipoPrenda = $producto->listarTiposPrendas();
 ?>

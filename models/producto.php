@@ -646,17 +646,27 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerMisPrendasSegundaMano($idUsuario)
+ public function obtenerMisPrendasSegundaMano($idUsuario)
     {
-        $sql = "SELECT p.*, MIN(i.url_imagen) as url_imagen 
+        $sql = "SELECT p.*, pc.color_id, pt.talla, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
+                LEFT JOIN producto_colores pc ON p.id = pc.producto_id
+                LEFT JOIN producto_tallas pt ON p.id = pt.producto_id
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
                 WHERE p.id_usuario_vendedor = :idUsuario 
-                GROUP BY p.id 
+                GROUP BY p.id, pc.color_id, pt.talla
                 ORDER BY p.creado_en DESC";
                 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idUsuario" => $idUsuario]);
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerImagenesProducto($idProducto)
+    {
+        $sql = "SELECT id, url_imagen FROM imagenes_productos WHERE producto_id = :id";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([':id' => $idProducto]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 }
