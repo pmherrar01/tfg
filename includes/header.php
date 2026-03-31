@@ -27,7 +27,7 @@
           <li class="nav-item"><a class="nav-link" href="../catalogo.php">Catalogo</a></li>
           <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=1">Hombre</a></li>
           <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=2">Mujer</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="../citas.php">Pide Cita</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="../models/cita.php">Pide Cita</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="../segundaMano.php">Segunda Mano</a></li>
         </ul>
       </div>
