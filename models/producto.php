@@ -473,7 +473,7 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
+public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
     {
         switch ($filtrado) {
             case 'genero':
@@ -488,6 +488,8 @@ class Producto
                 return $this->filtrarPorTalla($valor, $orden);
             case 'precio':
                 return $this->filtrarPorPrecio($valor, $valor2, $orden);
+            case 'rebajas': 
+                return $this->filtrarRebajas($orden);
             default:
                 return $this->listarProductos(1);
         }
@@ -757,6 +759,21 @@ class Producto
             $sentencia->execute();
         }
         
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    private function filtrarRebajas($orden)
+    {
+        $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
+                FROM productos p 
+                INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                INNER JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
+                WHERE p.rebaja > 0 AND p.activo = 1 
+                GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 }

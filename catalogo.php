@@ -25,6 +25,9 @@ include './includes/header.php';
                     <a href="catalogo.php" class="text-muted small text-decoration-underline">Limpiar</a>
                 </div>
                 <div class="accordion accordion-flush" id="acordeonFiltros">
+                    <a href="catalogo.php?filtro=rebajas&valor=1" class="list-group-item list-group-item-action fw-bold text-danger text-uppercase" style="letter-spacing: 1px;">
+                        <i class="bi bi-tag-fill me-2"></i> Rebajas
+                    </a>
                     <div class="accordion-item bg-transparent border-bottom">
                         <h2 class="accordion-header">
                             <button class="accordion-button bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroOrdenar">

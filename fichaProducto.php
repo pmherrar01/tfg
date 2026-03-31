@@ -71,7 +71,8 @@ include './includes/header.php';
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label for="talla" class="form-label text-uppercase m-0" style="letter-spacing: 2px; font-size: 0.85rem;">Talla</label>
-                        <a href="#" class="text-muted text-decoration-underline" style="font-size: 0.75rem;">Guía de tallas</a>
+                        <a href="#" class="text-muted text-decoration-underline fw-bold" style="font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#modalGuiaTallas">Guía de tallas
+                        </a>
                     </div>
                     <select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
                         <option value="" selected disabled>Selecciona un color primero</option>
@@ -238,6 +239,77 @@ include './includes/header.php';
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalGuiaTallas" tabindex="-1" aria-labelledby="modalGuiaTallasLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-0 border-0 shadow">
+                
+                <div class="modal-header border-bottom-0 pb-0 mt-3 px-4 bg-light">
+                    <h5 class="modal-title fw-bold text-uppercase fs-4" id="modalGuiaTallasLabel" style="letter-spacing: 2px;">
+                        <i class="bi bi-rulers me-2"></i>Guía de Tallas
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body px-4 pb-4 bg-light">
+                    <p class="text-muted small mb-4">Utiliza esta tabla para encontrar tu talla perfecta. Las medidas indicadas son aproximadas y se refieren a las medidas del cuerpo, no de la prenda.</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover text-center align-middle bg-white">
+                            <thead class="table-dark text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">
+                                <tr>
+                                    <th>Talla</th>
+                                    <th>Pecho (cm)</th>
+                                    <th>Cintura (cm)</th>
+                                    <th>Cadera (cm)</th>
+                                    <th>Equivalencia EU</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-bold">XS</td>
+                                    <td>82 - 86</td>
+                                    <td>62 - 66</td>
+                                    <td>88 - 92</td>
+                                    <td>34</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">S</td>
+                                    <td>86 - 90</td>
+                                    <td>66 - 70</td>
+                                    <td>92 - 96</td>
+                                    <td>36</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">M</td>
+                                    <td>90 - 94</td>
+                                    <td>70 - 74</td>
+                                    <td>96 - 100</td>
+                                    <td>38</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">L</td>
+                                    <td>94 - 100</td>
+                                    <td>74 - 80</td>
+                                    <td>100 - 106</td>
+                                    <td>40 / 42</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">XL</td>
+                                    <td>100 - 106</td>
+                                    <td>80 - 86</td>
+                                    <td>106 - 112</td>
+                                    <td>44 / 46</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+                
             </div>
         </div>
     </div>
