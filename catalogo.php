@@ -25,7 +25,7 @@ include './includes/header.php';
                     <a href="catalogo.php" class="text-muted small text-decoration-underline">Limpiar</a>
                 </div>
                 <div class="accordion accordion-flush" id="acordeonFiltros">
-                    <a href="catalogo.php?filtro=rebajas&valor=1" class="list-group-item list-group-item-action fw-bold text-danger text-uppercase" style="letter-spacing: 1px;">
+                    <a href="<?php echo crearUrl('rebajas', '1'); ?>" class="list-group-item list-group-item-action fw-bold text-danger text-uppercase" style="letter-spacing: 1px;">
                         <i class="bi bi-tag-fill me-2"></i> Rebajas
                     </a>
                     <div class="accordion-item bg-transparent border-bottom">
@@ -163,18 +163,17 @@ include './includes/header.php';
                         <div class="col-6 col-md-4">
                             <div class="card product-card border-0 bg-transparent h-100 position-relative">
                                 <a href="fichaProducto.php?idPrenda=<?php echo $prenda["id"] ?>&color=<?php echo $prenda['color_id']; ?>">
-                                    <?php 
-                                        // NUEVO: Lógica para calcular rebajas
-                                        $tieneRebaja = isset($prenda['rebaja']) && $prenda['rebaja'] > 0;
-                                        $precioFinal = $prenda['precio'];
-                                        if ($tieneRebaja) {
-                                            $precioFinal = $prenda['precio'] - ($prenda['precio'] * ($prenda['rebaja'] / 100));
-                                        }
+                                    <?php
+                                    $tieneRebaja = isset($prenda['rebaja']) && $prenda['rebaja'] > 0;
+                                    $precioFinal = $prenda['precio'];
+                                    if ($tieneRebaja) {
+                                        $precioFinal = $prenda['precio'] - ($prenda['precio'] * ($prenda['rebaja'] / 100));
+                                    }
                                     ?>
                                     <div class="img-wrapper position-relative">
                                         <img src="<?php echo $prenda["url_imagen"]; ?>" class="card-img-top img-principal transicion-suave" alt="Prenda">
                                         <img src="<?php echo $fotoHover; ?>" class="card-img-top img-hover transicion-suave position-absolute top-0 start-0 w-100 h-100" alt="Prenda Hover">
-                                        
+
                                         <?php if ($tieneRebaja): ?>
                                             <span class="position-absolute top-0 end-0 m-2 badge bg-danger text-white rounded-0 fw-bold px-2 py-1 shadow-sm" style="font-size: 0.8rem; letter-spacing: 1px; z-index: 10;">
                                                 -<?= $prenda['rebaja'] ?>%
@@ -192,7 +191,7 @@ include './includes/header.php';
                                     </div>
                                     <div class="card-body text-center px-0">
                                         <h5 class="card-title text-uppercase fw-bold fs-6 mt-2 mb-1"><?php echo $prenda["nombre"] ?></h5>
-                                        
+
                                         <?php if ($tieneRebaja): ?>
                                             <p class="card-text mb-2">
                                                 <del class="text-muted small me-2"><?= number_format($prenda['precio'], 2) ?> €</del>

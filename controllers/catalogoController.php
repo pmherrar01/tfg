@@ -23,6 +23,7 @@ function crearUrl($clave, $valor)
         if (isset($_GET['tipo'])) $parametros['tipo'] = $_GET['tipo'];
         if (isset($_GET['talla'])) $parametros['talla'] = $_GET['talla'];
         if (isset($_GET['color'])) $parametros['color'] = $_GET['color'];
+        if (isset($_GET['rebajas'])) $parametros['rebajas'] = $_GET['rebajas'];
         if (isset($_GET['precioMin'])) {
             $parametros['precioMin'] = $_GET['precioMin'];
             $parametros['precioMax'] = $_GET['precioMax'];
@@ -78,6 +79,9 @@ if (isset($_GET["coleccion"]) && $_GET["coleccion"] === 'vip') {
 } elseif (isset($_GET["color"])) {
     $listaProductos = $producto->filtrar('color', $_GET["color"], null, $ordenActual);
     $mensajeFiltrado = "Color: " . $_GET["color"];
+}elseif (isset($_GET["rebajas"])) {
+    $listaProductos = $producto->filtrar('rebajas', 1, null, $ordenActual);
+    $mensajeFiltrado = "Productos en Rebajas";
 } elseif (isset($_GET["precioMin"]) && isset($_GET["precioMax"])) {
     $listaProductos = $producto->filtrar('precio', $_GET["precioMax"], $_GET["precioMin"], $ordenActual);
     $mensajeFiltrado = "Productos entre " . $_GET["precioMin"] . "€ y " . $_GET["precioMax"] . "€";
