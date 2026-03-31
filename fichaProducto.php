@@ -74,10 +74,77 @@ include './includes/header.php';
                         <a href="#" class="text-muted text-decoration-underline fw-bold" style="font-size: 0.75rem;" data-bs-toggle="modal" data-bs-target="#modalGuiaTallas">Guía de tallas
                         </a>
                     </div>
+
+                    <div class="modal fade" id="modalAsistenteTallas" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-0 border-0 shadow">
+                <div class="modal-header border-bottom-0 pb-0 mt-3 px-4 bg-light">
+                    <h5 class="modal-title fw-bold text-uppercase fs-5" style="letter-spacing: 1px;">
+                        <i class="bi bi-magic me-2 text-warning"></i>Tu Talla Ideal
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                <div class="modal-body px-4 pb-4 bg-light">
+                    <p class="text-muted small mb-4">Introduce tus datos y calcularemos la talla perfecta para ti.</p>
+                    
+                    <form id="formAsistenteIA">
+                        <input type="hidden" id="ia_nombre_prenda" value="<?php echo htmlspecialchars($datosPrenda['nombre']); ?>">
+                        
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-uppercase text-muted">Altura (cm)</label>
+                                <input type="number" class="form-control rounded-0" id="ia_altura" placeholder="Ej: 175" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold text-uppercase text-muted">Peso (kg)</label>
+                                <input type="number" class="form-control rounded-0" id="ia_peso" placeholder="Ej: 70" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-uppercase text-muted">Complexión</label>
+                                <select class="form-select rounded-0" id="ia_complexion" required>
+                                    <option value="" selected disabled>Selecciona...</option>
+                                    <option value="Delgada">Delgada</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Atlética">Atlética / Musculosa</option>
+                                    <option value="Fuerte">Fuerte / Ancha</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label small fw-bold text-uppercase text-muted">¿Cómo prefieres el ajuste?</label>
+                                <select class="form-select rounded-0" id="ia_ajuste" required>
+                                    <option value="Ajustada">Ajustada (Pegada al cuerpo)</option>
+                                    <option value="Normal" selected>Normal (Regular)</option>
+                                    <option value="Holgada">Holgada (Oversize)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid mt-4">
+                            <button type="submit" id="btnCalcularTalla" class="btn btn-dark rounded-0 py-2 text-uppercase fw-bold" style="letter-spacing: 1px;">
+                                Calcular mi talla
+                            </button>
+                        </div>
+                    </form>
+
+                    <div id="resultadoIA" class="mt-4 p-3 border border-2 border-dark text-center bg-white d-none">
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
                     <select class="form-select border-dark rounded-0 py-2" id="talla" name="talla" required>
                         <option value="" selected disabled>Selecciona un color primero</option>
                     </select>
+
+                    <button type="button" class="btn btn-sm btn-outline-dark rounded-0 w-100 mt-2 text-uppercase fw-bold d-flex justify-content-center align-items-center gap-2"
+                        data-bs-toggle="modal" data-bs-target="#modalAsistenteTallas"
+                        style="letter-spacing: 1px; font-size: 0.75rem;;">Asistente de Tallas</button>
                 </div>
+
+                
 
                 <?php if (!empty($coloresProducto)) { ?>
                     <div class="mb-4">
@@ -246,17 +313,17 @@ include './includes/header.php';
     <div class="modal fade" id="modalGuiaTallas" tabindex="-1" aria-labelledby="modalGuiaTallasLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content rounded-0 border-0 shadow">
-                
+
                 <div class="modal-header border-bottom-0 pb-0 mt-3 px-4 bg-light">
                     <h5 class="modal-title fw-bold text-uppercase fs-4" id="modalGuiaTallasLabel" style="letter-spacing: 2px;">
                         <i class="bi bi-rulers me-2"></i>Guía de Tallas
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                
+
                 <div class="modal-body px-4 pb-4 bg-light">
                     <p class="text-muted small mb-4">Utiliza esta tabla para encontrar tu talla perfecta. Las medidas indicadas son aproximadas y se refieren a las medidas del cuerpo, no de la prenda.</p>
-                    
+
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover text-center align-middle bg-white">
                             <thead class="table-dark text-uppercase" style="font-size: 0.8rem; letter-spacing: 1px;">
@@ -307,9 +374,9 @@ include './includes/header.php';
                             </tbody>
                         </table>
                     </div>
-                    
+
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -324,6 +391,7 @@ include './includes/header.php';
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin3.min.js"></script>
 
 <script src="public/js/producto.js"></script>
+<script src="public/js/n8n.js"></script>
 <?php
 
 include './includes/prendasRecientes.php';
