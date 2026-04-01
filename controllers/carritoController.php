@@ -13,6 +13,8 @@ $productoModel = new Producto($conexion);
 $imagenModel = new Imagen($conexion);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
+
+
     
     $idPrenda = $_POST['idPrenda'];
     $color_id = isset($_POST['color_id']) ? $_POST['color_id'] : (isset($_POST['color']) ? $_POST['color'] : '');
