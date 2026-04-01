@@ -6,15 +6,58 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../models/producto.php';
 require_once __DIR__ . '/../models/imagen.php';
+// AÑADIMOS EL MODELO DE USUARIO
+require_once __DIR__ . '/../models/usuario.php'; 
 
 $db = new Database();
 $conexion = $db->conectar();
+// RESPETAMOS TUS VARIABLES ORIGINALES
 $productoModel = new Producto($conexion);
 $imagenModel = new Imagen($conexion);
+$usuarioModel = new Usuario($conexion);
 
+// ==========================================
+// 1. APLICAR CÓDIGO DE DESCUENTO
+// ==========================================
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'aplicar_descuento') {
+    $codigo = trim($_POST['codigo_descuento']);
+    
+    if (isset($_SESSION['usuario_id'])) {
+        // USAMOS TU FUNCIÓN REAL: obtenerDatosUsu
+        $datosUsuario = $usuarioModel->obtenerDatosUsu($_SESSION['usuario_id']);
+        $emailUsuario = $datosUsuario['email'];
+
+        // Comprobamos si el código es válido y le pertenece a este email
+        $datosCodigo = $productoModel->verificarCodigoDescuento($codigo, $emailUsuario); 
+
+        if ($datosCodigo) {
+            $_SESSION['descuento'] = [
+                'codigo' => $codigo,
+                'porcentaje' => $datosCodigo['porcentaje_descuento']
+            ];
+            header("Location: ../carrito.php?mensaje=codigo_aplicado");
+        } else {
+            header("Location: ../carrito.php?error=codigo_invalido");
+        }
+    } else {
+        header("Location: ../carrito.php?error=no_sesion");
+    }
+    exit;
+}
+
+// ==========================================
+// 2. QUITAR CÓDIGO DE DESCUENTO
+// ==========================================
+if (isset($_GET['accion']) && $_GET['accion'] == 'quitar_descuento') {
+    unset($_SESSION['descuento']);
+    header("Location: ../carrito.php?mensaje=codigo_quitado");
+    exit;
+}
+
+// ==========================================
+// 3. AGREGAR PRODUCTO AL CARRITO (TU CÓDIGO INTACTO)
+// ==========================================
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'agregar') {
-
-
     
     $idPrenda = $_POST['idPrenda'];
     $color_id = isset($_POST['color_id']) ? $_POST['color_id'] : (isset($_POST['color']) ? $_POST['color'] : '');
@@ -87,6 +130,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['a
     exit;
 }
 
+// ==========================================
+// 4. SUMAR, RESTAR, ELIMINAR (TU CÓDIGO INTACTO)
+// ==========================================
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET['indice'])) {
     $indice = (int)$_GET['indice'];
 
@@ -123,6 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['accion']) && isset($_GET
     exit;
 }
 
+// ==========================================
+// 5. CARGAR VISTA DEL CARRITO (TU CÓDIGO INTACTO)
+// ==========================================
 $carritoActual = isset($_SESSION['carrito']) ? $_SESSION['carrito'] : [];
 $carritoDetallado = [];
 $totalCarrito = 0;
