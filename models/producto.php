@@ -777,13 +777,19 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
 public function verificarCodigoDescuento($codigo, $email) {
-        $sql = "SELECT * FROM codigos_acceso WHERE codigo = :codigo AND email = :email AND tipo = 'descuento' AND usado = 0";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([
-            ':codigo' => $codigo,
-            ':email' => $email
-        ]);
-        return $sentencia->fetch(PDO::FETCH_ASSOC);
+        try {
+            $sql = "SELECT * FROM codigos_acceso WHERE codigo = :codigo AND email = :email AND tipo = 'descuento' AND usado = 0";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ':codigo' => $codigo,
+                ':email' => $email
+            ]);
+            return $sentencia->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error en verificarCodigoDescuento: " . $e->getMessage());
+            return false;
+        }
     }
 }
