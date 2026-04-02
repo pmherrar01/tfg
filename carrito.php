@@ -106,21 +106,21 @@ include './includes/header.php';
                     </div>
 
 
-                    <?php
+<?php
                     $descuentoCantidad = 0;
                     if (isset($_SESSION['descuento'])) {
                         $porcentaje = $_SESSION['descuento']['porcentaje'];
-                        $descuentoCantidad = $subtotal * ($porcentaje / 100);
+                        $descuentoCantidad = $totalCarrito * ($porcentaje / 100);
                     }
 
-                    $envio = ($subtotal > 50) ? 0 : 4.99;
+                    $envio = ($totalCarrito > 50) ? 0 : 4.99;
 
-                    $totalFinal = ($subtotal - $descuentoCantidad) + $envio;
+                    $totalFinal = ($totalCarrito - $descuentoCantidad) + $envio;
                     ?>
 
                     <div class="d-flex justify-content-between mb-4 mt-3">
                         <span class="fw-bold text-uppercase">Total</span>
-                        <span class="fw-bold fs-4"><?php echo number_format($totalCarrito, 2); ?> €</span>
+                        <span class="fw-bold fs-4"><?php echo number_format($totalFinal, 2); ?> €</span>
                     </div>
                     <?php if ($descuentoCantidad > 0) { ?>
                         <div class="d-flex justify-content-between mb-2 text-danger fw-bold">
