@@ -780,7 +780,7 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
 
 public function verificarCodigoDescuento($codigo, $email) {
         try {
-            $sql = "SELECT * FROM codigos_acceso WHERE codigo = :codigo AND email = :email AND tipo = 'descuento' AND usado = 0";
+            $sql = "SELECT * FROM codigos_accesos WHERE codigo = :codigo AND email = :email AND tipo = 'descuento' AND usado = 0";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([
                 ':codigo' => $codigo,

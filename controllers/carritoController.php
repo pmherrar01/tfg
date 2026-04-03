@@ -20,12 +20,13 @@ $usuarioModel = new Usuario($conexion);
 // 1. APLICAR CÓDIGO DE DESCUENTO
 // ==========================================
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['accion']) && $_POST['accion'] == 'aplicar_descuento') {
-    $codigo = trim($_POST['codigo_descuento']);
+    $codigo = strtoupper(trim($_POST['codigo_descuento']));
     
     if (isset($_SESSION['usuario_id'])) {
         // USAMOS TU FUNCIÓN REAL: obtenerDatosUsu
         $datosUsuario = $usuarioModel->obtenerDatosUsu($_SESSION['usuario_id']);
-        $emailUsuario = $datosUsuario['email'];
+        $emailUsuario = trim($datosUsuario['email']);
+
 
         // Comprobamos si el código es válido y le pertenece a este email
         $datosCodigo = $productoModel->verificarCodigoDescuento($codigo, $emailUsuario); 
