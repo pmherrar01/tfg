@@ -88,8 +88,23 @@ include './includes/header.php';
                         <span>Calculado en el siguiente paso</span>
                     </div>
 
-                    <div class="mb-4 p-3 bg-light border border-dark">
+                    
+
+                        <div class="mb-4 p-3 bg-light border border-dark">
                         <label class="form-label fw-bold text-uppercase small" style="letter-spacing: 1px;">¿Tienes un código de descuento?</label>
+
+                        <?php if (isset($_GET['error'])): ?>
+                            <div class="alert alert-danger py-2 rounded-0 small fw-bold mb-3 border-2 border-danger">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <?php 
+                                    if ($_GET['error'] == 'no_sesion') {
+                                        echo 'Debes iniciar sesión para usar un código.';
+                                    } elseif ($_GET['error'] == 'codigo_invalido') {
+                                        echo 'El código no existe, está caducado o no está vinculado a tu correo.';
+                                    }
+                                ?>
+                            </div>
+                        <?php endif; ?>
 
                         <?php if (isset($_SESSION['descuento'])): ?>
                             <div class="alert alert-success m-0 py-2 d-flex justify-content-between align-items-center rounded-0 border-success border-2 fw-bold">
