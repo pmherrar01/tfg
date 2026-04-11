@@ -111,4 +111,4 @@ function cambiarMetodoPago() {
         cajaTarjeta.style.opacity = '0.7';
         formTarjeta.style.display = 'none';
     }
-}//
+}
