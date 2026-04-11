@@ -790,3 +790,49 @@ footer a:hover {
     box-shadow: 0 0 0 0.25rem rgba(var(--color-acento), 0.25); 
     color: inherit;
 }
+
+/* =========================================
+   ESTILOS TARJETA DE CRÉDITO INTERACTIVA
+========================================= */
+.tarjeta-contenedor {
+    perspective: 1000px; /* Le da profundidad 3D al girar */
+}
+
+.tarjeta-credito {
+    width: 320px;
+    height: 200px;
+    position: relative;
+    transition: transform 0.6s;
+    transform-style: preserve-3d; /* Permite que las caras tengan 3D */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    border-radius: 15px;
+}
+
+/* Esta clase se añade con JS cuando se pincha en el CVV */
+.tarjeta-credito.girada {
+    transform: rotateY(180deg);
+}
+
+.tarjeta-cara {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Oculta la cara que está de espaldas */
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.tarjeta-frente {
+    background: linear-gradient(135deg, #1f1f1f 0%, #4a4a4a 100%);
+}
+
+.tarjeta-dorso {
+    background: linear-gradient(135deg, #4a4a4a 0%, #1f1f1f 100%);
+    transform: rotateY(180deg); /* El dorso empieza girado */
+}
+
+.banda-magnetica {
+    width: 100%;
+    height: 40px;
+    background-color: #000;
+}

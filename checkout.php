@@ -14,44 +14,94 @@ include './includes/header.php';
 
     <div class="row g-5">
         <div class="col-lg-7">
-            <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2">1. Dirección de Envío</h4>
-
-            <?php
-            if (empty($datosComprador['direccion']) || empty($datosComprador['ciudad'])):
-            ?>
-                <div class="border border-dark border-3 p-4 mb-4 bg-transparent">
-                    <h5 class="fw-bold text-uppercase mb-1" style="letter-spacing: 1px;">Dirección no válida</h5>
-                    <p class="text-uppercase small fw-bold text-muted mb-4" style="letter-spacing: 0.5px;">Acción requerida: Faltan datos postales para poder procesar el envío.</p>
-                    <a href="perfil.php" class="btn btn-outline-dark rounded-0 px-4 py-3 text-uppercase fw-bold border-2 w-100" style="letter-spacing: 2px;">
-                        Actualizar Perfil
-                    </a>
-                </div>
-
-            <?php else: ?>
-                <div class="card border-0 bg-light rounded-0 p-4 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h5 class="fw-bold m-0 text-uppercase"><?php echo $datosComprador['nombre'] . ' ' . $datosComprador['apellidos']; ?></h5>
-                        <a href="perfil.php" class="text-muted small text-decoration-underline"><i class="bi bi-pencil me-1"></i>Editar</a>
-                    </div>
-
-                    <p class="mb-1 text-muted"><i class="bi bi-geo-alt me-2"></i><strong>Dirección:</strong> <?php echo $datosComprador['direccion']; ?></p>
-                    <p class="mb-1 text-muted"><i class="bi bi-building me-2"></i><strong>Ciudad:</strong> <?php echo $datosComprador['ciudad']; ?></p>
-                    <p class="mb-1 text-muted"><i class="bi bi-mailbox me-2"></i><strong>C.P.:</strong> <?php echo $datosComprador['codigo_postal'] ?? 'No especificado'; ?></p>
-                    <p class="mb-0 text-muted"><i class="bi bi-telephone me-2"></i><strong>Teléfono:</strong> <?php echo $datosComprador['telefono'] ?? 'No especificado'; ?></p>
-                </div>
-            <?php endif; ?>
-
             <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2 mt-5">2. Método de Pago</h4>
-            <div class="card border border-dark border-2 rounded-0 p-3 bg-white mb-3">
-                <div class="form-check d-flex align-items-center">
-                    <input class="form-check-input me-3" type="radio" name="metodo_pago" id="pago_tarjeta" checked style="transform: scale(1.2);">
-                    <label class="form-check-label fw-bold w-100 d-flex justify-content-between align-items-center" for="pago_tarjeta">
+            
+            <div class="card border border-dark border-2 rounded-0 p-3 bg-white mb-3" id="caja_tarjeta">
+                <div class="form-check d-flex align-items-center m-0">
+                    <input class="form-check-input me-3" type="radio" name="metodo_pago" id="pago_tarjeta" value="tarjeta" checked style="transform: scale(1.2);" onchange="cambiarMetodoPago()">
+                    <label class="form-check-label fw-bold w-100 d-flex justify-content-between align-items-center" for="pago_tarjeta" style="cursor: pointer;">
                         <span>Tarjeta de Crédito / Débito</span>
                         <i class="bi bi-credit-card-2-back fs-4"></i>
                     </label>
                 </div>
+<div id="form_tarjeta" class="mt-3 pt-3 border-top">
+                    
+                    <div class="tarjeta-contenedor d-flex justify-content-center mb-4">
+                        <div class="tarjeta-credito" id="tarjeta-credito">
+                            <div class="tarjeta-cara tarjeta-frente p-3 text-white">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <i class="bi bi-sim text-warning fs-2"></i>
+                                    <i class="bi bi-wifi fs-4"></i>
+                                </div>
+                                <h4 id="tarjeta-numero-visual" class="mb-4" style="letter-spacing: 2px;">#### #### #### ####</h4>
+                                <div class="d-flex justify-content-between text-uppercase" style="font-size: 0.8rem;">
+                                    <div>
+                                        <small class="text-white-50 d-block">Titular</small>
+                                        <span id="tarjeta-nombre-visual">NOMBRE APELLIDOS</span>
+                                    </div>
+                                    <div class="text-end">
+                                        <small class="text-white-50 d-block">Expira</small>
+                                        <span id="tarjeta-mes-visual">MM</span>/<span id="tarjeta-anio-visual">AA</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tarjeta-cara tarjeta-dorso">
+                                <div class="banda-magnetica mt-4"></div>
+                                <div class="p-3">
+                                    <div class="bg-white text-dark text-end p-2 mb-2 rounded" style="height: 40px; line-height: 1.5;">
+                                        <span id="tarjeta-cvv-visual" class="fw-bold"></span>
+                                    </div>
+                                    <p class="text-white-50 small m-0" style="font-size: 0.6rem;">Código de seguridad de 3 dígitos (CVV)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-uppercase">Número de Tarjeta</label>
+                            <input type="text" class="form-control rounded-0" id="input-numero" name="num_tarjeta" maxlength="19" placeholder="0000 0000 0000 0000" autocomplete="off">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-bold text-uppercase">Titular de la Tarjeta</label>
+                            <input type="text" class="form-control rounded-0 text-uppercase" id="input-nombre" name="titular_tarjeta" maxlength="30" placeholder="Ej: PABLO PÉREZ" autocomplete="off">
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small fw-bold text-uppercase">Mes</label>
+                            <select class="form-select rounded-0" id="input-mes" name="mes_tarjeta">
+                                <option value="MM" selected disabled>Mes</option>
+                                <?php for($i=1; $i<=12; $i++){ printf('<option value="%02d">%02d</option>', $i, $i); } ?>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small fw-bold text-uppercase">Año</label>
+                            <select class="form-select rounded-0" id="input-anio" name="anio_tarjeta">
+                                <option value="AA" selected disabled>Año</option>
+                                <?php $anioActual = date("y"); for($i=0; $i<10; $i++){ $a = $anioActual+$i; echo "<option value='$a'>20$a</option>"; } ?>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label small fw-bold text-uppercase">CVV</label>
+                            <input type="text" class="form-control rounded-0" id="input-cvv" name="cvv_tarjeta" maxlength="3" placeholder="123" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="text-muted small"><i class="bi bi-shield-lock me-1"></i> Pago seguro.</p>
+
+            <div class="card border border-secondary border-1 rounded-0 p-3 bg-light mb-3" id="caja_bizum" style="opacity: 0.7;">
+                <div class="form-check d-flex align-items-center m-0">
+                    <input class="form-check-input me-3" type="radio" name="metodo_pago" id="pago_bizum" value="bizum" style="transform: scale(1.2);" onchange="cambiarMetodoPago()">
+                    <label class="form-check-label fw-bold w-100 d-flex justify-content-between align-items-center" for="pago_bizum" style="cursor: pointer;">
+                        <span>Pago con Bizum</span>
+                        <i class="bi bi-phone fs-4"></i>
+                    </label>
+                </div>
+                <div id="form_bizum" class="mt-3 pt-3 border-top" style="display: none;">
+                    <p class="text-muted small mb-0"><i class="bi bi-shield-check text-success me-1"></i> Serás redirigido a la pasarela segura de Bizum para confirmar el pago con tu número de teléfono.</p>
+                </div>
+            </div>
+
+            <p class="text-muted small mt-3"><i class="bi bi-shield-lock me-1"></i> Pago 100% seguro y encriptado.</p>
         </div>
 
         <div class="col-lg-5">
@@ -60,12 +110,12 @@ include './includes/header.php';
 
                 <div class="border-bottom pb-3 mb-3" style="max-height: 250px; overflow-y: auto;">
                     <?php
-                    $totalCheckout = 0;
+                    $subtotalCheckout = 0;
                     if (isset($_SESSION['carrito'])):
                         foreach ($_SESSION['carrito'] as $item):
                             $producto = $productoModel->obtenerProducto($item['idPrenda']);
                             $subtotalItem = $producto['precio'] * $item['cantidad'];
-                            $totalCheckout += $subtotalItem;
+                            $subtotalCheckout += $subtotalItem;
                     ?>
                             <div class="d-flex justify-content-between mb-2 small">
                                 <span class="text-truncate pe-2" style="max-width: 250px;">
@@ -79,22 +129,48 @@ include './includes/header.php';
                     ?>
                 </div>
 
-                <div class="d-flex justify-content-between mb-3 text-muted">
+                <div class="d-flex justify-content-between mb-2 text-muted">
                     <span>Subtotal</span>
-                    <span><?php echo number_format($totalCheckout, 2); ?> €</span>
+                    <span><?php echo number_format($subtotalCheckout, 2); ?> €</span>
                 </div>
+
+                <?php 
+                // CÁLCULO DEL DESCUENTO
+                $descuentoCheckout = 0;
+                if (isset($_SESSION['descuento'])) {
+                    $porcentaje = $_SESSION['descuento']['porcentaje'];
+                    $descuentoCheckout = $subtotalCheckout * ($porcentaje / 100);
+                }
+                
+                if ($descuentoCheckout > 0): ?>
+                    <div class="d-flex justify-content-between mb-2 text-danger fw-bold">
+                        <span>Descuento (<?= $_SESSION['descuento']['porcentaje'] ?>%)</span>
+                        <span>-<?= number_format($descuentoCheckout, 2) ?> €</span>
+                    </div>
+                <?php endif; ?>
+
+                <?php 
+                // CÁLCULO FINAL
+                $envio = (($subtotalCheckout - $descuentoCheckout) > 50) ? 0 : 4.99;
+                $totalFinalCheckout = ($subtotalCheckout - $descuentoCheckout) + $envio;
+                ?>
+
                 <div class="d-flex justify-content-between mb-3 text-muted border-bottom pb-3">
                     <span>Gastos de envío</span>
-                    <span class="text-success fw-bold">GRATIS</span>
+                    <?php if ($envio == 0): ?>
+                        <span class="text-success fw-bold">GRATIS</span>
+                    <?php else: ?>
+                        <span class="fw-bold"><?php echo number_format($envio, 2); ?> €</span>
+                    <?php endif; ?>
                 </div>
 
                 <div class="d-flex justify-content-between mb-4 mt-3">
                     <span class="fw-bold text-uppercase fs-5">Total a Pagar</span>
-                    <span class="fw-bold fs-3"><?php echo number_format($totalCheckout, 2); ?> €</span>
+                    <span class="fw-bold fs-3"><?php echo number_format($totalFinalCheckout, 2); ?> €</span>
                 </div>
 
                 <form action="controllers/pagoController.php" method="POST">
-                    <input type="hidden" name="totalPedido" value="<?php echo $totalCheckout; ?>">
+                    <input type="hidden" name="totalPedido" value="<?php echo $totalFinalCheckout; ?>">
 
                     <?php
                     $btnDisabled = (empty($datosComprador['direccion']) || empty($datosComprador['ciudad'])) ? 'disabled' : '';
@@ -106,7 +182,7 @@ include './includes/header.php';
 
                     <?php if ($btnDisabled): ?>
                         <div class="text-danger small mt-2 text-center fw-bold">
-                            Debes completar tu dirección de envío para poder pagar.
+                            Debes completar tu dirección de envío en el perfil para poder pagar.
                         </div>
                     <?php endif; ?>
                 </form>
@@ -115,5 +191,7 @@ include './includes/header.php';
         </div>
     </div>
 </main>
+
+<script src="public/js/checkout.js"></script>
 
 <?php include './includes/footer.php'; ?>
