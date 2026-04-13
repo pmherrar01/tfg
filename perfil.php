@@ -77,7 +77,7 @@ include './includes/header.php';
     </h4>
     
     <form action="controllers/perfilController.php" method="POST">
-        <input type="hidden" name="accion" value="cambiar_password">
+        <input type="hidden" name="accion" value="cambiarPass">
 
         <div class="row g-3">
             <div class="col-12">

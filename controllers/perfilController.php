@@ -42,6 +42,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['accion'] == 'cambiarPass') {
+    $passActual = isset($_POST["passActual"]) ? $_POST["passActual"] : "";
+    $nuevaPass = isset($_POST["nuevaPass"]) ? $_POST["nuevaPass"] : "";
+    $nuevaPassConfirmada = isset($_POST["confirmarCambioPass"]) ? $_POST["confirmarCambioPass"] : "";
+
+    if($passActual === $_SERVER["password"]){
+        if($nuevaPass === $nuevaPassConfirmada){
+            $user->cambiarPass($nuevaPass, $idUsuarioSession);
+        }else{
+        header("Location: ../perfil.php?error=passNoCoinciden");
+        exit;    
+        }
+    }else{
+        header("Location: ../perfil.php?error=passActualFalsa");
+        exit;
+    }
 
 }
 
