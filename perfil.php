@@ -72,46 +72,64 @@ include './includes/header.php';
                             </div>
                         </div>
                         <div class="card border-0 shadow-sm rounded-0 p-4 bg-white mt-4">
-    <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2">
-        <i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña
-    </h4>
-    
-    <form action="controllers/perfilController.php" method="POST">
-        <input type="hidden" name="accion" value="cambiarPass">
+                            <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2">
+                                <i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña
+                            </h4>
 
-        <div class="row g-3">
-            <div class="col-12">
-                <label class="form-label small fw-bold text-uppercase">Contraseña Actual</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-key text-muted"></i></span>
-                    <input type="password" name="passActual" class="form-control rounded-0 border-start-0" placeholder="Introduce tu clave actual" required>
-                </div>
-            </div>
+                            <?php if (isset($_GET['error']) && $_GET['error'] == 'passNoCoinciden'): ?>
+                                <div class="alert alert-danger rounded-0 small fw-bold text-uppercase text-center">
+                                    <i class="bi bi-exclamation-triangle me-1"></i> Las nuevas contraseñas no coinciden.
+                                </div>
+                            <?php endif; ?>
 
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-uppercase">Nueva Contraseña</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-lock text-muted"></i></span>
-                    <input type="password" name="nuevaPass" class="form-control rounded-0 border-start-0" placeholder="Mín. 6 caracteres" required>
-                </div>
-            </div>
+                            <?php if (isset($_GET['error']) && $_GET['error'] == 'passActualFalsa'): ?>
+                                <div class="alert alert-danger rounded-0 small fw-bold text-uppercase text-center">
+                                    <i class="bi bi-exclamation-triangle me-1"></i> La contraseña actual es incorrecta.
+                                </div>
+                            <?php endif; ?>
 
-            <div class="col-md-6">
-                <label class="form-label small fw-bold text-uppercase">Confirmar Nueva Contraseña</label>
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-check-all text-muted"></i></span>
-                    <input type="password" name="confirmarCambioPass" class="form-control rounded-0 border-start-0" placeholder="Repite la clave" required>
-                </div>
-            </div>
+                            <?php if (isset($_GET['mensaje']) && $_GET['mensaje'] == 'passActualizada'): ?>
+                                <div class="alert alert-success rounded-0 small fw-bold text-uppercase text-center">
+                                    <i class="bi bi-check-circle me-1"></i> ¡Contraseña actualizada con éxito!
+                                </div>
+                            <?php endif; ?>
 
-            <div class="col-12 mt-4 text-end">
-                <button type="submit" class="btn btn-dark rounded-0 px-4 py-2 text-uppercase fw-bold ls-1">
-                    Actualizar Contraseña
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+                            <form action="controllers/perfilController.php" method="POST">
+                                <input type="hidden" name="accion" value="cambiarPass">
+
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label small fw-bold text-uppercase">Contraseña Actual</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-key text-muted"></i></span>
+                                            <input type="password" name="passActual" class="form-control rounded-0 border-start-0" placeholder="Introduce tu clave actual" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-uppercase">Nueva Contraseña</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-lock text-muted"></i></span>
+                                            <input type="password" name="nuevaPass" class="form-control rounded-0 border-start-0" placeholder="Mín. 6 caracteres" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-uppercase">Confirmar Nueva Contraseña</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-check-all text-muted"></i></span>
+                                            <input type="password" name="confirmarCambioPass" class="form-control rounded-0 border-start-0" placeholder="Repite la clave" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 mt-4 text-end">
+                                        <button type="submit" class="btn btn-dark rounded-0 px-4 py-2 text-uppercase fw-bold ls-1">
+                                            Actualizar Contraseña
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
 
                         <h3 class="fw-bold text-uppercase mb-4 mt-3 border-top pt-4">Dirección de Envío</h3>
                         <div class="row">
