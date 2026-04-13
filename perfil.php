@@ -84,7 +84,7 @@ include './includes/header.php';
                 <label class="form-label small fw-bold text-uppercase">Contraseña Actual</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-key text-muted"></i></span>
-                    <input type="password" name="current_password" class="form-control rounded-0 border-start-0" placeholder="Introduce tu clave actual" required>
+                    <input type="password" name="passActual" class="form-control rounded-0 border-start-0" placeholder="Introduce tu clave actual" required>
                 </div>
             </div>
 
@@ -92,7 +92,7 @@ include './includes/header.php';
                 <label class="form-label small fw-bold text-uppercase">Nueva Contraseña</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-lock text-muted"></i></span>
-                    <input type="password" name="new_password" class="form-control rounded-0 border-start-0" placeholder="Mín. 6 caracteres" required>
+                    <input type="password" name="nuevaPass" class="form-control rounded-0 border-start-0" placeholder="Mín. 6 caracteres" required>
                 </div>
             </div>
 
@@ -100,7 +100,7 @@ include './includes/header.php';
                 <label class="form-label small fw-bold text-uppercase">Confirmar Nueva Contraseña</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light border-end-0 rounded-0"><i class="bi bi-check-all text-muted"></i></span>
-                    <input type="password" name="confirm_password" class="form-control rounded-0 border-start-0" placeholder="Repite la clave" required>
+                    <input type="password" name="confirmarCambioPass" class="form-control rounded-0 border-start-0" placeholder="Repite la clave" required>
                 </div>
             </div>
 

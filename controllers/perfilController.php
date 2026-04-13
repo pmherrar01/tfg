@@ -41,6 +41,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $datosUsu = $user->obtenerDatosUsu($idUsuarioSession);
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['accion']) && $_POST['accion'] == 'cambiarPass') {
+
+}
+
 $listaPedidos = $pedido->listarPedidos($_SESSION["usuario_id"]);
 $listaFavoritos = $favoritoModel->listarFavoritos($_SESSION["usuario_id"]);
 $listaCitas = $citaModel->obtenerCitasUsuario($_SESSION["usuario_id"]); 
