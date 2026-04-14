@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
             "token" => $token
         ]);
 
-$urlWebhook = "http://127.0.0.1:5678/webhook-test/recuperar-password-tfg";
+$urlWebhook = "http://localhost:5678/webhook-test/recuperarPassword";
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -27,10 +27,8 @@ $urlWebhook = "http://127.0.0.1:5678/webhook-test/recuperar-password-tfg";
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 5); 
 
-        // Disparamos la petición a n8n y guardamos la respuesta
         $respuesta = curl_exec($curl);
         
-        // CHIVATO DE ERRORES: Si algo falla, que detenga la web y nos lo diga
         if(curl_errno($curl)){
             die('Error catastrófico de cURL: ' . curl_error($curl));
         }
