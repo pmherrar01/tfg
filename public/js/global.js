@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
             swalRapido.fire({
                 icon: 'error',
                 title: 'Ups...',
-                text: 'Hubo un problema al registrarte. Es posible que el correo ya esté en uso.'
+                text: 'Hubo un problema al registrarte. El correo ya está en uso.'
             });
         }
         else if (errorAlerta === 'password_debil') {
@@ -140,32 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-if (urlParams.has('error')) {
-    const error = urlParams.get('error');
-    if (error === 'debes_iniciar_sesion') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'ACCESO RESTRINGIDO',
-            text: 'Debes iniciar sesión para validar tu código de acceso anticipado.',
-            confirmButtonColor: '#000',
-            borderRaidus: '0'
-        });
-    } else if (error === 'codigo_invalido') {
-        Swal.fire({
-            icon: 'error',
-            title: 'CÓDIGO NO VÁLIDO',
-            text: 'El código introducido es incorrecto o no pertenece a tu cuenta.',
-            confirmButtonColor: '#000'
-        });
-    } else if (error === 'codigo_usado') {
-        Swal.fire({
-            icon: 'info',
-            title: 'CÓDIGO AGOTADO',
-            text: 'Este código ya ha sido utilizado anteriormente.',
-            confirmButtonColor: '#000'
-        });
-    }
-}
+
 
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
@@ -194,7 +169,37 @@ if (urlParams.has('error')) {
             showConfirmButton: false
         });
     }
+
+    if (urlParams.has('error')) {
+    const error = urlParams.get('error');
+    if (error === 'debes_iniciar_sesion') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'ACCESO RESTRINGIDO',
+            text: 'Debes iniciar sesión para validar tu código de acceso anticipado.',
+            confirmButtonColor: '#000',
+            borderRaidus: '0'
+        });
+    } else if (error === 'codigo_invalido') {
+        Swal.fire({
+            icon: 'error',
+            title: 'CÓDIGO NO VÁLIDO',
+            text: 'El código introducido es incorrecto o no pertenece a tu cuenta.',
+            confirmButtonColor: '#000'
+        });
+    } else if (error === 'codigo_usado') {
+        Swal.fire({
+            icon: 'info',
+            title: 'CÓDIGO AGOTADO',
+            text: 'Este código ya ha sido utilizado anteriormente.',
+            confirmButtonColor: '#000'
+        });
+    }
+}
 });
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const animContainer = document.querySelector('.anim-container');
     const loginLink = document.querySelector('.SignInLink');

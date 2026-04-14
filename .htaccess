@@ -1,5 +1,5 @@
 # Bloquear el acceso a archivos de scripts, base de datos y logs
-<FilesMatch "\.(sh|ps1|sql|log|md)$">
+<FilesMatch "\.(sh|ps1|sql|log|md|txt)$">
     Order allow,deny
     Deny from all
 </FilesMatch>
