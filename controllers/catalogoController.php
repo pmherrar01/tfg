@@ -60,17 +60,7 @@ if ($esModoSecreto) {
 
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
-if (isset($_GET["coleccion"]) && $_GET["coleccion"] === 'vip') {
-    
-    if (isset($_SESSION['acceso']) && $_SESSION['acceso'] === true) {
-        $listaProductos = $producto->listarProductos(3);
-        $mensajeFiltrado = "Colección Exclusiva";
-    } else {
-        header("Location: index.php?error=acceso_denegado");
-        exit();
-    }
-
-}elseif (isset($_GET["genero"])) {
+if (isset($_GET["genero"])) {
     $listaProductos = $producto->filtrar("genero", $_GET["genero"], null, $ordenActual);
     $mensajeFiltrado = $_GET['genero'];
     if ($mensajeFiltrado == "1") {
