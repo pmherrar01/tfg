@@ -363,7 +363,6 @@ class Usuario
 
         } catch (PDOException) {
             return false;
-            header("Location: index.php");
         }
     }
 
@@ -375,7 +374,7 @@ class Usuario
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([
             ":token" => $token,
-            "emailCambiarPass" => $emailCambiarPass
+            ":emailCambiarPass" => $emailCambiarPass
         ]);
 
         return $token;
