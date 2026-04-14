@@ -10,9 +10,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
     $emailCambiarPass = isset($_POST["email"]) ? $_POST["email"] : "";
     
     if($user->buscarUsuPorCorreo($emailCambiarPass)){
-        $token;
+        $token = $user->anadirTokenRecuperarPass($emailCambiarPass);
     }else{
-        header("Location:recuperarPassword.php?error=emailNoExiste");
+        header("Location: ../recuperarPassword.php?error=emailNoExiste");
         exit;
     }
 
