@@ -292,14 +292,15 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listarProductos($estadoActivo, $limite = null)
+public function listarProductos($estadoActivo, $limite = null)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
-                WHERE p.activo = :estadoActivo
+                WHERE p.activo = :estadoActivo AND col.estado = 1
                 GROUP BY p.id, c.id
                 ORDER BY p.creado_en DESC";
 
