@@ -19,7 +19,10 @@ if ($esModoSecreto) {
     $listaProductos = $producto->obtenerColeccionSecreta(); 
     $listaColores = $producto->obtenerColoresColeccionSecreta();
     $listaColecciones = []; 
-     $mensajeFiltrado = "Colección Exclusiva";
+    $mensajeFiltrado = "Colección Exclusiva";
+
+    $precioMin = 0; 
+    $precioMax = 1000;
 } else {
 
 function crearUrl($clave, $valor)

@@ -140,6 +140,33 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+if (urlParams.has('error')) {
+    const error = urlParams.get('error');
+    if (error === 'debes_iniciar_sesion') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'ACCESO RESTRINGIDO',
+            text: 'Debes iniciar sesión para validar tu código de acceso anticipado.',
+            confirmButtonColor: '#000',
+            borderRaidus: '0'
+        });
+    } else if (error === 'codigo_invalido') {
+        Swal.fire({
+            icon: 'error',
+            title: 'CÓDIGO NO VÁLIDO',
+            text: 'El código introducido es incorrecto o no pertenece a tu cuenta.',
+            confirmButtonColor: '#000'
+        });
+    } else if (error === 'codigo_usado') {
+        Swal.fire({
+            icon: 'info',
+            title: 'CÓDIGO AGOTADO',
+            text: 'Este código ya ha sido utilizado anteriormente.',
+            confirmButtonColor: '#000'
+        });
+    }
+}
+
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
             swalRapido.fire({

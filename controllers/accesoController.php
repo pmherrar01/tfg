@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['codigo']) && !empty($_
 
     $codigo = trim($_POST["codigo"]);
     
-    $sql = "SELECT * FROM codigos_accesos WHERE codigo = :codigo AND email = :email AND usado = 0";
+    $sql = "SELECT * FROM codigos_accesos WHERE codigo = :codigo AND email = :email AND usado = 0 AND tipo = 'acceso' ";
     $sentencia = $conexion->prepare($sql);
     $sentencia->execute([
         ":codigo" => $codigo,
