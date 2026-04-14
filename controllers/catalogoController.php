@@ -15,16 +15,6 @@ $imagen = new Imagen($db->conectar());
 
 $esModoSecreto = (isset($_GET['especial']) && $_GET['especial'] == 'herror');
 
-if ($esModoSecreto) {
-    $listaProductos = $producto->obtenerColeccionSecreta(); 
-    $listaColores = $producto->obtenerColoresColeccionSecreta();
-    $listaColecciones = []; 
-    $mensajeFiltrado = "Colección Exclusiva";
-
-    $precioMin = 0; 
-    $precioMax = 1000;
-} else {
-
 function crearUrl($clave, $valor)
 {
     $parametros = [];
@@ -54,6 +44,19 @@ function crearUrl($clave, $valor)
     
     return '?' . http_build_query($parametros);
 }
+
+if ($esModoSecreto) {
+    $listaProductos = $producto->obtenerColeccionSecreta(); 
+    $listaColores = $producto->obtenerColoresColeccionSecreta();
+    $listaColecciones = []; 
+    $listaTiposProductos = $producto->listarTiposPrendas();
+    $mensajeFiltrado = "Colección Exclusiva";
+
+    $precioMin = 0; 
+    $precioMax = 1000;
+} else {
+
+
 
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 

@@ -10,16 +10,6 @@ include './includes/header.php';
 ?>
 
 <main class="container my-5 py-5 mt-5">
-
-<?php 
-if (isset($esModoSecreto) && $esModoSecreto) {
-    echo "<div class='alert alert-warning text-center mt-5' style='position:relative; z-index:9999;'>";
-    echo "<h2 class='fw-bold'>🕵️ MODO VIP DETECTADO</h2>";
-    echo "<p class='fs-5'>PHP ha encontrado <b>" . count($listaProductos) . "</b> prendas para esta colección secreta.</p>";
-    echo "</div>";
-}
-?>
-
     <div class="row mb-5">
         <div class="col-12 text-center">
             <h1 class="display-5 fw-bold text-uppercase" style="letter-spacing: 4px;">Catálogo</h1>
