@@ -24,7 +24,7 @@ include './includes/header.php';
 
                 <?php if (isset($_GET["mensaje"]) && $_GET["mensaje"] == "correoEnviado"): ?>
                     <div class="alert alert-success rounded-0 small fw-bold text-center">
-                        <i class="bi bi-envelope-check me-1"></i> Si el correo existe, hemos enviado un enlace de recuperación.
+                        <i class="bi bi-envelope-check me-1"></i> Hemos enviado un enlace de recuperación a tu correo, mira por si acaso la bandeja de spam.
                     </div>
                 <?php endif; ?>
 

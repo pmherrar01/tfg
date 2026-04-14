@@ -12,6 +12,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
     
     if($user->buscarUsuPorCorreo($emailCambiarPass)){
         $token = $user->anadirTokenRecuperarPass($emailCambiarPass);
+        header("Location: ../recuperarPassword.php?mensaje=correoEnviado");
     }else{
         header("Location: ../recuperarPassword.php?error=emailNoExiste");
         exit;
