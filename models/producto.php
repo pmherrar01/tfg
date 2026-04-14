@@ -379,95 +379,95 @@ public function listarProductos($estadoActivo, $limite = null)
         return $ordenSql;
     }
 
-    private function filtrarGenero($genero, $orden)
+private function filtrarGenero($genero, $orden)
     {
         switch ($genero) {
-            case '1':
-                $generoAFiltrar = 1;
-                break;
-            case '2':
-                $generoAFiltrar = 2;
-                break;
-            default:
-                $generoAFiltrar = 3;
-                break;
+            case '1': $generoAFiltrar = 1; break;
+            case '2': $generoAFiltrar = 2; break;
+            default: $generoAFiltrar = 3; break;
         }
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.genero = :filtro AND p.activo = 1 
+                WHERE p.genero = :filtro AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $generoAFiltrar]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarColeccion($idColeccion, $orden)
+private function filtrarColeccion($idColeccion, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.coleccion_id = :filtro AND p.activo = 1 
+                WHERE p.coleccion_id = :filtro AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $idColeccion]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarTipoPrenda($tipo, $orden)
+private function filtrarTipoPrenda($tipo, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.tipo_id = :filtro AND p.activo = 1 
+                WHERE p.tipo_id = :filtro AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":filtro" => $tipo]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarPorTalla($talla, $orden)
+private function filtrarPorTalla($talla, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_tallas pt ON p.id = pt.producto_id 
                 INNER JOIN colores c ON pt.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE pt.talla = :talla AND pt.stock > 0 AND p.activo = 1 
+                WHERE pt.talla = :talla AND pt.stock > 0 AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":talla" => $talla]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarColor($color, $orden)
+private function filtrarColor($color, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id 
                 INNER JOIN colores c ON pc.color_id = c.id 
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE c.nombre = :color AND p.activo = 1 
+                WHERE c.nombre = :color AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":color" => $color]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function filtrarPorPrecio($max, $min, $orden)
+private function filtrarPorPrecio($max, $min, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.precio BETWEEN :min AND :max AND p.activo = 1 
+                WHERE p.precio BETWEEN :min AND :max AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":min" => $min, ":max" => $max]);
@@ -519,14 +519,18 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
         }
     }
 
-    public function obtenerPrecioMinMax($valor)
+public function obtenerPrecioMinMax($valor)
     {
         $funcionSql = "MAX";
         if (strtoupper($valor) === "MIN") {
             $funcionSql = "MIN";
         }
         try {
-            $sql = "SELECT {$funcionSql}(precio) as precio_limite FROM productos WHERE activo = 1";
+            // Añadimos el INNER JOIN aquí también
+            $sql = "SELECT {$funcionSql}(p.precio) as precio_limite 
+                    FROM productos p 
+                    INNER JOIN colecciones col ON p.coleccion_id = col.id 
+                    WHERE p.activo = 1 AND col.activa = 1";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute();
             $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
@@ -537,15 +541,16 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
         }
     }
 
-    public function ordenar($accion)
+public function ordenar($accion)
     {
         $ordenSql = $this->obtenerSqlOrden($accion);
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.activo = 1 
+                WHERE p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $ordenSql;
         $sentencia  = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
@@ -572,14 +577,15 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
     }
 
 
-    public function buscarPorNombre($nombreABuscar)
+public function buscarPorNombre($nombreABuscar)
     {
         $sql = "SELECT p.id, p.nombre, p.precio, c.id AS color_id, c.nombre AS color_nombre, MIN(i.url_imagen) AS url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
-                WHERE p.activo = 1 AND p.nombre LIKE :nombreABuscar
+                WHERE p.activo = 1 AND col.activa = 1 AND p.nombre LIKE :nombreABuscar
                 GROUP BY p.id, c.id
                 LIMIT 6";
 
@@ -764,20 +770,20 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
     }
 
 
-    private function filtrarRebajas($orden)
+private function filtrarRebajas($orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
                 INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1 
-                WHERE p.rebaja > 0 AND p.activo = 1 
+                WHERE p.rebaja > 0 AND p.activo = 1 AND col.activa = 1 
                 GROUP BY p.id, c.id" . $this->obtenerSqlOrden($orden);
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
-
 
 public function verificarCodigoDescuento($codigo, $email) {
         try {
@@ -793,4 +799,32 @@ public function verificarCodigoDescuento($codigo, $email) {
             return false;
         }
     }
+
+    public function obtenerColeccionSecreta() {
+        $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
+                FROM productos p
+                INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
+                WHERE p.activo = 1 AND col.activa = 3
+                GROUP BY p.id, c.id
+                ORDER BY p.creado_en DESC";
+                
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerColoresColeccionSecreta() {
+    $sql = "SELECT DISTINCT c.* FROM colores c 
+            INNER JOIN producto_colores pc ON c.id = pc.color_id 
+            INNER JOIN productos p ON pc.producto_id = p.id 
+            INNER JOIN colecciones col ON p.coleccion_id = col.id 
+            WHERE p.activo = 1 AND col.activa = 3";
+            
+    $sentencia = $this->conexionDataBase->prepare($sql);
+    $sentencia->execute();
+    return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+}
 }

@@ -13,6 +13,15 @@ $db = new DataBase();
 $producto = new Producto($db->conectar());
 $imagen = new Imagen($db->conectar());
 
+$esModoSecreto = (isset($_GET['especial']) && $_GET['especial'] == 'herror');
+
+if ($esModoSecreto) {
+    // Solo cargamos lo que tiene activa = 3
+    $listaProductos = $producto->obtenerColeccionSecreta(); 
+    $listaColores = $producto->obtenerColoresColeccionSecreta();
+    $listaColecciones = []; // Vaciamos para que no aparezcan filtros
+} else {
+
 function crearUrl($clave, $valor)
 {
     $parametros = [];
@@ -111,6 +120,6 @@ if (isset($_SESSION['usuario_id'])) {
         $arrayFavoritos[] = $fav['id'] . '-' . $fav['color_id'];
     }
 }
-
+}
 
  ?>
