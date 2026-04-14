@@ -347,4 +347,41 @@ class Usuario
             return false;
         }
     }
+
+    public function buscarUsuPorCorreo($emailABuscar){
+        try {
+            $sql = "SELECT * from usuarios where email = :emailABuscar";
+
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia -> execute([":emailABuscar" => $emailABuscar]);
+
+            if($sentencia->fetchALL(PDO::FETCH_ASSOC)){
+                return true;
+            }else{
+                return false;
+            }
+
+        } catch (PDOException) {
+            return false;
+            header("Location: index.php");
+        }
+    }
+
+    public function anadirTokenRecuperarPass($emailCambiarPass){
+        $token = bin2hex(random_bytes(32));
+
+        try {
+        $sql = "UPDATE usuarios SET token_cambiar_password = :token, caducidad_token = reset_token_caducidad = DATE_ADD(NOW(), INTERVAL 1 HOUR) where email = :emailCambiarPass";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([
+            ":token" => $token,
+            "emailCambiarPass" => $emailCambiarPass
+        ]);
+
+        return true;
+        } catch (PDOException) {
+            return false;
+        }
+
+    }
 }

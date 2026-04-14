@@ -93,7 +93,7 @@
 
   </nav>
 
-  <?php if (!isset($_SESSION['usuario_id'])){ ?>
+  <?php if (!isset($_SESSION['usuario_id'])) { ?>
     <div class="modal fade" id="modalUsuario" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" style="max-width: 800px;">
         <div class="modal-content rounded-0 border-0 p-0 overflow-hidden shadow-lg">
@@ -114,6 +114,9 @@
                   <i class="bi bi-lock"></i>
                 </div>
                 <button class="btn-anim" type="submit" name="accion" value="login">Iniciar Sesión</button>
+                <div class="regi-link">
+                  <p>¿No te acuerdas de la contraseña? <br> <a href="recuperarPassword.php">Recuperar Contraseña</a></p>
+                </div>
                 <div class="regi-link">
                   <p>¿No tienes cuenta? <a href="#" class="SignUpLink">Regístrate</a></p>
                 </div>

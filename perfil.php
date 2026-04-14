@@ -71,7 +71,30 @@ include './includes/header.php';
                                 <input type="text" class="form-control rounded-0" name="telefono" value="<?php echo isset($datosUsu['telefono']) ? $datosUsu['telefono'] : ''; ?>">
                             </div>
                         </div>
-                        <div class="card border-0 shadow-sm rounded-0 p-4 bg-white mt-4">
+                        
+
+                        <h3 class="fw-bold text-uppercase mb-4 mt-3 border-top pt-4">Dirección de Envío</h3>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label text-muted small fw-bold text-uppercase">Dirección Completa (Calle, número, piso)</label>
+                                <input type="text" class="form-control rounded-0" name="direccion" value="<?php echo isset($datosUsu['direccion']) ? $datosUsu['direccion'] : ''; ?>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold text-uppercase">Ciudad</label>
+                                <input type="text" class="form-control rounded-0" name="ciudad" value="<?php echo isset($datosUsu['ciudad']) ? $datosUsu['ciudad'] : ''; ?>">
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label text-muted small fw-bold text-uppercase">Código Postal</label>
+                                <input type="text" class="form-control rounded-0" name="codigoPostal" value="<?php echo isset($datosUsu['codigo_postal']) ? $datosUsu['codigo_postal'] : ''; ?>">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark rounded-0 px-5 py-3 text-uppercase fw-bold ls-1 w-100">Guardar Cambios</button>
+                    </form>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-0 p-4 bg-white mt-4">
                             <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2">
                                 <i class="bi bi-shield-lock me-2"></i>Cambiar Contraseña
                             </h4>
@@ -130,27 +153,6 @@ include './includes/header.php';
                                 </div>
                             </form>
                         </div>
-
-                        <h3 class="fw-bold text-uppercase mb-4 mt-3 border-top pt-4">Dirección de Envío</h3>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label class="form-label text-muted small fw-bold text-uppercase">Dirección Completa (Calle, número, piso)</label>
-                                <input type="text" class="form-control rounded-0" name="direccion" value="<?php echo isset($datosUsu['direccion']) ? $datosUsu['direccion'] : ''; ?>">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <label class="form-label text-muted small fw-bold text-uppercase">Ciudad</label>
-                                <input type="text" class="form-control rounded-0" name="ciudad" value="<?php echo isset($datosUsu['ciudad']) ? $datosUsu['ciudad'] : ''; ?>">
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <label class="form-label text-muted small fw-bold text-uppercase">Código Postal</label>
-                                <input type="text" class="form-control rounded-0" name="codigoPostal" value="<?php echo isset($datosUsu['codigo_postal']) ? $datosUsu['codigo_postal'] : ''; ?>">
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-dark rounded-0 px-5 py-3 text-uppercase fw-bold ls-1 w-100">Guardar Cambios</button>
-                    </form>
-                </div>
 
 
             <?php } elseif ($seccion == 'pedidos') { ?>

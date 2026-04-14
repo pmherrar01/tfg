@@ -81,8 +81,7 @@ include './includes/header.php';
 
                     <button type="button" class="btn btn-sm btn-outline-dark rounded-0 w-100 mt-2 text-uppercase fw-bold d-flex justify-content-center align-items-center gap-2"
                         data-bs-toggle="modal" data-bs-target="#modalAsistenteTallas"
-                        style="letter-spacing: 1px; font-size: 0.75rem; border-style: dashed;">
-                        <i class="bi bi-magic text-warning fs-6"></i> Asistente de Tallas
+                        style="letter-spacing: 1px; font-size: 0.75rem; border-style: dashed;">Asistente de Tallas
                     </button>
                 </div>
 
@@ -324,7 +323,7 @@ include './includes/header.php';
             <div class="modal-content rounded-0 border-0 shadow">
                 <div class="modal-header border-bottom-0 pb-0 mt-3 px-4 bg-light">
                     <h5 class="modal-title fw-bold text-uppercase fs-5" style="letter-spacing: 1px;">
-                        <i class="bi bi-magic me-2 text-warning"></i>Tu Talla Ideal
+                        Tu Talla Ideal
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
