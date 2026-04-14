@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . "/../models/usuario.php";
+require_once __DIR__ . "/../config/db.php";
 
 $db = new Database();
 $user = new Usuario($db->conectar());

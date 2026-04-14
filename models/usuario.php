@@ -371,14 +371,14 @@ class Usuario
         $token = bin2hex(random_bytes(32));
 
         try {
-        $sql = "UPDATE usuarios SET token_cambiar_password = :token, caducidad_token = reset_token_caducidad = DATE_ADD(NOW(), INTERVAL 1 HOUR) where email = :emailCambiarPass";
+        $sql = "UPDATE usuarios SET token_cambiar_password = :token, caducidad_token = DATE_ADD(NOW(), INTERVAL 1 HOUR) where email = :emailCambiarPass";
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([
             ":token" => $token,
             "emailCambiarPass" => $emailCambiarPass
         ]);
 
-        return true;
+        return $token;
         } catch (PDOException) {
             return false;
         }
