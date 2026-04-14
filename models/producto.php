@@ -300,7 +300,7 @@ public function listarProductos($estadoActivo, $limite = null)
                 INNER JOIN colores c ON pc.color_id = c.id
                 INNER JOIN colecciones col ON p.coleccion_id = col.id 
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
-                WHERE p.activo = :estadoActivo AND col.estado = 1
+                WHERE p.activo = :estadoActivo AND col.activa = 1
                 GROUP BY p.id, c.id
                 ORDER BY p.creado_en DESC";
 
