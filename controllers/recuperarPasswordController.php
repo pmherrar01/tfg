@@ -3,7 +3,7 @@
 require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../config/db.php";
 
-$db = new Database();
+$db = new DataBase();
 $user = new Usuario($db->conectar());
 
 if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["accion"] === "recuperarPassword"){
@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
             "token" => $token
         ]);
 
-$urlWebhook = "http://localhost:5678/webhook-test/recuperarPassword";
+$urlWebhook = "http://localhost:5678/webhook/recuperarPassword";
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
