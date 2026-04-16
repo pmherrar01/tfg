@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $email = $datos['email'];
         $codigoAcceso = "herror"; 
 
-        $urlWebhook = "http://127.0.0.1:5678/webhook/solicitarCodigo";
+        $urlWebhook = "http://localhost:5678/webhook-test/solicitarCodigo";
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -26,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($http_code === 200) {
             echo json_encode(["status" => "success"]);
         } else {
-            echo json_encode(["status" => "error", "message" => "Error al conectar con n8n"]);
+            // Si falla, mandamos el error rojo con el código exacto
+            echo json_encode(["status" => "error", "message" => "Fallo n8n. Código HTTP: " . $http_code . " Respuesta: " . $respuesta]);
         }
     } else {
         echo json_encode(["status" => "error", "message" => "Email no proporcionado"]);
