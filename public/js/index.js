@@ -18,29 +18,55 @@ const temporizador = setInterval(() => {
 
 }, 1000);
 
-const formularioAcceso = document.getElementById("formSolicitarAcceso");
+const formSolicitar = document.getElementById('formSolicitarCodigo');
+if(formSolicitar){
+    formSolicitar.addEventListener('submit', function(e){
+        e.preventDefault();
+        const emailInput = document.getElementById('emailSolicitud');
+        const email = emailInput.value;
+        const btn = e.target.querySelector('button');
+        
+        btn.disabled = true;
+        btn.innerText = "ENVIANDO...";
 
-formularioAcceso.addEventListener('submit', function (e) {
+        fetch('controllers/solicitarCodigoController.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            btn.disabled = false;
+            btn.innerText = "SOLICITAR CÓDIGO";
 
-    e.preventDefault();
-    const correo = document.getElementById("emailAcceso").value;
-
-    console.log("Correo Acesso anticipado:  " + correo);
-
-
-    Swal.fire({
-        icon: 'success',
-        title: '¡Solicitud recibida!',
-        text: 'Revisa tu bandeja de entrada (y la carpeta de Spam). Te hemos enviado tu pase secreto.',
-        confirmButtonColor: 'var(--color-principal, #000)',
-        showClass: { popup: 'animate__animated animate__fadeIn animate__faster' },
-        hideClass: { popup: 'animate__animated animate__fadeOut animate__faster' }
+            if(data.status === 'success'){
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Código solicitado!',
+                    text: 'Si tu email es válido, recibirás el código de acceso exclusivo en unos segundos.',
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    confirmButtonColor: '#333'
+                });
+                emailInput.value = ""; 
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalCodigo'));
+                modal.hide();
+            } else {
+                throw new Error(data.message);
+            }
+        })
+        .catch(error => {
+            btn.disabled = false;
+            btn.innerText = "SOLICITAR CÓDIGO";
+            console.error("Error:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo procesar la solicitud. Inténtalo de nuevo más tarde.',
+                background: '#1a1a1a',
+                color: '#fff',
+                confirmButtonColor: '#333'
+            });
+        });
     });
-    
-    formularioAcceso.reset();
-
-
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarAcceso'));
-    modal.hide();
-
-});
+}
