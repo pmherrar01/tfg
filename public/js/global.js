@@ -176,6 +176,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    const urlParams = new URLSearchParams(window.location.search);
+
     if (urlParams.has('error')) {
     const error = urlParams.get('error');
     if (error === 'debes_iniciar_sesion') {
