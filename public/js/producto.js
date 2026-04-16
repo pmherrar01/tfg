@@ -375,8 +375,66 @@ function guardarPrendasRecientes() {
 
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const formAsistente = document.getElementById('formAsistenteIA');
+    
+    if (formAsistente) {
+        formAsistente.addEventListener('submit', function(e) {
+            e.preventDefault(); // Evitamos que la página se recargue
 
-function pintarPrendasRecientes() {
+            const altura = document.getElementById('ia_altura').value;
+            const peso = document.getElementById('ia_peso').value;
+            const complexion = document.getElementById('ia_complexion').value;
+            const ajuste = document.getElementById('ia_ajuste').value;
+            const nombrePrenda = document.getElementById('ia_nombre_prenda').value;
 
-}
+            const btn = document.getElementById('btnCalcularTalla');
+            const textoOriginal = btn.innerText;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> PENSANDO...';
+
+            const contenedorResultado = document.getElementById('resultadoIA');
+            contenedorResultado.classList.add('d-none');
+
+            fetch('controllers/apiAsistenteTallasController.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ altura, peso, complexion, ajuste, prenda: nombrePrenda })
+            })
+            .then(response => response.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerText = textoOriginal;
+
+                if(data.talla) {
+                    contenedorResultado.innerHTML = `
+                        <h4 class="fw-bold text-uppercase mb-2" style="letter-spacing: 2px;">
+                            Talla Recomendada: <span style="font-size: 1.5em; text-decoration: underline;">${data.talla}</span>
+                        </h4>
+                        <p class="mb-0 small text-muted">${data.explicacion}</p>
+                    `;
+                    contenedorResultado.classList.remove('d-none');
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ups...',
+                        text: data.message || 'La IA no pudo calcular tu talla en este momento.',
+                        confirmButtonColor: '#000'
+                    });
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
+                btn.innerText = textoOriginal;
+                console.error("Error:", error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'No hemos podido contactar con el asistente.',
+                    confirmButtonColor: '#000'
+                });
+            });
+        });
+    }
+});
 

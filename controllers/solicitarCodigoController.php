@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':email' => $email
             ]);
 
-            $urlWebhook = "http://localhost:5678/webhook/solicitarCodigo";
+            $urlWebhook = "http://localhost:5678/webhook-test/solicitarCodigo";
 
             $curl = curl_init($urlWebhook);
             curl_setopt($curl, CURLOPT_POST, true);
