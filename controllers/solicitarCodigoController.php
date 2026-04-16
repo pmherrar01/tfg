@@ -1,35 +1,53 @@
 <?php
+require_once __DIR__ . "/../config/db.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents('php://input');
     $datos = json_decode($json, true);
 
     if (isset($datos['email']) && !empty($datos['email'])) {
-        $email = $datos['email'];
-        $codigoAcceso = "herror"; 
-
-        $urlWebhook = "http://localhost:5678/webhook-test/solicitarCodigo";
-
-        $curl = curl_init($urlWebhook);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
-            "email" => $email,
-            "codigo" => $codigoAcceso
-        ]));
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $email = trim($datos['email']);
         
-        $respuesta = curl_exec($curl);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
+        try {
+            $db = new Database();
+            $conexion = $db->conectar();
 
-        if ($http_code === 200) {
-            echo json_encode(["status" => "success"]);
-        } else {
-            // Si falla, mandamos el error rojo con el código exacto
-            echo json_encode(["status" => "error", "message" => "Fallo n8n. Código HTTP: " . $http_code . " Respuesta: " . $respuesta]);
+            $codigoUnico = strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+
+            $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, 'acceso')";
+            $stmt = $conexion->prepare($sql);
+            $stmt->execute([
+                ':codigo' => $codigoUnico,
+                ':email' => $email
+            ]);
+
+            $urlWebhook = "http://localhost:5678/webhook/solicitarCodigo";
+
+            $curl = curl_init($urlWebhook);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode([
+                "email" => $email,
+                "codigo" => $codigoUnico 
+            ]));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            
+            $respuesta = curl_exec($curl);
+            $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
+
+            if ($http_code === 200) {
+                echo json_encode(["status" => "success"]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "Fallo de comunicación con n8n."]);
+            }
+
+        } catch (PDOException $e) {
+            echo json_encode(["status" => "error", "message" => "Error DB: " . $e->getMessage()]);
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "Email no proporcionado"]);
+        echo json_encode(["status" => "error", "message" => "Falta el email."]);
     }
+    exit;
 }
+?>

@@ -18,16 +18,16 @@ const temporizador = setInterval(() => {
 
 }, 1000);
 
-const formSolicitar = document.getElementById('formSolicitarCodigo');
+const formSolicitar = document.getElementById('formSolicitarAcceso');
 if(formSolicitar){
     formSolicitar.addEventListener('submit', function(e){
         e.preventDefault();
-        const emailInput = document.getElementById('emailSolicitud');
+        const emailInput = document.getElementById('emailAcceso');
         const email = emailInput.value;
         const btn = e.target.querySelector('button');
         
         btn.disabled = true;
-        btn.innerText = "ENVIANDO...";
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> ENVIANDO...';
 
         fetch('controllers/solicitarCodigoController.php', {
             method: 'POST',
@@ -37,19 +37,17 @@ if(formSolicitar){
         .then(response => response.json())
         .then(data => {
             btn.disabled = false;
-            btn.innerText = "SOLICITAR CÓDIGO";
+            btn.innerText = "Enviar solicitud";
 
             if(data.status === 'success'){
                 Swal.fire({
                     icon: 'success',
-                    title: '¡Código solicitado!',
-                    text: 'Si tu email es válido, recibirás el código de acceso exclusivo en unos segundos.',
-                    background: '#1a1a1a',
-                    color: '#fff',
-                    confirmButtonColor: '#333'
+                    title: '¡Pase solicitado!',
+                    text: 'En breves momentos recibirás un código de un solo uso en tu correo electrónico.',
+                    confirmButtonColor: 'var(--color-principal, #000)'
                 });
                 emailInput.value = ""; 
-                const modal = bootstrap.Modal.getInstance(document.getElementById('modalCodigo'));
+                const modal = bootstrap.Modal.getInstance(document.getElementById('modalSolicitarAcceso'));
                 modal.hide();
             } else {
                 throw new Error(data.message);
@@ -57,15 +55,13 @@ if(formSolicitar){
         })
         .catch(error => {
             btn.disabled = false;
-            btn.innerText = "SOLICITAR CÓDIGO";
+            btn.innerText = "Enviar solicitud";
             console.error("Error:", error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'No se pudo procesar la solicitud. Inténtalo de nuevo más tarde.',
-                background: '#1a1a1a',
-                color: '#fff',
-                confirmButtonColor: '#333'
+                title: 'No se pudo enviar',
+                text: 'Hubo un problema técnico: ' + error.message,
+                confirmButtonColor: 'var(--color-principal, #000)'
             });
         });
     });
