@@ -106,6 +106,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: '¡Inicia Sesión!',
                 text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.'
             });
+        }else if (mensajeAlerta === 'passwordActualizada') {
+            swalRapido.fire({
+                icon: 'success',
+                title: '¡Contraseña actualizada!',
+                text: 'Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión.'
+            });
         }
     }
 

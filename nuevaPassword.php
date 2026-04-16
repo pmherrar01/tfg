@@ -8,29 +8,38 @@ if(!isset($_GET['token']) || empty($_GET['token'])){
 $token = htmlspecialchars($_GET['token']);
 ?>
 
-<main class="container my-5 py-5 text-white" style="min-height: 60vh;">
+<main class="container my-5 py-5" style="min-height: 60vh;">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
-            <div class="card bg-black border border-secondary shadow-lg">
+            <div class="card rounded-0 border-0 shadow-lg" style="background-color: var(--color-secundario);">
                 <div class="card-body p-5">
-                    <h2 class="text-center fw-bold mb-4 text-uppercase tracking-wide">Nueva Contraseña</h2>
-                    <p class="text-center text-muted mb-4">Introduce tu nueva contraseña para HERROR.</p>
+                    
+                    <div class="text-center mb-4">
+                        <i class="bi bi-key fs-1 mb-2 d-block" style="color: var(--color-principal);"></i>
+                        <h2 class="fw-bold text-uppercase tracking-wide" style="color: var(--color-principal); letter-spacing: 2px;">Nueva Contraseña</h2>
+                        <p class="text-muted small">Crea una nueva contraseña para tu cuenta de HERROR.</p>
+                    </div>
 
                     <form action="controllers/nuevaPasswordController.php" method="POST" id="formNuevaPassword">
                         <input type="hidden" name="accion" value="actualizarPassword">
                         <input type="hidden" name="token" value="<?php echo $token; ?>">
 
-                        <div class="mb-3">
-                            <label for="password" class="form-label text-secondary">Nueva Contraseña</label>
-                            <input type="password" class="form-control bg-dark text-white border-secondary" id="password" name="password" required minlength="6">
+                        <div class="mb-4 position-relative input-box">
+                            <input type="password" class="form-control rounded-0 border-0 border-bottom" id="password" name="password" required>
+                            <label for="password">Nueva Contraseña</label>
+                            <i class="bi bi-lock"></i>
+                            <div class="form-text mt-2 small text-muted">
+                                Mínimo 8 caracteres, una mayúscula, una minúscula y un número.
+                            </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label for="confirm_password" class="form-label text-secondary">Confirmar Contraseña</label>
-                            <input type="password" class="form-control bg-dark text-white border-secondary" id="confirm_password" name="confirm_password" required minlength="6">
+                        <div class="mb-5 position-relative input-box">
+                            <input type="password" class="form-control rounded-0 border-0 border-bottom" id="confirm_password" name="confirm_password" required>
+                            <label for="confirm_password">Confirmar Contraseña</label>
+                            <i class="bi bi-lock-fill"></i>
                         </div>
 
-                        <button type="submit" class="btn btn-light w-100 fw-bold text-uppercase rounded-0 py-2">Cambiar Contraseña</button>
+                        <button type="submit" class="btn btn-principal w-100 fw-bold text-uppercase rounded-0 py-3" style="letter-spacing: 1px;">Guardar Contraseña</button>
                     </form>
                 </div>
             </div>
@@ -38,48 +47,64 @@ $token = htmlspecialchars($_GET['token']);
     </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    document.getElementById('formNuevaPassword').addEventListener('submit', function(e) {
-        const pass1 = document.getElementById('password').value;
-        const pass2 = document.getElementById('confirm_password').value;
+    document.addEventListener("DOMContentLoaded", function () {
+        const swalRapido = Swal.mixin({
+            confirmButtonColor: 'var(--color-principal, #000)',
+            showClass: { popup: 'animate__animated animate__fadeIn animate__faster' },
+            hideClass: { popup: 'animate__animated animate__fadeOut animate__faster' }
+        });
 
-        if (pass1 !== pass2) {
-            e.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'No coinciden',
-                text: 'Ambas contraseñas deben ser exactamente iguales.',
-                background: '#1a1a1a',
-                color: '#fff',
-                confirmButtonColor: '#333'
-            });
+        document.getElementById('formNuevaPassword').addEventListener('submit', function(e) {
+            const pass1 = document.getElementById('password').value;
+            const pass2 = document.getElementById('confirm_password').value;
+            
+            const patronPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+            if (!patronPassword.test(pass1)) {
+                e.preventDefault();
+                swalRapido.fire({
+                    icon: 'warning',
+                    title: 'Contraseña poco segura',
+                    text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.'
+                });
+                return;
+            }
+
+            if (pass1 !== pass2) {
+                e.preventDefault();
+                swalRapido.fire({
+                    icon: 'error',
+                    title: 'No coinciden',
+                    text: 'Las contraseñas que has escrito no son iguales.'
+                });
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.has('error')) {
+            let error = urlParams.get('error');
+            if(error === 'tokenCaducado') {
+                swalRapido.fire({
+                    icon: 'warning',
+                    title: 'Tiempo Agotado',
+                    text: 'El enlace ha caducado. Disponías de 1 hora. Por favor, solicita un nuevo correo.'
+                });
+            } else if(error === 'tokenInvalido') {
+                swalRapido.fire({
+                    icon: 'error',
+                    title: 'Enlace no válido',
+                    text: 'Este enlace ya ha sido utilizado o no existe.'
+                });
+            } else if(error === 'datosInvalidos') {
+                swalRapido.fire({
+                    icon: 'error',
+                    title: 'Error de validación',
+                    text: 'Los datos enviados no son válidos.'
+                });
+            }
         }
     });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    if(urlParams.has('error')) {
-        let error = urlParams.get('error');
-        if(error === 'tokenCaducado') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Tiempo Agotado',
-                text: 'El enlace ha caducado. Disponías de 1 hora. Por favor, solicita un nuevo correo de recuperación.',
-                background: '#1a1a1a',
-                color: '#fff',
-                confirmButtonColor: '#333'
-            });
-        } else if(error === 'tokenInvalido') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Enlace no válido',
-                text: 'Este enlace ya ha sido utilizado o no existe.',
-                background: '#1a1a1a',
-                color: '#fff',
-                confirmButtonColor: '#333'
-            });
-        }
-    }
 </script>
 
 <?php require_once "includes/footer.php"; ?>
