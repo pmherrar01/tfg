@@ -21,7 +21,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_close($curl);
 
         if ($http_code === 200) {
-            echo $respuesta_n8n;
+            $respuesta_limpia = str_replace(['```json', '```'], '', $respuesta_n8n);
+            
+            echo trim($respuesta_limpia);
         } else {
             echo json_encode(["status" => "error", "message" => "N8N no responde. Código: " . $http_code]);
         }
