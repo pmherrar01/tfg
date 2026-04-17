@@ -376,25 +376,24 @@ function guardarPrendasRecientes() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const formAsistente = document.getElementById('formAsistenteIA');
+    const formAsistente = document.getElementById('formAsistenteTalla');
     
     if (formAsistente) {
         formAsistente.addEventListener('submit', function(e) {
             e.preventDefault(); 
 
-            const altura = document.getElementById('ia_altura').value;
-            const peso = document.getElementById('ia_peso').value;
-            const complexion = document.getElementById('ia_complexion').value;
-            const ajuste = document.getElementById('ia_ajuste').value;
-            const nombrePrenda = document.getElementById('ia_nombre_prenda').value;
+            const altura = document.getElementById('altura').value;
+            const peso = document.getElementById('peso').value;
+            const complexion = document.getElementById('complexion').value;
+            const ajuste = document.getElementById('ajuste').value;
+            const nombrePrenda = document.getElementById('nombrePrenda').value;
 
-            const btn = document.getElementById('btnCalcularTalla');
+            const botonCalcular = document.getElementById('btnCalcularTalla');
             const textoOriginal = btn.innerText;
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> PENSANDO...';
+            botonCalcular.disabled = true;
+            botonCalcular.innerHTML = '<span class="spinner-border spinner-border-sm"></span> PENSANDO...';
 
             const contenedorResultado = document.getElementById('resultadoAsistenteTalla');
-            contenedorResultado.classList.add('d-none');
 
             fetch('controllers/apiAsistenteTallasController.php', {
                 method: 'POST',
@@ -403,8 +402,10 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                btn.disabled = false;
-                btn.innerText = textoOriginal;
+                botonCalcular.disabled = false;
+                botonCalcular.innerText = textoOriginal;
+
+                console.log(data);
 
                 if(data.talla) {
                     contenedorResultado.innerHTML = `
@@ -424,8 +425,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                btn.disabled = false;
-                btn.innerText = textoOriginal;
+                botonCalcular.disabled = false;
+                botonCalcular.innerText = textoOriginal;
                 console.error("Error:", error);
                 Swal.fire({
                     icon: 'error',

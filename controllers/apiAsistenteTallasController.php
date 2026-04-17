@@ -16,12 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_TIMEOUT, 15); 
         
-        $respuesta_n8n = curl_exec($curl);
+        $respuestaN8n = curl_exec($curl);
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
 
         if ($http_code === 200) {
-            echo trim($respuesta_n8n);
+            echo trim($respuestaN8n);
         } else {
             echo json_encode(["status" => "error", "message" => "N8N no responde."]);
         }

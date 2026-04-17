@@ -23,13 +23,14 @@ include './includes/header.php';
             
             <div class="flex-grow-1 bg-light position-relative" style="min-height: 350px;">
                 <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.284206037134!2d-3.689626323490729!3d40.42470737143734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4228913985d1e7%3A0xc3419992d9d1b098!2sC.%20de%20Serrano%2C%20Madrid!5e0!3m2!1ses!2ses!4v1716382947192!5m2!1ses!2ses" 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.8930759449527!2d-3.7068409225622716!3d40.433366471436706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422889dc61cd51%3A0x7d87718fe6a0552f!2sCalle%20de%20Fuencarral%2C%20Madrid!5e0!3m2!1ses!2ses!4v1776428358937!5m2!1ses!2ses" 
                     class="position-absolute top-0 start-0 w-100 h-100 border-0" 
                     allowfullscreen="" 
                     loading="lazy" 
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
+
 
             <div class="bg-light p-4 text-center mt-5">
                 <i class="bi bi-shield-check display-4 mb-3 d-block text-dark"></i>

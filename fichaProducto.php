@@ -331,21 +331,21 @@ include './includes/header.php';
                 <div class="modal-body px-4 pb-4 bg-light">
                     <p class="text-muted small mb-4">Introduce tus datos y calcularemos la talla perfecta para ti.</p>
                     
-                    <form id="formAsistenteIA">
-                        <input type="hidden" id="ia_nombre_prenda" value="<?php echo htmlspecialchars($datosPrenda['nombre']); ?>">
+                    <form id="formAsistenteTalla">
+                        <input type="hidden" id="nombrePrenda" value="<?php echo htmlspecialchars($datosPrenda['nombre']); ?>">
                         
                         <div class="row g-3">
                             <div class="col-6">
                                 <label class="form-label small fw-bold text-uppercase text-muted">Altura (cm)</label>
-                                <input type="number" class="form-control rounded-0" id="ia_altura" placeholder="Ej: 175" required>
+                                <input type="number" class="form-control rounded-0" id="altura" placeholder="Ej: 175" required>
                             </div>
                             <div class="col-6">
                                 <label class="form-label small fw-bold text-uppercase text-muted">Peso (kg)</label>
-                                <input type="number" class="form-control rounded-0" id="ia_peso" placeholder="Ej: 70" required>
+                                <input type="number" class="form-control rounded-0" id="peso" placeholder="Ej: 70" required>
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-uppercase text-muted">Complexión</label>
-                                <select class="form-select rounded-0" id="ia_complexion" required>
+                                <select class="form-select rounded-0" id="complexion" required>
                                     <option value="" selected disabled>Selecciona...</option>
                                     <option value="Delgada">Delgada</option>
                                     <option value="Normal">Normal</option>
@@ -355,7 +355,7 @@ include './includes/header.php';
                             </div>
                             <div class="col-12">
                                 <label class="form-label small fw-bold text-uppercase text-muted">¿Cómo prefieres el ajuste?</label>
-                                <select class="form-select rounded-0" id="ia_ajuste" required>
+                                <select class="form-select rounded-0" id="ajuste" required>
                                     <option value="Ajustada">Ajustada (Pegada al cuerpo)</option>
                                     <option value="Normal" selected>Normal (Regular)</option>
                                     <option value="Holgada">Holgada (Oversize)</option>
