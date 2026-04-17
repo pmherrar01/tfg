@@ -4,7 +4,7 @@ require_once '../includes/auth.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    $usuario_id = $_SESSION['usuario_id']; 
+    $idUsu = $_SESSION['usuario_id']; 
     $fecha = $_POST['fecha']; 
     $hora = $_POST['hora']; 
     $motivoForm = $_POST['motivo'];
@@ -15,14 +15,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $motivoFinal .= " | Notas: " . $comentarios;
     }
 
-    $fecha_cita_datetime = $fecha . ' ' . $hora . ':00';
+    $fechaCita = $fecha . ' ' . $hora . ':00';
 
     $db = new Database();
-    $conn = $db->conectar();
+    $coexion = $db->conectar();
 
     $sqlCheck = "SELECT COUNT(*) as total FROM citas WHERE fecha_cita = :fecha_cita AND estado != 'cancelada'";
-    $stmtCheck = $conn->prepare($sqlCheck);
-    $stmtCheck->bindParam(':fecha_cita', $fecha_cita_datetime);
+    $stmtCheck = $coexion->prepare($sqlCheck);
+    $stmtCheck->bindParam(':fecha_cita', $fechaCita);
     $stmtCheck->execute();
     $resultado = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
@@ -31,13 +31,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $sqlInsert = "INSERT INTO citas (usuario_id, fecha_cita, motivo, estado) VALUES (:usuario_id, :fecha_cita, :motivo, 'confirmada')";
-    $stmtInsert = $conn->prepare($sqlInsert);
-    $stmtInsert->bindParam(':usuario_id', $usuario_id);
-    $stmtInsert->bindParam(':fecha_cita', $fecha_cita_datetime);
-    $stmtInsert->bindParam(':motivo', $motivoFinal);
+    $sql = "INSERT INTO citas (usuario_id, fecha_cita, motivo, estado) VALUES (:usuario_id, :fecha_cita, :motivo, 'confirmada')";
+    $sentencia = $coexion->prepare($sql);
+    $sentencia->bindParam(':usuario_id', $idUsu);
+    $sentencia->bindParam(':fecha_cita', $fechaCita);
+    $sentencia->bindParam(':motivo', $motivoFinal);
 
-    if ($stmtInsert->execute()) {
+    if ($sentencia->execute()) {
+
+
+
         header("Location: ../reservaConfirmada.php");
         exit();
     } else {
