@@ -370,7 +370,7 @@ include './includes/header.php';
                         </div>
                     </form>
 
-                    <div id="resultadoIA" class="mt-4 p-3 border border-2 border-dark text-center bg-white d-none">
+                    <div id="resultadoAsistenteTalla" class="mt-4 p-3 border border-2 border-dark text-center bg-white d-none">
                     </div>
 
                 </div>

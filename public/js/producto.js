@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (formAsistente) {
         formAsistente.addEventListener('submit', function(e) {
-            e.preventDefault(); // Evitamos que la página se recargue
+            e.preventDefault(); 
 
             const altura = document.getElementById('ia_altura').value;
             const peso = document.getElementById('ia_peso').value;
@@ -393,7 +393,7 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> PENSANDO...';
 
-            const contenedorResultado = document.getElementById('resultadoIA');
+            const contenedorResultado = document.getElementById('resultadoAsistenteTalla');
             contenedorResultado.classList.add('d-none');
 
             fetch('controllers/apiAsistenteTallasController.php', {

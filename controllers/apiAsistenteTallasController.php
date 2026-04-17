@@ -21,14 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         curl_close($curl);
 
         if ($http_code === 200) {
-            $respuesta_limpia = str_replace(['```json', '```'], '', $respuesta_n8n);
-            
-            echo trim($respuesta_limpia);
+            echo trim($respuesta_n8n);
         } else {
-            echo json_encode(["status" => "error", "message" => "N8N no responde. Código: " . $http_code]);
+            echo json_encode(["status" => "error", "message" => "N8N no responde."]);
         }
     } else {
-        echo json_encode(["status" => "error", "message" => "Faltan datos de altura o peso."]);
+        echo json_encode(["status" => "error", "message" => "Faltan datos."]);
     }
     exit;
 }
