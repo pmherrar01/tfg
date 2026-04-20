@@ -37,7 +37,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
             "emailUsu" => $usu->obtenerDatosUsu($idUsu)["email"],
             "nombrePrenda" => $nombrePrenda,
             "precio" => $precioPrenda,
-            "fecha" => date("Y-m-d")
+            "fecha" => date("d/m/y")
         ];
 
         $urlWebhookSegundaMano = "http://localhost:5678/webhook-test/subidaPrendaSegundaMano";
