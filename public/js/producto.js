@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombrePrenda = document.getElementById('nombrePrenda').value;
 
             const botonCalcular = document.getElementById('btnCalcularTalla');
-            const textoOriginal = btn.innerText;
+            const textoOriginal = botonCalcular.innerText;
             botonCalcular.disabled = true;
             botonCalcular.innerHTML = '<span class="spinner-border spinner-border-sm"></span> PENSANDO...';
 
