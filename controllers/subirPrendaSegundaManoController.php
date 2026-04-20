@@ -4,6 +4,7 @@ session_start();
 
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../models/producto.php';
+require_once __DIR__ . '/../models/usuario.php';
 
 if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
     
@@ -40,11 +41,11 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
             "fecha" => date("d/m/y")
         ];
 
-        $urlWebhookSegundaMano = "http://localhost:5678/webhook-test/subidaPrendaSegundaMano";
+        $urlWebhookSegundaMano = "http://localhost:5678/webhook/subidaPrendaSegundaMano";
 
         $curl = curl_init($urlWebhookSegundaMano);
             curl_setopt($curl, CURLOPT_POST, true); 
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosSegundaMano)); 
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosPedidoSegundaMano)); 
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); 
             curl_setopt($curl, CURLOPT_TIMEOUT, 2); 
