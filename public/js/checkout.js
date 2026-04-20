@@ -1,19 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // 1. Lógica para alternar entre Tarjeta y Bizum
     const radiosPago = document.querySelectorAll('input[name="metodo_pago"]');
     if (radiosPago.length > 0) {
         radiosPago.forEach(radio => {
             radio.addEventListener('change', cambiarMetodoPago);
         });
-        cambiarMetodoPago(); // Estado inicial
+        cambiarMetodoPago(); 
     }
 
-    // ==========================================
-    // 2. LÓGICA DE LA TARJETA INTERACTIVA (Vanilla JS)
-    // ==========================================
-    
-    // Capturamos los elementos visuales de la tarjeta
     const visualNumero = document.getElementById('tarjeta-numero-visual');
     const visualNombre = document.getElementById('tarjeta-nombre-visual');
     const visualMes = document.getElementById('tarjeta-mes-visual');
@@ -21,34 +15,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const visualCvv = document.getElementById('tarjeta-cvv-visual');
     const tarjetaAnimada = document.getElementById('tarjeta-credito');
 
-    // Capturamos los inputs del formulario
     const inputNumero = document.getElementById('input-numero');
     const inputNombre = document.getElementById('input-nombre');
     const inputMes = document.getElementById('input-mes');
     const inputAnio = document.getElementById('input-anio');
     const inputCvv = document.getElementById('input-cvv');
 
-    if(inputNumero) { // Solo ejecutar si estamos en el checkout
+    if(inputNumero) { 
         
-        // A) Actualizar el Número de la tarjeta en tiempo real
         inputNumero.addEventListener('input', function(e) {
-            // Solo permitir números y borrar espacios
             let valor = e.target.value.replace(/\D/g, ''); 
-            // Formatear en bloques de 4 (ej: 1234 5678)
             let formateado = valor.match(/.{1,4}/g)?.join(' ') || ''; 
-            e.target.value = formateado; // Se actualiza el input con espacios
+            e.target.value = formateado;
             
-            // Pintar en la tarjeta visual
             visualNumero.textContent = formateado !== '' ? formateado : '#### #### #### ####';
         });
 
-        // B) Actualizar el Nombre en tiempo real
         inputNombre.addEventListener('input', function(e) {
             let nombre = e.target.value.toUpperCase();
             visualNombre.textContent = nombre !== '' ? nombre : 'NOMBRE APELLIDOS';
         });
 
-        // C) Actualizar Mes y Año
         inputMes.addEventListener('change', function(e) {
             visualMes.textContent = e.target.value;
         });
@@ -57,26 +44,22 @@ document.addEventListener('DOMContentLoaded', function() {
             visualAnio.textContent = e.target.value;
         });
 
-        // D) Escribir CVV
         inputCvv.addEventListener('input', function(e) {
-            let valor = e.target.value.replace(/\D/g, ''); // Solo números
+            let valor = e.target.value.replace(/\D/g, ''); 
             e.target.value = valor;
             visualCvv.textContent = valor;
         });
 
-        // E) EL EFECTO 3D: Girar la tarjeta al entrar en el input CVV
         inputCvv.addEventListener('focus', function() {
             tarjetaAnimada.classList.add('girada');
         });
 
-        // Volver a girar la tarjeta al salir del input CVV
         inputCvv.addEventListener('blur', function() {
             tarjetaAnimada.classList.remove('girada');
         });
     }
 });
 
-// Función para cambiar el estilo visual entre Tarjeta y Bizum
 function cambiarMetodoPago() {
     const radioTarjeta = document.getElementById('pago_tarjeta');
     const cajaTarjeta = document.getElementById('caja_tarjeta');
@@ -112,3 +95,29 @@ function cambiarMetodoPago() {
         formTarjeta.style.display = 'none';
     }
 }
+
+    const formPago = document.getElementById('formPago');
+    if (formPago) {
+        formPago.addEventListener('submit', function(e) {
+            const radioTarjeta = document.getElementById('pago_tarjeta');
+            
+            if (radioTarjeta && radioTarjeta.checked) {
+                const num = document.getElementById('input-numero').value;
+                const nombre = document.getElementById('input-nombre').value;
+                const mes = document.getElementById('input-mes').value;
+                const anio = document.getElementById('input-anio').value;
+                const cvv = document.getElementById('input-cvv').value;
+
+                if (num.length < 19 || nombre === "" || mes === "MM" || anio === "AA" || cvv.length < 3) {
+                    e.preventDefault(); 
+                    
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Datos Incompletos',
+                        text: 'Por favor, rellena todos los datos de la tarjeta correctamente antes de pagar.',
+                        confirmButtonColor: '#000'
+                    });
+                }
+            }
+        });
+    }

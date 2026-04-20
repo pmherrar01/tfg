@@ -169,7 +169,7 @@ include './includes/header.php';
                     <span class="fw-bold fs-3"><?php echo number_format($totalFinalCheckout, 2); ?> €</span>
                 </div>
 
-                <form action="controllers/pagoController.php" method="POST">
+                <form id="formPago" action="controllers/pagoController.php" method="POST">
                     <input type="hidden" name="totalPedido" value="<?php echo $totalFinalCheckout; ?>">
 
                     <?php

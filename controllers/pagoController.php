@@ -40,6 +40,26 @@ try {
 
     $conexion->commit();
 
+    $datosPedido = [
+        "nombreUsu" => $datosUsu['nombre'],
+        "email"     => $datosUsu['email'],
+        "idPedido"  => $idPedido,
+        "total"     => $totalPedido,
+        "direccion" => $direccionUsu,
+        "articulos" => count($_SESSION["carrito"]) 
+    ];
+
+    $urlWebhookPedido = "http://localhost:5678/webhook/confirmacionCompra"; 
+
+    $curl = curl_init($urlWebhookPedido);
+    curl_setopt($curl, CURLOPT_POST, true); 
+    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosPedido)); 
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); 
+    curl_setopt($curl, CURLOPT_TIMEOUT, 2);
+    
+    curl_exec($curl);
+
     unset($_SESSION['carrito']);
     header("Location: ../gracias.php");
 } catch (Exception $e) {
