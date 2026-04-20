@@ -332,7 +332,8 @@ class Usuario
         }
     }
 
-    public function cambiarPass($passNueva, $idUsu) {
+    public function cambiarPass($passNueva, $idUsu)
+    {
         try {
             $sql = "UPDATE usuarios SET password = :passNueva WHERE id = :idUsu";
 
@@ -348,60 +349,62 @@ class Usuario
         }
     }
 
-    public function buscarUsuPorCorreo($emailABuscar){
+    public function buscarUsuPorCorreo($emailABuscar)
+    {
         try {
             $sql = "SELECT * from usuarios where email = :emailABuscar";
 
             $sentencia = $this->conexionDataBase->prepare($sql);
-            $sentencia -> execute([":emailABuscar" => $emailABuscar]);
+            $sentencia->execute([":emailABuscar" => $emailABuscar]);
 
-            if($sentencia->fetchALL(PDO::FETCH_ASSOC)){
+            if ($sentencia->fetchALL(PDO::FETCH_ASSOC)) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-
         } catch (PDOException) {
             return false;
         }
     }
 
-public function anadirTokenRecuperarPass($emailCambiarPass){
-    $token = bin2hex(random_bytes(32));
-    
-    date_default_timezone_set('Europe/Madrid');
-    $fechaCaducidad = date('Y-m-d H:i:s', strtotime('+1 hour'));
+    public function anadirTokenRecuperarPass($emailCambiarPass)
+    {
+        $token = bin2hex(random_bytes(32));
 
-    try {
-        $sql = "UPDATE usuarios SET token_cambiar_password = :token, caducidad_token = :caducidad where email = :emailCambiarPass";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([
-            ":token" => $token,
-            ":caducidad" => $fechaCaducidad,
-            ":emailCambiarPass" => $emailCambiarPass
-        ]);
+        date_default_timezone_set('Europe/Madrid');
+        $fechaCaducidad = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-        return $token;
-    } catch (PDOException $e) {
-        return false;
+        try {
+            $sql = "UPDATE usuarios SET token_cambiar_password = :token, caducidad_token = :caducidad where email = :emailCambiarPass";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":token" => $token,
+                ":caducidad" => $fechaCaducidad,
+                ":emailCambiarPass" => $emailCambiarPass
+            ]);
+
+            return $token;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
-}
 
-public function actualizarPasswordPorToken($token, $nuevaPasswordHash){
+    public function actualizarPasswordPorToken($token, $nuevaPasswordHash)
+    {
         try {
             $sql = "SELECT id, caducidad_token FROM usuarios WHERE token_cambiar_password = :token";
             $sentencia = $this->conexionDataBase->prepare($sql);
             $sentencia->execute([':token' => $token]);
 
-            if($sentencia->rowCount() > 0){
+            if ($sentencia->rowCount() > 0) {
                 $fila = $sentencia->fetch(PDO::FETCH_ASSOC);
                 $idUsu = $fila['id'];
                 $caducidad = $fila['caducidad_token'];
 
                 date_default_timezone_set('Europe/Madrid');
-                
+
                 if (strtotime(date("Y-m-d H:i:s")) > strtotime($caducidad)) {
-                    return "caducado"; 
+                    return "caducado";
                 }
 
                 $sqlUpd = "UPDATE usuarios SET password = :password, token_cambiar_password = NULL, caducidad_token = NULL WHERE id = :idUsu";
@@ -410,8 +413,8 @@ public function actualizarPasswordPorToken($token, $nuevaPasswordHash){
                     ':password' => $nuevaPasswordHash,
                     ':idUsu' => $idUsu
                 ]);
-                
-                if($exito){
+
+                if ($exito) {
                     return "exito";
                 }
             }
@@ -420,4 +423,39 @@ public function actualizarPasswordPorToken($token, $nuevaPasswordHash){
             return "invalido";
         }
     }
+
+    public function comprobarDescuento($email)
+    {
+        $sql = "SELECT * from codigos_accesos where email = :email AND porcentaje_descuento = 10";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+
+        if ($sentencia->execute([":email" => $email])) {
+            return true;
+        } else {
+            return false;
+        }
+        return false;
+    }
+
+    public function generarCodigoDescuento(){
+        return strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+    }
+
+
+    public function crearCodigoDescuento($codigoDescuento, $email)
+    {
+        $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, 'descuento')";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        if($sentencia->execute([
+            ':codigo' => $codigoDescuento,
+            ':email' => $email
+        ])){
+            return true;
+        }else{
+            return false;
+        }
+
+        return false;
+    }
+
 }

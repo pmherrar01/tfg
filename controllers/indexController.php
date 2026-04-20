@@ -6,9 +6,12 @@ session_start();
 require_once __DIR__ . '/../models/favorito.php';
 require_once "./models/producto.php"; 
 require_once "./config/db.php";
+require_once "./models/usuario.php"; 
 
 $db = new Database();
-$producto = new Producto($db->conectar());
+$conexion = $db->conectar();
+$producto = new Producto($conexion);
+$usu = new Usuario($conexion);
 
 $novedades = $producto->listarProductos(1, 8);
 
@@ -24,8 +27,14 @@ if (isset($_SESSION['usuario_id'])) {
 }
 
 
-if(){
+if($_SERVER['REQUEST_METHOD'] == 'POST' ){
+
+$email = isset($_POST["emial"]) ? $_POST["email"] : "";
+
+if(!$usu->comprobarDescuento($email)){
     
+}
+
 }
 
 

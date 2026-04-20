@@ -267,7 +267,7 @@ include './includes/prendasRecientes.php';
 
                 <form id="formSuscripcion" class="mx-auto" style="max-width: 500px;">
                     <div class="input-group input-group-lg mb-2">
-                        <input type="email" class="form-control rounded-0 border-dark border-2" placeholder="tu@email.com" required>
+                        <input type="email" id="email" name="email" class="form-control rounded-0 border-dark border-2" placeholder="tu@email.com" required>
                         <button class="btn btn-dark rounded-0 fw-bold text-uppercase px-4 border-2 border-dark" type="submit">¡Lo quiero!</button>
                     </div>
                     <small class="text-muted fw-bold small text-uppercase">No enviamos spam. Solo puro estilo.</small>

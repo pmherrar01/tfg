@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . "/../config/db.php";
+require_once __DIR__ . "/../models/usuario.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents('php://input');
@@ -11,12 +12,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $db = new Database();
             $conexion = $db->conectar();
+            $usu = new Usuario($conexion);
 
-            $codigoUnico = strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+            $codigoUnico = $usu->generarCodigoDescuento();
 
             $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, 'acceso')";
-            $stmt = $conexion->prepare($sql);
-            $stmt->execute([
+            $sentencia = $conexion->prepare($sql);
+            $sentencia->execute([
                 ':codigo' => $codigoUnico,
                 ':email' => $email
             ]);
@@ -34,7 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             $respuesta = curl_exec($curl);
             $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            curl_close($curl);
 
             if ($http_code === 200) {
                 echo json_encode(["status" => "success"]);
