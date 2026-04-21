@@ -292,7 +292,7 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-public function listarProductos($estadoActivo, $limite = null)
+    public function listarProductos($estadoActivo, $limite = null)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
                 FROM productos p
@@ -305,7 +305,11 @@ public function listarProductos($estadoActivo, $limite = null)
                 ORDER BY p.creado_en DESC";
 
         if ($limite != null) {
-            $sql .= " LIMIT " . $limite;
+            if (filter_var($limite, FILTER_VALIDATE_INT)) {
+                $sql .= " LIMIT " . $limite;
+            } else {
+                $sql .= " LIMIT 20"; 
+            }
         }
 
         $sentencia = $this->conexionDataBase->prepare($sql);
@@ -379,12 +383,18 @@ public function listarProductos($estadoActivo, $limite = null)
         return $ordenSql;
     }
 
-private function filtrarGenero($genero, $orden)
+    private function filtrarGenero($genero, $orden)
     {
         switch ($genero) {
-            case '1': $generoAFiltrar = 1; break;
-            case '2': $generoAFiltrar = 2; break;
-            default: $generoAFiltrar = 3; break;
+            case '1':
+                $generoAFiltrar = 1;
+                break;
+            case '2':
+                $generoAFiltrar = 2;
+                break;
+            default:
+                $generoAFiltrar = 3;
+                break;
         }
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -399,7 +409,7 @@ private function filtrarGenero($genero, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarColeccion($idColeccion, $orden)
+    private function filtrarColeccion($idColeccion, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -414,7 +424,7 @@ private function filtrarColeccion($idColeccion, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarTipoPrenda($tipo, $orden)
+    private function filtrarTipoPrenda($tipo, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -429,7 +439,7 @@ private function filtrarTipoPrenda($tipo, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarPorTalla($talla, $orden)
+    private function filtrarPorTalla($talla, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -444,7 +454,7 @@ private function filtrarPorTalla($talla, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarColor($color, $orden)
+    private function filtrarColor($color, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -459,7 +469,7 @@ private function filtrarColor($color, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-private function filtrarPorPrecio($max, $min, $orden)
+    private function filtrarPorPrecio($max, $min, $orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -474,7 +484,7 @@ private function filtrarPorPrecio($max, $min, $orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
+    public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
     {
         switch ($filtrado) {
             case 'genero':
@@ -489,7 +499,7 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
                 return $this->filtrarPorTalla($valor, $orden);
             case 'precio':
                 return $this->filtrarPorPrecio($valor, $valor2, $orden);
-            case 'rebajas': 
+            case 'rebajas':
                 return $this->filtrarRebajas($orden);
             default:
                 return $this->listarProductos(1);
@@ -519,7 +529,7 @@ public function filtrar($filtrado, $valor, $valor2 = null, $orden = null)
         }
     }
 
-public function obtenerPrecioMinMax($valor)
+    public function obtenerPrecioMinMax($valor)
     {
         $funcionSql = "MAX";
         if (strtoupper($valor) === "MIN") {
@@ -541,7 +551,7 @@ public function obtenerPrecioMinMax($valor)
         }
     }
 
-public function ordenar($accion)
+    public function ordenar($accion)
     {
         $ordenSql = $this->obtenerSqlOrden($accion);
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
@@ -577,7 +587,7 @@ public function ordenar($accion)
     }
 
 
-public function buscarPorNombre($nombreABuscar)
+    public function buscarPorNombre($nombreABuscar)
     {
         $sql = "SELECT p.id, p.nombre, p.precio, c.id AS color_id, c.nombre AS color_nombre, MIN(i.url_imagen) AS url_imagen
                 FROM productos p
@@ -595,7 +605,7 @@ public function buscarPorNombre($nombreABuscar)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-   public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
+    public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
     {
         try {
             $this->conexionDataBase->beginTransaction();
@@ -603,7 +613,7 @@ public function buscarPorNombre($nombreABuscar)
             $sql = "INSERT INTO productos (nombre, precio, tipo_id, activo, es_segunda_mano, id_usuario_vendedor, estado_revision) 
             VALUES (:nombre, :precio, :idTipoPrenda, 0, 1, :idUsuario, 'Pendiente')";
             $sentencia = $this->conexionDataBase->prepare($sql);
-            $sentencia -> execute([
+            $sentencia->execute([
                 ":nombre" => $nombrePrenda,
                 ":precio" => $precioPrenda,
                 ":idTipoPrenda" => $idTipoPrenda,
@@ -622,7 +632,7 @@ public function buscarPorNombre($nombreABuscar)
             $sqlImagen = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) 
                   VALUES (:idProducto, :idColor, :imagenUrl, 1)";
             $sentenciaImg = $this->conexionDataBase->prepare($sqlImagen);
-            $sentenciaImg ->execute([
+            $sentenciaImg->execute([
                 ":idProducto" => $idProductoInsertado,
                 ":idColor" => $idColor,
                 ":imagenUrl" => $imgPrenda
@@ -631,7 +641,7 @@ public function buscarPorNombre($nombreABuscar)
             $sqlTalla =  "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) 
                  VALUES (:idProducto, :idColor, :talla, 1)";
             $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
-            $sentenciaTalla -> execute([
+            $sentenciaTalla->execute([
                 ":idProducto" => $idProductoInsertado,
                 ":idColor" => $idColor,
                 ":talla" => $tallaPrenda
@@ -639,9 +649,8 @@ public function buscarPorNombre($nombreABuscar)
 
             $this->conexionDataBase->commit();
             return true;
-
         } catch (Exception $e) {
-           header("Location: ../segundaMano.php" );
+            header("Location: ../segundaMano.php");
             return false;
         }
     }
@@ -655,7 +664,7 @@ public function buscarPorNombre($nombreABuscar)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
- public function obtenerMisPrendasSegundaMano($idUsuario)
+    public function obtenerMisPrendasSegundaMano($idUsuario)
     {
         $sql = "SELECT p.*, pc.color_id, pt.talla, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -665,7 +674,7 @@ public function buscarPorNombre($nombreABuscar)
                 WHERE p.id_usuario_vendedor = :idUsuario 
                 GROUP BY p.id, pc.color_id, pt.talla
                 ORDER BY p.creado_en DESC";
-                
+
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute([":idUsuario" => $idUsuario]);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
@@ -679,54 +688,56 @@ public function buscarPorNombre($nombreABuscar)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function actualizarDatosPrendaSegundaMano($idPrenda, $nombrePrenda, $precioPrenda, $tipoPrenda, $idUsu, $idColor, $talla){
-        
-    try {
-             $this->conexionDataBase->beginTransaction();
+    public function actualizarDatosPrendaSegundaMano($idPrenda, $nombrePrenda, $precioPrenda, $tipoPrenda, $idUsu, $idColor, $talla)
+    {
+
+        try {
+            $this->conexionDataBase->beginTransaction();
 
             $sql = "UPDATE productos SET nombre = :nombrePrenda, precio = :precioPrenda, tipo_id = :idTipoPrenda, estado_revision = 'Pendiente' WHERE id = :idPrenda AND id_usuario_vendedor = :idUsu";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([
-            ":nombrePrenda" => $nombrePrenda,
-            ":precioPrenda" => $precioPrenda,
-            ":idTipoPrenda" => $tipoPrenda,
-            ":idPrenda" => $idPrenda,
-            ":idUsu" => $idUsu
-        ]);
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ":nombrePrenda" => $nombrePrenda,
+                ":precioPrenda" => $precioPrenda,
+                ":idTipoPrenda" => $tipoPrenda,
+                ":idPrenda" => $idPrenda,
+                ":idUsu" => $idUsu
+            ]);
 
-        $sqlColor = "UPDATE producto_colores SET color_id = :idColor WHERE producto_id = :idPrenda";
-        $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
-        $sentenciaColor -> execute([
-            ":idColor" => $idColor,
-            ":idPrenda" => $idPrenda
-        ]);
+            $sqlColor = "UPDATE producto_colores SET color_id = :idColor WHERE producto_id = :idPrenda";
+            $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
+            $sentenciaColor->execute([
+                ":idColor" => $idColor,
+                ":idPrenda" => $idPrenda
+            ]);
 
-        $sqlTalla = "UPDATE producto_tallas SET talla = :talla, color_id = :idColor WHERE producto_id = :idPrenda";
+            $sqlTalla = "UPDATE producto_tallas SET talla = :talla, color_id = :idColor WHERE producto_id = :idPrenda";
 
-        $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
-        $sentenciaTalla -> execute([
-            ":talla" => $talla,
-            ":idColor" => $idColor,
-            ":idPrenda" => $idPrenda
-        ]);
+            $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
+            $sentenciaTalla->execute([
+                ":talla" => $talla,
+                ":idColor" => $idColor,
+                ":idPrenda" => $idPrenda
+            ]);
 
-        $this->conexionDataBase->commit();
+            $this->conexionDataBase->commit();
 
-        return true;
-    } catch (PDOException) {
-        header("Location: perfil.php?seccion=prendas");
-        return false;
+            return true;
+        } catch (PDOException) {
+            header("Location: perfil.php?seccion=prendas");
+            return false;
+        }
     }
 
-    }
-
-    public function borrarImagenPrenda($idImagen) {
+    public function borrarImagenPrenda($idImagen)
+    {
         $sql = "DELETE FROM imagenes_productos WHERE id = :idImagen";
         $sentencia = $this->conexionDataBase->prepare($sql);
         return $sentencia->execute([":idImagen" => $idImagen]);
     }
 
-    public function anadirImagenPrenda($idPrenda, $idColor, $urlImagen) {
+    public function anadirImagenPrenda($idPrenda, $idColor, $urlImagen)
+    {
         $sqlCheck = "SELECT count(*) FROM imagenes_productos WHERE producto_id = :id AND es_principal = 1";
         $sentenciaCheck = $this->conexionDataBase->prepare($sqlCheck);
         $sentenciaCheck->execute([":id" => $idPrenda]);
@@ -751,26 +762,26 @@ public function buscarPorNombre($nombreABuscar)
                 LEFT JOIN producto_tallas pt ON p.id = pt.producto_id
                 LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.es_principal = 1
                 WHERE p.es_segunda_mano = 1 AND p.estado_revision = 'Aprobado' AND pt.stock > 0";
-        
+
         if ($idUsuarioActual !== null) {
             $sql .= " AND p.id_usuario_vendedor != :idUsuario ";
         }
-        
+
         $sql .= " GROUP BY p.id, pc.color_id, pt.talla, c.nombre ORDER BY p.creado_en DESC";
-                
+
         $sentencia = $this->conexionDataBase->prepare($sql);
-        
+
         if ($idUsuarioActual !== null) {
             $sentencia->execute([":idUsuario" => $idUsuarioActual]);
         } else {
             $sentencia->execute();
         }
-        
+
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
-private function filtrarRebajas($orden)
+    private function filtrarRebajas($orden)
     {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen 
                 FROM productos p 
@@ -785,7 +796,8 @@ private function filtrarRebajas($orden)
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-public function verificarCodigoDescuento($codigo, $email) {
+    public function verificarCodigoDescuento($codigo, $email)
+    {
         try {
             $sql = "SELECT * FROM codigos_accesos WHERE codigo = :codigo AND email = :email AND tipo = 'descuento' AND usado = 0";
             $sentencia = $this->conexionDataBase->prepare($sql);
@@ -800,7 +812,8 @@ public function verificarCodigoDescuento($codigo, $email) {
         }
     }
 
-    public function obtenerColeccionSecreta() {
+    public function obtenerColeccionSecreta()
+    {
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
@@ -810,21 +823,22 @@ public function verificarCodigoDescuento($codigo, $email) {
                 WHERE p.activo = 1 AND col.activa = 3
                 GROUP BY p.id, c.id
                 ORDER BY p.creado_en DESC";
-                
+
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerColoresColeccionSecreta() {
-    $sql = "SELECT DISTINCT c.* FROM colores c 
+    public function obtenerColoresColeccionSecreta()
+    {
+        $sql = "SELECT DISTINCT c.* FROM colores c 
             INNER JOIN producto_colores pc ON c.id = pc.color_id 
             INNER JOIN productos p ON pc.producto_id = p.id 
             INNER JOIN colecciones col ON p.coleccion_id = col.id 
             WHERE p.activo = 1 AND col.activa = 3";
-            
-    $sentencia = $this->conexionDataBase->prepare($sql);
-    $sentencia->execute();
-    return $sentencia->fetchAll(PDO::FETCH_ASSOC);
-}
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

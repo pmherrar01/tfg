@@ -836,3 +836,147 @@ footer a:hover {
     height: 40px;
     background-color: #000;
 }
+
+/* ==========================================
+   ESTILOS DEL CHATBOT HERROR
+   ========================================== */
+
+/* Contenedor principal que fija la posición en la esquina inferior derecha */
+.chatbot-wrapper {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999; /* Para que esté por encima del menú y las fotos */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* El botón redondo negro */
+.chatbot-toggle-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.chatbot-toggle-btn:hover {
+    transform: scale(1.1);
+    background-color: #333;
+}
+
+/* La ventana del chat */
+.chatbot-window {
+    width: 360px;
+    height: 500px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    bottom: 85px; /* Sube la ventana para que no tape el botón */
+    right: 0;
+    overflow: hidden;
+    /* Animación de entrada suave */
+    animation: slideUpChat 0.3s ease forwards; 
+}
+
+@keyframes slideUpChat {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cabecera negra de la ventana */
+.chatbot-header {
+    background-color: #000;
+    color: #fff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 2px;
+    border-bottom: 2px solid #000;
+}
+
+/* Zona central donde van los mensajes */
+.chatbot-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Estilo general de un mensaje (bocadillo) */
+.chat-msg {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Mensaje del BOT (Gris claro) */
+.bot-msg {
+    background-color: #e9ecef;
+    color: #000;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+    border: 1px solid #ddd;
+}
+
+/* Mensaje del USUARIO (Negro) */
+.user-msg {
+    background-color: #000;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+/* Animación de "pensando" */
+.loading-msg {
+    font-style: italic;
+    color: #666;
+    background-color: transparent !important;
+    border: none !important;
+    padding: 5px 0 !important;
+}
+
+/* Zona de abajo (Input y botón de enviar) */
+.chatbot-input-area {
+    display: flex;
+    border-top: 2px solid #000;
+    background-color: #fff;
+}
+
+#chatbot-input {
+    flex: 1;
+    border: none;
+    padding: 15px;
+    outline: none;
+    font-size: 14px;
+}
+
+#chatbot-send-btn {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 0 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#chatbot-send-btn:hover {
+    background-color: #333;
+}

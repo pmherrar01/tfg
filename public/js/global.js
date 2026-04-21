@@ -486,3 +486,80 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const chatbotToggle = document.getElementById("chatbot-toggle");
+    const chatbotWindow = document.getElementById("chatbot-window");
+    const chatbotClose = document.getElementById("chatbot-close");
+    const chatbotForm = document.getElementById("chatbot-form");
+    const chatbotInput = document.getElementById("chatbot-input");
+    const chatbotMessages = document.getElementById("chatbot-messages");
+
+    if (chatbotToggle && chatbotWindow) {
+        
+        chatbotToggle.addEventListener("click", () => {
+            chatbotWindow.classList.toggle("d-none");
+            if (!chatbotWindow.classList.contains("d-none")) {
+                chatbotInput.focus();
+            }
+        });
+
+        chatbotClose.addEventListener("click", () => {
+            chatbotWindow.classList.add("d-none");
+        });
+
+        function addMessage(text, sender) {
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("chat-msg");
+            
+            if (sender === "user") {
+                msgDiv.classList.add("user-msg");
+            } else {
+                msgDiv.classList.add("bot-msg");
+                text = text.replace(/\n/g, "<br>");
+            }
+            
+            msgDiv.innerHTML = text;
+            chatbotMessages.appendChild(msgDiv);
+            
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        chatbotForm.addEventListener("submit", function (e) {
+            e.preventDefault(); 
+            
+            const mensaje = chatbotInput.value.trim();
+            if (mensaje === "") return;
+
+            chatbotInput.value = "";
+            addMessage(mensaje, "user");
+
+            const botLoadingDiv = document.createElement("div");
+            botLoadingDiv.classList.add("chat-msg", "bot-msg", "loading-msg");
+            botLoadingDiv.innerHTML = '<i>Gemini está pensando...</i>';
+            chatbotMessages.appendChild(botLoadingDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            fetch('controllers/apiChatbotController.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mensaje: mensaje })
+            })
+            .then(res => res.json())
+            .then(data => {
+                botLoadingDiv.remove();
+                
+                if (data.status === "success") {
+                    addMessage(data.respuesta, "bot");
+                } else {
+                    addMessage("Error: " + data.message, "bot");
+                }
+            })
+            .catch(error => {
+                botLoadingDiv.remove();
+                console.error("Error en Chatbot:", error);
+                addMessage("Lo siento, he perdido la conexión. Inténtalo de nuevo.", "bot");
+            });
+        });
+    }
+});

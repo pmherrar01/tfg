@@ -26,10 +26,7 @@ include './includes/header.php';
                         <a href="perfil.php?seccion=datos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'datos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Datos</a>
                         <a href="perfil.php?seccion=pedidos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'pedidos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Pedidos</a>
                         <a href="perfil.php?seccion=favoritos" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'favoritos' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Favoritos</a>
-                        <a href="perfil.php?seccion=puntos" class="list-group-item list-group-item-action p-3 fw-bold d-flex justify-content-between align-items-center <?php echo $seccion == 'puntos' ? 'bg-dark text-white' : 'text-muted'; ?>">
-                            Puntos de Fidelidad
-                            <span class="badge bg-success rounded-pill"><?php echo isset($datosUsu['puntos_fidelidad']) ? $datosUsu['puntos_fidelidad'] : '0'; ?> pts</span>
-                        </a>
+                        
                         <a href="perfil.php?seccion=citas" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'citas' ? 'bg-dark text-white' : 'text-muted'; ?>">Mis Citas</a>
                         <a href="perfil.php?seccion=prendas" class="list-group-item list-group-item-action p-3 fw-bold <?php echo $seccion == 'prendas' ? 'bg-dark text-white' : 'text-muted'; ?>">Mi Armario (Ventas)</a>
                         <a href="controllers/usuarioController.php?accion=logout" class="list-group-item list-group-item-action p-3 text-danger fw-bold mt-2 border-top">Cerrar Sesión</a>
@@ -241,18 +238,7 @@ include './includes/header.php';
                 <?php };  ?>
 
 
-            <?php } elseif ($seccion == 'puntos') { ?>
-
-                <div class="card border-0 shadow-sm rounded-0 p-5 text-center h-100 d-flex justify-content-center align-items-center bg-light">
-                    <div>
-                        <i class="bi bi-star-fill text-warning display-1 mb-3 d-block"></i>
-                        <h3 class="fw-bold text-uppercase">Tu Saldo Actual</h3>
-                        <h1 class="display-2 fw-bold my-3 text-dark"><?php echo isset($datosUsu['puntos_fidelidad']) ? $datosUsu['puntos_fidelidad'] : '0'; ?> <span class="fs-4 text-muted">pts</span></h1>
-                        <p class="text-muted fs-5">Acumula puntos con cada compra y canjéalos por descuentos exclusivos en futuros pedidos.</p>
-                    </div>
-                </div>
-
-            <?php } elseif ($seccion == 'favoritos') { ?>
+            <?php }elseif ($seccion == 'favoritos') { ?>
 
                 <h3 class="fw-bold text-uppercase mb-4">Mis Favoritos</h3>
 
