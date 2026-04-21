@@ -16,12 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $codigoUnico = $usu->generarCodigoDescuento();
 
-            $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, 'acceso')";
-            $sentencia = $conexion->prepare($sql);
-            $sentencia->execute([
-                ':codigo' => $codigoUnico,
-                ':email' => $email
-            ]);
+            $usu -> crearCodigo($codigoUnico,$email);
 
             $urlWebhook = "http://localhost:5678/webhook/solicitarCodigo";
 

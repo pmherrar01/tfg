@@ -442,13 +442,14 @@ class Usuario
     }
 
 
-    public function crearCodigoDescuento($codigoDescuento, $email)
+    public function crearCodigo($codigoDescuento, $email,  $tipo = "acceso")
     {
-        $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, 'descuento')";
+        $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, :tipo)";
         $sentencia = $this->conexionDataBase->prepare($sql);
         if($sentencia->execute([
-            ':codigo' => $codigoDescuento,
-            ':email' => $email
+            ":codigo" => $codigoDescuento,
+            ":email" => $email,
+            ":tipo" => $tipo
         ])){
             return true;
         }else{
