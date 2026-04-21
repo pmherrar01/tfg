@@ -41,5 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "codigo" => $codigo
         ];
 
-    }
+        $urlWebhookDescuento = "http://localhost:5678/webhook-test/solicitarCodigoDescuento";
+
+            $curl = curl_init($urlWebhookDescuento);
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosn8n));
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 2); 
+            
+            curl_exec($curl);
+
+            header("Location: index.php?mensaje=codigo_enviado");
+            exit;
+
+    }else {
+            header("Location: index.php?error=codigo_existente");
+            exit;
+        }
 }

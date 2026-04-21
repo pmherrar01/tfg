@@ -112,7 +112,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 title: '¡Contraseña actualizada!',
                 text: 'Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión.'
             });
-        }
+        }else if (mensajeAlerta === 'codigo_enviado') {
+    Swal.fire({
+        icon: 'success',
+        title: '¡Revisa tu bandeja!',
+        text: 'Te acabamos de enviar tu código del 10% de descuento.',
+        confirmButtonColor: '#000'
+    });
+}
+if (errorAlerta === 'codigo_existente') {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Ya estás en la lista',
+        text: 'Este correo ya ha recibido un código de bienvenida anteriormente.',
+        confirmButtonColor: '#000'
+    });
+}
     }
 
     if (typeof errorAlerta !== 'undefined') {

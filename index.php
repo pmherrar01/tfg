@@ -6,35 +6,35 @@ include './includes/header.php';
 ?>
 
 <section class="vip-countdown position-relative text-center py-5 overflow-hidden text-white">
-    
+
     <div class="vip-overlay position-absolute w-100 h-100 top-0 start-0"></div>
-    
+
     <div class="container position-relative z-1">
-        
+
         <h2 class="vip-title display-4 fw-bold text-uppercase mb-3">Acceso Anticipado</h2>
         <p class="fs-5 mb-5 text-light fw-light">Nuestra colección más exclusiva está a punto de salir. Consigue tu acceso anticipado.</p>
-        
+
         <div class="vip-reloj-container mb-5 mx-auto">
             <div id="reloj-vip" class="d-flex justify-content-center align-items-center gap-3 gap-md-5">
-                
+
                 <div class="text-center">
                     <span id="dias" class="vip-number fw-bold d-block">00</span>
                     <span class="vip-label text-uppercase fw-bold">Días</span>
                 </div>
                 <span class="vip-separator fw-bold">:</span>
-                
+
                 <div class="text-center">
                     <span id="horas" class="vip-number fw-bold d-block">00</span>
                     <span class="vip-label text-uppercase fw-bold">Horas</span>
                 </div>
                 <span class="vip-separator fw-bold">:</span>
-                
+
                 <div class="text-center">
                     <span id="minutos" class="vip-number fw-bold d-block">00</span>
                     <span class="vip-label text-uppercase fw-bold">Min</span>
                 </div>
                 <span class="vip-separator fw-bold d-none d-sm-block">:</span>
-                
+
                 <div class="text-center d-none d-sm-block">
                     <span id="segundos" class="vip-number fw-bold d-block">00</span>
                     <span class="vip-label text-uppercase fw-bold">Seg</span>
@@ -48,10 +48,10 @@ include './includes/header.php';
                 Solicitar Código
             </button>
             <button class="btn btn-principal transicion-suave rounded-0 px-4 py-3 text-uppercase fw-bold vip-btn-espaciado" data-bs-toggle="modal" data-bs-target="#modalEntrarAcceso">
-                 Ya tengo mi pase
+                Ya tengo mi pase
             </button>
         </div>
-        
+
     </div>
 </section>
 
@@ -64,7 +64,7 @@ include './includes/header.php';
             <div class="modal-body text-center p-4 p-md-5 pt-0">
                 <h3 class="fw-bold text-uppercase mb-3">Pase Anticipado</h3>
                 <p class="text-muted small mb-4">Introduce tu correo electrónico. Te enviaremos un código de un solo uso para acceder a la nueva colección antes de la apertura pública.</p>
-                
+
                 <form id="formSolicitarAcceso">
                     <input type="email" id="emailAcceso" class="form-control rounded-0 text-center mb-3 py-3 bg-light border-0" placeholder="tu@email.com" required>
                     <button type="submit" class="btn btn-dark w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Enviar solicitud</button>
@@ -78,20 +78,20 @@ include './includes/header.php';
 <div class="modal fade" id="modalEntrarAcceso" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-0 modal-acceso-bg border-0 shadow-lg">
-            
+
             <div class="modal-header border-0 pb-0">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            
+
             <div class="modal-body text-center p-4 p-md-5 pt-0">
                 <i class="bi bi-unlock fs-1 text-acento mb-3 d-block"></i>
-                
+
                 <h3 class="fw-bold text-uppercase mb-3">Acceso Exclusivo</h3>
                 <p class="text-muted small mb-4">Introduce el código secreto que has recibido por email.</p>
-                
+
                 <form id="form-entrar-vip" action="controllers/accesoController.php" method="POST">
                     <input type="text" name="codigo" class="form-control rounded-0 text-center mb-4 py-3 text-uppercase fw-bold fs-3 input-codigo-acceso" placeholder="XXXXXX" maxlength="6" required>
-                    
+
                     <button type="submit" class="btn btn-principal transicion-suave w-100 rounded-0 py-3 text-uppercase fw-bold" style="letter-spacing: 1px;">Desbloquear Colección</button>
                 </form>
 
@@ -240,8 +240,8 @@ include './includes/prendasRecientes.php';
 
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
-                <form action="#" method="POST" class="newsletter-form d-flex align-items-center justify-content-center flex-wrap gap-3">
-                    <input type="email" class="form-control newsletter-input transicion-suave flex-grow-1" placeholder="TU CORREO ELECTRÓNICO" required>
+                <form action="index.php" method="POST" class="newsletter-form d-flex align-items-center justify-content-center flex-wrap gap-3">
+                    <input type="email" name="email" class="form-control newsletter-input transicion-suave flex-grow-1" placeholder="TU CORREO ELECTRÓNICO" required>
                     <button type="submit" class="btn btn-newsletter transicion-suave">Subcribete</button>
                 </form>
             </div>
@@ -265,7 +265,7 @@ include './includes/prendasRecientes.php';
                 <h1 class="display-4 fw-bold text-uppercase mb-3">¡Consigue un <span class="text-decoration-underline">10%</span> de descuento!</h1>
                 <p class="text-muted fs-5 mb-4">Suscríbete a nuestra newsletter y recibe un código de descuento instantáneo para tu primera compra. ¡Únete a la familia!</p>
 
-                <form id="formSuscripcion" class="mx-auto" style="max-width: 500px;">
+                <form id="formSuscripcion" action="index.php" method="POST" class="mx-auto" style="max-width: 500px;">
                     <div class="input-group input-group-lg mb-2">
                         <input type="email" id="email" name="email" class="form-control rounded-0 border-dark border-2" placeholder="tu@email.com" required>
                         <button class="btn btn-dark rounded-0 fw-bold text-uppercase px-4 border-2 border-dark" type="submit">¡Lo quiero!</button>
