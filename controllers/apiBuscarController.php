@@ -18,7 +18,7 @@ if(empty($prendaABuscar)){
     exit;
 }
 
-$resultado = $producto->buscarPorNombre($prendaABuscar);
+$resultado = $producto->buscarPorNombreChatBot($prendaABuscar);
 
 echo json_encode($resultado);
 

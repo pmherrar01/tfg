@@ -536,11 +536,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const botLoadingDiv = document.createElement("div");
             botLoadingDiv.classList.add("chat-msg", "bot-msg", "loading-msg");
-            botLoadingDiv.innerHTML = '<i>Gemini está pensando...</i>';
+            botLoadingDiv.innerHTML = '<i>Pensando...</i>';
             chatbotMessages.appendChild(botLoadingDiv);
             chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
 
-            fetch('controllers/apiChatbotController.php', {
+            fetch('controllers/apiChatBotController.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ mensaje: mensaje })

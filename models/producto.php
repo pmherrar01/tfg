@@ -605,6 +605,27 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+public function buscarPorNombreChatBot($nombreABuscar)
+    {
+        $sql = "SELECT p.id, p.nombre, p.precio, c.nombre AS color_nombre, 
+                       MIN(i.url_imagen) AS url_imagen,
+                       GROUP_CONCAT(CONCAT(pt.talla, ': ', pt.stock, ' unidades') SEPARATOR ' | ') AS tallas_stock
+                FROM productos p
+                INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                INNER JOIN colores c ON pc.color_id = c.id
+                INNER JOIN colecciones col ON p.coleccion_id = col.id 
+                INNER JOIN producto_tallas pt ON p.id = pt.producto_id AND c.id = pt.color_id
+                LEFT JOIN imagenes_productos i ON p.id = i.producto_id AND i.color_id = c.id AND i.es_principal = 1
+                WHERE p.activo = 1 AND col.activa = 1 AND p.nombre LIKE :nombreABuscar AND pt.stock > 0
+                GROUP BY p.id, c.id
+                LIMIT 6";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute([":nombreABuscar" => "%" . $nombreABuscar . "%"]);
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function subirPrendasSegundaMano($nombrePrenda, $precioPrenda, $idUsu, $imgPrenda, $idColor, $tallaPrenda, $idTipoPrenda)
     {
         try {
