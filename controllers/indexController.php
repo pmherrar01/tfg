@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             "codigo" => $codigo
         ];
 
-        $urlWebhookDescuento = "http://localhost:5678/webhook-test/solicitarCodigoDescuento";
+        $urlWebhookDescuento = "http://localhost:5678/webhook/solicitarCodigoDescuento";
 
             $curl = curl_init($urlWebhookDescuento);
             curl_setopt($curl, CURLOPT_POST, true);

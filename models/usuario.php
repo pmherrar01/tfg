@@ -428,8 +428,8 @@ class Usuario
     {
         $sql = "SELECT * from codigos_accesos where email = :email AND porcentaje_descuento = 10";
         $sentencia = $this->conexionDataBase->prepare($sql);
-
-        if ($sentencia->execute([":email" => $email])) {
+        $sentencia->execute([":email" => $email]);
+        if ($sentencia->fetch()) {
             return true;
         } else {
             return false;
@@ -446,17 +446,12 @@ class Usuario
     {
         $sql = "INSERT INTO codigos_accesos (codigo, email, tipo) VALUES (:codigo, :email, :tipo)";
         $sentencia = $this->conexionDataBase->prepare($sql);
-        if($sentencia->execute([
+        return $sentencia->execute([
             ":codigo" => $codigoDescuento,
             ":email" => $email,
             ":tipo" => $tipo
-        ])){
-            return true;
-        }else{
-            return false;
-        }
+        ]);
 
-        return false;
     }
 
 }
