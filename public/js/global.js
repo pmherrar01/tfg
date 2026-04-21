@@ -92,133 +92,70 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    if (typeof mensajeAlerta !== 'undefined') {
-        if (mensajeAlerta === 'registro_exito') {
-            swalRapido.fire({
-                icon: 'success',
-                title: '¡Bienvenido a HERROR!',
-                text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.'
-            });
-        }
-        else if (mensajeAlerta === 'login_requerido') {
-            swalRapido.fire({
-                icon: 'info',
-                title: '¡Inicia Sesión!',
-                text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.'
-            });
-        }else if (mensajeAlerta === 'passwordActualizada') {
-            swalRapido.fire({
-                icon: 'success',
-                title: '¡Contraseña actualizada!',
-                text: 'Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión.'
-            });
-        }else if (mensajeAlerta === 'codigo_enviado') {
-    Swal.fire({
-        icon: 'success',
-        title: '¡Revisa tu bandeja!',
-        text: 'Te acabamos de enviar tu código del 10% de descuento.',
-        confirmButtonColor: '#000'
-    });
-}
-if (errorAlerta === 'codigo_existente') {
-    Swal.fire({
-        icon: 'warning',
-        title: 'Ya estás en la lista',
-        text: 'Este correo ya ha recibido un código de bienvenida anteriormente.',
-        confirmButtonColor: '#000'
-    });
-}
-    }
+    // 1. LEER LAS ALERTAS DIRECTAMENTE DESDE LA URL (La forma más segura)
+    const urlParams = new URLSearchParams(window.location.search);
 
-    if (typeof errorAlerta !== 'undefined') {
-        if (errorAlerta === 'registro_fallo') {
-            swalRapido.fire({
-                icon: 'error',
-                title: 'Ups...',
-                text: 'Hubo un problema al registrarte. El correo ya está en uso.'
-            });
-        }
-        else if (errorAlerta === 'password_debil') {
-            swalRapido.fire({
-                icon: 'warning',
-                title: 'Contraseña poco segura',
-                text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.'
-            });
-        }
-        else if (errorAlerta === 'falta_talla') {
-            swalRapido.fire({
-                icon: 'warning',
-                title: '¡Falta la talla!',
-                text: 'Por favor, selecciona una talla antes de añadir al carrito.'
-            });
-        }
-        else if (errorAlerta === 'no_stock') {
-            swalRapido.fire({
-                icon: 'error',
-                title: 'Límite de stock',
-                text: 'No hay más unidades disponibles de este artículo en tu talla y color.'
-            });
+    // --- MENSAJES DE ÉXITO O INFO (?mensaje=...) ---
+    if (urlParams.has('mensaje')) {
+        const mensaje = urlParams.get('mensaje');
+        
+        if (mensaje === 'registro_exito') {
+            swalRapido.fire({ icon: 'success', title: '¡Bienvenido a HERROR!', text: 'Tu cuenta se ha creado con éxito. Ya puedes iniciar sesión.' });
+        } else if (mensaje === 'login_requerido') {
+            swalRapido.fire({ icon: 'info', title: '¡Inicia Sesión!', text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.' });
+        } else if (mensaje === 'passwordActualizada') {
+            swalRapido.fire({ icon: 'success', title: '¡Contraseña actualizada!', text: 'Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión.' });
+        } else if (mensaje === 'codigo_enviado') { // ¡LA NUEVA DE LA NEWSLETTER!
+            swalRapido.fire({ icon: 'success', title: '¡Revisa tu bandeja!', text: 'Te acabamos de enviar tu código del 10% de descuento.' });
         }
     }
 
+    // --- MENSAJES DE ERROR O AVISO (?error=...) ---
+    if (urlParams.has('error')) {
+        const error = urlParams.get('error');
+        
+        if (error === 'registro_fallo') {
+            swalRapido.fire({ icon: 'error', title: 'Ups...', text: 'Hubo un problema al registrarte. El correo ya está en uso.' });
+        } else if (error === 'password_debil') {
+            swalRapido.fire({ icon: 'warning', title: 'Contraseña poco segura', text: 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula y un número.' });
+        } else if (error === 'falta_talla') {
+            swalRapido.fire({ icon: 'warning', title: '¡Falta la talla!', text: 'Por favor, selecciona una talla antes de añadir al carrito.' });
+        } else if (error === 'no_stock') {
+            swalRapido.fire({ icon: 'error', title: 'Límite de stock', text: 'No hay más unidades disponibles de este artículo en tu talla y color.' });
+        } else if (error === 'debes_iniciar_sesion') {
+            swalRapido.fire({ icon: 'warning', title: 'ACCESO RESTRINGIDO', text: 'Debes iniciar sesión para validar tu código de acceso anticipado.', borderRadius: '0' });
+        } else if (error === 'codigo_invalido') {
+            swalRapido.fire({ icon: 'error', title: 'CÓDIGO NO VÁLIDO', text: 'El código introducido es incorrecto o no pertenece a tu cuenta.' });
+        } else if (error === 'codigo_usado') {
+            swalRapido.fire({ icon: 'info', title: 'CÓDIGO AGOTADO', text: 'Este código ya ha sido utilizado anteriormente.' });
+        } else if (error === 'codigo_existente') { // ¡LA NUEVA DE LA NEWSLETTER!
+            swalRapido.fire({ icon: 'warning', title: 'Ya estás en la lista', text: 'Este correo ya ha recibido un código de bienvenida anteriormente.' });
+        }
+    }
 
-
+    // 2. ALERTAS INYECTADAS POR PHP DIRECTAMENTE (Variables globales)
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
             swalRapido.fire({
                 icon: 'success',
-                title: '¡Hola, ' + nombreUsuario + '!',
+                title: '¡Hola, ' + (typeof nombreUsuario !== 'undefined' ? nombreUsuario : '') + '!',
                 text: 'Has iniciado sesión correctamente.',
                 timer: 3000,
                 showConfirmButton: false
             });
         } else if (bienvenidoAlerta === 'false') {
-            swalRapido.fire({
-                icon: 'error',
-                title: 'Error de acceso',
-                text: 'El email o la contraseña son incorrectos.'
-            });
+            swalRapido.fire({ icon: 'error', title: 'Error de acceso', text: 'El email o la contraseña son incorrectos.' });
         }
     }
 
     if (typeof sesionCerradaAlerta !== 'undefined' && sesionCerradaAlerta === 'true') {
-        swalRapido.fire({
-            icon: 'info',
-            title: '¡Hasta pronto!',
-            text: 'Has cerrado sesión correctamente de forma segura.',
-            timer: 3000,
-            showConfirmButton: false
-        });
+        swalRapido.fire({ icon: 'info', title: '¡Hasta pronto!', text: 'Has cerrado sesión correctamente de forma segura.', timer: 3000, showConfirmButton: false });
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-
-    if (urlParams.has('error')) {
-    const error = urlParams.get('error');
-    if (error === 'debes_iniciar_sesion') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'ACCESO RESTRINGIDO',
-            text: 'Debes iniciar sesión para validar tu código de acceso anticipado.',
-            confirmButtonColor: '#000',
-            borderRaidus: '0'
-        });
-    } else if (error === 'codigo_invalido') {
-        Swal.fire({
-            icon: 'error',
-            title: 'CÓDIGO NO VÁLIDO',
-            text: 'El código introducido es incorrecto o no pertenece a tu cuenta.',
-            confirmButtonColor: '#000'
-        });
-    } else if (error === 'codigo_usado') {
-        Swal.fire({
-            icon: 'info',
-            title: 'CÓDIGO AGOTADO',
-            text: 'Este código ya ha sido utilizado anteriormente.',
-            confirmButtonColor: '#000'
-        });
+    // Opcional y muy pro: Limpiar la URL para que no vuelva a saltar si el usuario recarga la página
+    if (urlParams.has('mensaje') || urlParams.has('error')) {
+        window.history.replaceState(null, null, window.location.pathname);
     }
-}
 });
 
 

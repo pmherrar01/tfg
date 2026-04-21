@@ -29,9 +29,10 @@ if (isset($_SESSION['usuario_id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $email = isset($_POST["email"]) ? $_POST["email"] : "";
+    $email = trim($_POST["email"]);
 
-    if (!$usu->comprobarDescuento($email)) {
+    if(!empty($email)){
+        if (!$usu->comprobarDescuento($email)) {
 
         $codigo = $usu->generarCodigoDescuento();
         $usu->crearCodigo($codigo, $email, "descuento");
@@ -59,4 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: index.php?error=codigo_existente");
             exit;
         }
+    }
+
+    
 }
