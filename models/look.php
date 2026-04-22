@@ -154,6 +154,22 @@ class Look{
         }
     }
 
+    public function obtenerTodosLosLooks() {
+        $sql = "SELECT l.id as look_id, 
+                       GROUP_CONCAT(CONCAT(p.nombre, ' (Color: ', c.nombre, ')') SEPARATOR ', ') as composicion
+                FROM looks l
+                INNER JOIN look_prendas lp ON l.id = lp.look_id
+                INNER JOIN productos p ON lp.producto_id = p.id
+                INNER JOIN colores c ON lp.color_id = c.id
+                WHERE l.activo = 1
+                GROUP BY l.id";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
 
 ?>

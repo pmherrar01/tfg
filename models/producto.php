@@ -607,7 +607,7 @@ class Producto
 
 public function buscarPorNombreChatBot($nombreABuscar)
     {
-        $sql = "SELECT p.id, p.nombre, p.precio, c.nombre AS color_nombre, 
+        $sql = "SELECT p.id, p.nombre, p.descripcion, p.precio, c.nombre AS color_nombre, 
                        MIN(i.url_imagen) AS url_imagen,
                        GROUP_CONCAT(CONCAT(pt.talla, ': ', pt.stock, ' unidades') SEPARATOR ' | ') AS tallas_stock
                 FROM productos p
