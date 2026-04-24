@@ -980,3 +980,71 @@ footer a:hover {
 #chatbot-send-btn:hover {
     background-color: #333;
 }
+
+/* =========================================
+   ESTILOS ESPECÍFICOS DEL PANEL DE ADMIN
+========================================= */
+
+.admin-body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8f9fa; /* Fondo gris muy clarito */
+}
+
+/* El menú lateral oscuro */
+.sidebar-admin {
+    min-height: 100vh;
+    background-color: #000000;
+    padding-top: 2rem;
+    position: sticky;
+    top: 0;
+}
+
+/* Enlaces del menú lateral */
+.admin-nav-link {
+    color: #adb5bd; /* Gris clarito */
+    font-weight: 500;
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+    transition: all 0.3s;
+}
+
+/* Efecto hover en el menú */
+.admin-nav-link:hover, 
+.admin-nav-link.active {
+    color: white !important;
+    background-color: #1a1a1a;
+}
+
+.admin-nav-link i {
+    margin-right: 10px;
+}
+
+/* Espaciado del contenido central */
+.admin-content {
+    padding: 2rem;
+}
+
+/* Tarjetas y Tablas del Admin */
+.admin-card {
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.admin-table thead {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Botones genéricos del admin */
+.btn-admin-black {
+    background-color: #000;
+    color: #fff;
+    border-radius: 0;
+    transition: background-color 0.3s;
+}
+
+.btn-admin-black:hover {
+    background-color: #333;
+    color: #fff;
+}

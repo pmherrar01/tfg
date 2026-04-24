@@ -19,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
         ]);
 
         $config = parse_ini_file(__DIR__ . '/../config/config.ini');
-        $urlWebhook = $config['base_url'] . $config['recuperarPssword'];
+        $urlWebhook = $config['base_url'] . $config['recuperarPassword'];
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);

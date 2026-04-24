@@ -105,8 +105,14 @@ document.addEventListener("DOMContentLoaded", function () {
             swalRapido.fire({ icon: 'info', title: '¡Inicia Sesión!', text: 'Por favor, debes iniciar sesión o registrarte antes de poder tramitar tu pedido.' });
         } else if (mensaje === 'passwordActualizada') {
             swalRapido.fire({ icon: 'success', title: '¡Contraseña actualizada!', text: 'Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión.' });
-        } else if (mensaje === 'codigo_enviado') { // ¡LA NUEVA DE LA NEWSLETTER!
+        } else if (mensaje === 'codigo_enviado') {
             swalRapido.fire({ icon: 'success', title: '¡Revisa tu bandeja!', text: 'Te acabamos de enviar tu código del 10% de descuento.' });
+        } else if (mensaje === 'error_peso') {
+            swalRapido.fire({ icon: 'error', title: '¡Foto demasiado grande!', text: 'La imagen que intentas subir pesa más de 2MB. Por favor, recórtala o usa una foto más pequeña.' });
+        } else if (mensaje === 'error_subida') {
+            swalRapido.fire({ icon: 'error', title: 'Error de servidor', text: 'No se pudo guardar la imagen. Revisa los permisos de la carpeta.' });
+        } else if (mensaje === 'prenda_subida') {
+            swalRapido.fire({ icon: 'success', title: '¡Prenda Subida!', text: 'Tu prenda se ha publicado correctamente en la sección de Segunda Mano.' });
         }
     }
 
@@ -130,6 +136,8 @@ document.addEventListener("DOMContentLoaded", function () {
             swalRapido.fire({ icon: 'info', title: 'CÓDIGO AGOTADO', text: 'Este código ya ha sido utilizado anteriormente.' });
         } else if (error === 'codigo_existente') { // ¡LA NUEVA DE LA NEWSLETTER!
             swalRapido.fire({ icon: 'warning', title: 'Ya estás en la lista', text: 'Este correo ya ha recibido un código de bienvenida anteriormente.' });
+        }else if (error === "noAdmin"){
+            swalRapido.fire({ icon: 'warning', title: 'No eres admin', text: 'No tienes acceso, no eres administrador' });
         }
     }
 
