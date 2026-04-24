@@ -525,6 +525,7 @@ class Producto
             $sentencia->execute([":idProducto" => $idProducto]);
             return $sentencia->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             return [];
         }
     }
@@ -536,7 +537,7 @@ class Producto
             $funcionSql = "MIN";
         }
         try {
-            // Añadimos el INNER JOIN aquí también
+           
             $sql = "SELECT {$funcionSql}(p.precio) as precio_limite 
                     FROM productos p 
                     INNER JOIN colecciones col ON p.coleccion_id = col.id 
@@ -547,6 +548,7 @@ class Producto
             $precio = isset($resultado['precio_limite']) ? $resultado['precio_limite'] : 0;
             return round((float)$precio, 2);
         } catch (PDOException $e) {
+            error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             return 0;
         }
     }
@@ -581,7 +583,7 @@ class Producto
             ]);
             return true;
         } catch (PDOException $e) {
-            $errores = [$e];
+            error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             return false;
         }
     }
@@ -671,6 +673,7 @@ public function buscarPorNombreChatBot($nombreABuscar)
             $this->conexionDataBase->commit();
             return true;
         } catch (Exception $e) {
+            error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             header("Location: ../segundaMano.php");
             return false;
         }
@@ -744,7 +747,8 @@ public function buscarPorNombreChatBot($nombreABuscar)
             $this->conexionDataBase->commit();
 
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             header("Location: perfil.php?seccion=prendas");
             return false;
         }

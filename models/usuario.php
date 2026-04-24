@@ -276,7 +276,8 @@ class Usuario
             ]);
 
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -295,7 +296,8 @@ class Usuario
             } else {
                 return false;
             }
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -327,7 +329,8 @@ class Usuario
             ]);
 
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -344,7 +347,8 @@ class Usuario
             ]);
 
             return true;
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -362,7 +366,8 @@ class Usuario
             } else {
                 return false;
             }
-        } catch (PDOException) {
+        } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -385,6 +390,7 @@ class Usuario
 
             return $token;
         } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return false;
         }
     }
@@ -420,6 +426,7 @@ class Usuario
             }
             return "invalido";
         } catch (PDOException $e) {
+            error_log("Error en Usuario->registrar: " . $e->getMessage());
             return "invalido";
         }
     }
