@@ -49,9 +49,10 @@ try {
         "articulos" => count($_SESSION["carrito"]) 
     ];
 
-    $urlWebhookPedido = "http://localhost:5678/webhook/confirmacionCompra"; 
+    $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+    $urlWebhook = $config['base_url'] . $config['confirmacionCompra'];
 
-    $curl = curl_init($urlWebhookPedido);
+    $curl = curl_init($urlWebhook);
     curl_setopt($curl, CURLOPT_POST, true); 
     curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosPedido)); 
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));

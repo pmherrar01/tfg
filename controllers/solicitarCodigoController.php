@@ -18,7 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $usu -> crearCodigo($codigoUnico,$email);
 
-            $urlWebhook = "http://localhost:5678/webhook/solicitarCodigo";
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['solicitarCodigo'];
 
             $curl = curl_init($urlWebhook);
             curl_setopt($curl, CURLOPT_POST, true);

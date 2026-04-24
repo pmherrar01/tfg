@@ -41,9 +41,10 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
             "fecha" => date("d/m/y")
         ];
 
-        $urlWebhookSegundaMano = "http://localhost:5678/webhook/subidaPrendaSegundaMano";
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['subidaPrendaSegundaMano'];
 
-        $curl = curl_init($urlWebhookSegundaMano);
+        $curl = curl_init($urlWebhook);
             curl_setopt($curl, CURLOPT_POST, true); 
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosPedidoSegundaMano)); 
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));

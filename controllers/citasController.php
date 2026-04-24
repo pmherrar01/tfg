@@ -52,7 +52,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "motivo" => $motivoFinal
             ];
 
-        $urlWebhookCitas = "http://localhost:5678/webhook/citaNueva"; 
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['citaNueva'];
 
         $curl = curl_init($urlWebhookCitas);
         

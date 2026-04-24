@@ -18,7 +18,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["accion"]) && $_POST["ac
             "token" => $token
         ]);
 
-$urlWebhook = "http://localhost:5678/webhook/recuperarPassword";
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['recuperarPssword'];
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
@@ -33,7 +34,6 @@ $urlWebhook = "http://localhost:5678/webhook/recuperarPassword";
             die('Error catastrófico de cURL: ' . curl_error($curl));
         }
         
-        curl_close($curl);
 
         header("Location: ../recuperarPassword.php?mensaje=correoEnviado");
         exit;

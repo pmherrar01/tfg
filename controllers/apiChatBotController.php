@@ -33,9 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             "sessionId" => session_id()
         ];
 
-        $urlWebhookChatbot = "http://165.232.96.8:5678/webhook/chatBot"; 
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['chatbot'];
 
-        $curl = curl_init($urlWebhookChatbot);
+        $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosN8n));
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));

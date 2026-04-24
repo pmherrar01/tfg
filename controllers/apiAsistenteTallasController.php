@@ -7,7 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($datos['altura']) && isset($datos['peso'])) {
         
-        $urlWebhook = "http://localhost:5678/webhook/asistenteTallas";
+        $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+        $urlWebhook = $config['base_url'] . $config['asistenteTallas'];
+
+
 
         $curl = curl_init($urlWebhook);
         curl_setopt($curl, CURLOPT_POST, true);
