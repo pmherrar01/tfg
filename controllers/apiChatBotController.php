@@ -12,17 +12,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         try {
             $db = new Database();
-            $conexion = $db->conectar();
+            $conexion = $db->conectar(); 
             
-            $usuarioId = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
+            $usuarioId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            $sessionId = session_id(); 
             
-            $sqlLog = "INSERT INTO chat_logs (usuario_id, mensaje) VALUES (:user_id, :mensaje)";
-            $stmtLog = $conexion->prepare($sqlLog);
-            $stmtLog->execute([
+            $sql = "INSERT INTO chat_logs (usuario_id, session_id, mensaje) VALUES (:user_id, :session_id, :mensaje)";
+            $sentencia = $conexion->prepare($sql);
+            $sentencia->execute([
                 ':user_id' => $usuarioId,
+                ':session_id' => $sessionId,
                 ':mensaje' => $mensajeUsuario
             ]);
         } catch (Exception $e) {
+            error_log("Error guardando log de chat: " . $e->getMessage());
         }
 
         $datosN8n = [
