@@ -113,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
             swalRapido.fire({ icon: 'error', title: 'Error de servidor', text: 'No se pudo guardar la imagen. Revisa los permisos de la carpeta.' });
         } else if (mensaje === 'prenda_subida') {
             swalRapido.fire({ icon: 'success', title: '¡Prenda Subida!', text: 'Tu prenda se ha publicado correctamente en la sección de Segunda Mano.' });
+        } else if (mensaje === 'estado_actualizado') {
+            swalRapido.fire({ icon: 'success', title: '¡Actualizado!', text: 'El estado del pedido se ha modificado correctamente.' });
         }
     }
 

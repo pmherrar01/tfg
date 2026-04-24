@@ -13,7 +13,7 @@ $db = new Database();
 $conexion = $db->conectar();
 $pedido = new Pedido($conexion);
 
-if ($_SERVER["REQUEST_METHOD" === "POST"]) {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $idPedido = isset($_POST["idPedido"]) ? $_POST["idPedido"] : 0;
     $nuevoEstado = isset($_POST["nuevoEstado"]) ? trim($_POST["nuevoEstado"]) : "";
@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD" === "POST"]) {
     switch ($accion) {
         case 'cambiarEstadoPedido':
             $pedido->actualizarEstadoPedido($idPedido, $nuevoEstado);
+            header("Location: ../admin/admin.php?seccion=pedidos&mensaje=estado_actualizado");
             break;
 
         default:
