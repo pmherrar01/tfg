@@ -317,6 +317,21 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function listarInventarioCompleto()
+    {
+        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja_porcentaje, 
+                       c.id as color_id, c.color as nombre_color, 
+                       t.talla, t.stock 
+                FROM prendas p
+                LEFT JOIN colores c ON p.id = c.prenda_id
+                LEFT JOIN tallas t ON c.id = t.color_id
+                ORDER BY p.id DESC, c.color ASC, t.talla ASC";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function listarTiposPrendas()
     {
         $sql = "SELECT id, nombre from tipos_producto";

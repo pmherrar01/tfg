@@ -18,7 +18,7 @@ $idUsu = $_SESSION["usuario_id"];
 $datosUsu = $usu->obtenerDatosUsu($idUsu);
 $pedido = new Pedido($conexion);
 $producto  = new Producto($conexion);
-$listaProductos = $producto->listarProductos();
+$listaProductos = $producto->listarInventarioCompleto();
 
 if($datosUsu["rol_id"] != 1){
     header("Location: ../index.php?error=noAdmin");
@@ -163,7 +163,60 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                             echo '</div>';
                             break;
                         case 'productos':
-                            echo '<h3>Gestión de Productos e Inventario</h3>';
+
+                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '  <h3>Gestión de Productos e Inventario</h3>';
+                            echo '  <a href="#" class="btn btn-outline-dark"><i class="bi bi-plus-lg"></i> Nuevo Producto</a>'; 
+
+                            echo '<form action="../controllers/adminController.php" method="POST">';
+                            echo '<input type="hidden" name="accion" value="actualizarInventario">';
+                            
+                            echo '<div class="table-responsive bg-white p-3 admin-card">';
+                            echo '<table class="table admin-table table-hover align-middle table-sm">'; 
+                            echo '<thead>';
+                            echo '  <tr>
+                                        <th>ID</th>
+                                        <th>Prenda</th>
+                                        <th>Color</th>
+                                        <th>Talla</th>
+                                        <th>Stock Real</th>
+                                        <th>Rebaja (%)</th>
+                                    </tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
+
+                            foreach ($listaProductos as $p) {
+                                $claveUnica = $p['prenda_id'] . '_' . $p['color_id'] . '_' . $p['talla'];
+
+                                echo '<tr>';
+                                echo '  <td>#' . $p['prenda_id'] . '</td>';
+                                echo '  <td class="fw-bold text-uppercase" style="font-size: 0.85rem;">' . $p['nombre'] . '</td>';
+                                echo '  <td>' . $p['nombre_color'] . '</td>';
+                                echo '  <td><span class="badge bg-secondary">' . $p['talla'] . '</span></td>';
+                                
+                                echo '  <td style="width: 120px;">
+                                            <input type="number" name="stock[' . $claveUnica . ']" value="' . $p['stock'] . '" class="form-control form-control-sm text-center">
+                                        </td>';
+                                
+                                echo '  <td style="width: 120px;">
+                                            <div class="input-group input-group-sm">
+                                                <input type="number" name="rebaja[' . $p['prenda_id'] . ']" value="' . $p['rebaja_porcentaje'] . '" class="form-control text-center" min="0" max="100">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </td>';
+                                echo '</tr>';
+                            }
+
+                            echo '</tbody>';
+                            echo '</table>';
+                            echo '</div>';
+
+                            echo '<div class="d-flex justify-content-end mt-3">';
+                            echo '  <button type="submit" class="btn btn-admin-black px-5 py-2">💾 Guardar Cambios de Inventario</button>';
+                            echo '</div>';
+                            echo '</form>';
+                            
+                            break;
 
                             break;
                         case 'colecciones':
