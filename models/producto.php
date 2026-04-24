@@ -319,12 +319,12 @@ class Producto
 
     public function listarInventarioCompleto()
     {
-        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja_porcentaje, 
+        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, 
                        c.id as color_id, c.color as nombre_color, 
                        t.talla, t.stock 
-                FROM prendas p
-                LEFT JOIN colores c ON p.id = c.prenda_id
-                LEFT JOIN tallas t ON c.id = t.color_id
+                FROM productos p
+                LEFT JOIN productos_colores c ON p.id = c.producto_id
+                LEFT JOIN productos_tallas t ON c.id = t.color_id
                 ORDER BY p.id DESC, c.color ASC, t.talla ASC";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
