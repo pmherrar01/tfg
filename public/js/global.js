@@ -143,6 +143,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    
+
     // 2. ALERTAS INYECTADAS POR PHP DIRECTAMENTE (Variables globales)
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
@@ -162,9 +164,11 @@ document.addEventListener("DOMContentLoaded", function () {
         swalRapido.fire({ icon: 'info', title: '¡Hasta pronto!', text: 'Has cerrado sesión correctamente de forma segura.', timer: 3000, showConfirmButton: false });
     }
 
-    // Opcional y muy pro: Limpiar la URL para que no vuelva a saltar si el usuario recarga la página
     if (urlParams.has('mensaje') || urlParams.has('error')) {
-        window.history.replaceState(null, null, window.location.pathname);
+        urlParams.delete('mensaje');
+        urlParams.delete('error');
+        const parametrosRestantes = urlParams.toString() ? '?' + urlParams.toString() : '';
+        window.history.replaceState(null, null, window.location.pathname + parametrosRestantes);
     }
 });
 

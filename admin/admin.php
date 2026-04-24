@@ -4,6 +4,7 @@ session_start();
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/pedido.php";
+require_once __DIR__ . "/../models/producto.php";
 
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: ../index.php?error=debes_iniciar_sesion");
@@ -16,6 +17,8 @@ $usu = new Usuario($conexion);
 $idUsu = $_SESSION["usuario_id"];
 $datosUsu = $usu->obtenerDatosUsu($idUsu);
 $pedido = new Pedido($conexion);
+$producto  = new Producto($conexion);
+$listaProductos = $producto->listarProductos();
 
 if($datosUsu["rol_id"] != 1){
     header("Location: ../index.php?error=noAdmin");
@@ -33,6 +36,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
     <title>HERROR | Panel de Administración</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="/public/css/style.css">
@@ -160,6 +164,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                             break;
                         case 'productos':
                             echo '<h3>Gestión de Productos e Inventario</h3>';
+
                             break;
                         case 'colecciones':
                             echo '<h3>Gestión de Colecciones</h3>';
