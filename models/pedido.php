@@ -78,11 +78,25 @@ class Pedido
         return true;
     }
 
-    public function listarPedidos($idUsu)
+    public function listarPedidos($idUsu = null)
     {
-        $sql = "SELECT * from pedidos where usuario_id = :idUsu order by fecha DESC";
+        $sql = "SELECT pedidos.*, usuarios.nombre AS nombre_cliente 
+                FROM pedidos 
+                JOIN usuarios ON pedidos.usuario_id = usuarios.id ";
+
+        if ($idUsu !== null) {
+            $sql .= "WHERE pedidos.usuario_id = :idUsu ";
+        }
+
+        $sql .= "ORDER BY pedidos.fecha DESC";
+
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute([":idUsu" => $idUsu]);
+
+        if ($idUsu !== null) {
+            $sentencia->execute([":idUsu" => $idUsu]);
+        } else {
+            $sentencia->execute(); 
+        }
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -99,5 +113,16 @@ class Pedido
         $sentencia->execute([":idPedido" => $idPedido]);
 
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function actualizarEstadoPedido($idPedido, $estado){
+
+    $sql = "UPDATE pedidos SET estado = :estado WHERE id = :idPedido";
+    $sentencia = $this->conexionDataBase->prepare($sql);
+    $sentencia -> execute([
+        ":estado" => $estado,
+        ":idPedido" => $idPedido
+    ]);
+
     }
 }

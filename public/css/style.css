@@ -993,7 +993,7 @@ footer a:hover {
 /* El menú lateral oscuro */
 .sidebar-admin {
     min-height: 100vh;
-    background-color: #000000;
+    background-color: var(--color-principal);
     padding-top: 2rem;
     position: sticky;
     top: 0;

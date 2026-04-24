@@ -3,6 +3,7 @@ session_start();
 
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
+require_once __DIR__ . "/../models/pedido.php";
 
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: ../index.php?error=debes_iniciar_sesion");
@@ -10,9 +11,11 @@ if (!isset($_SESSION["usuario_id"])) {
 }
 
 $db = new Database();
-$usu = new Usuario($db->conectar());
+$conexion = $db -> conectar();
+$usu = new Usuario($conexion);
 $idUsu = $_SESSION["usuario_id"];
 $datosUsu = $usu->obtenerDatosUsu($idUsu);
+$pedido = new Pedido($conexion);
 
 if($datosUsu["rol_id"] != 1){
     header("Location: ../index.php?error=noAdmin");
@@ -32,7 +35,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 <body class="admin-body">
 
@@ -76,12 +79,12 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                 
                 <ul class="nav flex-column mb-2">
                     <li class="nav-item">
-                        <a class="nav-link admin-nav-link text-info" href="index.php">
+                        <a class="nav-link admin-nav-link text-info" href="../index.php">
                             <i class="bi bi-arrow-left-circle"></i> Volver a la Tienda
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link admin-nav-link text-danger" href="controllers/usuarioController.php?accion=cerrar">
+                        <a class="nav-link admin-nav-link text-danger" href="../controllers/usuarioController.php?accion=cerrar">
                             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
                         </a>
                     </li>
@@ -106,11 +109,56 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                             echo '<div class="alert alert-dark">Bienvenido al panel de control. Selecciona una opción en el menú lateral.</div>';
                             break;
                         case 'pedidos':
-                            // Aquí llamaremos a tu lógica de pedidos
-                            echo '<h3>Gestión de Pedidos</h3>';
+
+                            $listaPedidos = $pedido->listarPedidos();
+                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '  <h3>Gestión de Pedidos</h3>';
+                            echo '  <span class="badge bg-dark fs-6">Total: ' . count($listaPedidos) . ' pedidos</span>';
+                            echo '</div>';
+                            echo '<div class="table-responsive bg-white p-3 admin-card">';
+                            echo '<table class="table admin-table table-hover align-middle">';
+                            echo '<thead>';
+                            echo '  <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha</th>
+                                        <th>Total</th>
+                                        <th>Estado Actual</th>
+                                    </tr>';
+                            echo '</thead>';
+                            echo '<tbody>';
+                            foreach ($listaPedidos as $p) {
+                               echo '<tr>';
+                                echo '  <td class="fw-bold">#' . $p['id'] . '</td>';
+                                echo '  <td>' . $p['nombre_cliente'] . '</td>'; 
+                                echo '  <td>' . $p['fecha'] . '</td>';
+                                
+                                echo '  <td>' . $p['total'] . ' €</td>'; 
+                                
+                                echo '  <td>';
+                                echo '      <form action="../controllers/adminController.php" method="POST" class="d-flex gap-2">';
+                                echo '          <input type="hidden" name="accion" value="cambiarEstadoPedido">';
+                                echo '          <input type="hidden" name="idPedido" value="' . $p['id'] . '">';
+                                echo '          <select name="nuevoEstado" class="form-select form-select-sm" style="width: auto;">';
+                                
+                                $estadosPosibles = ['pendiente', 'pagado', 'enviado', 'entregado', 'cancelado'];
+                                foreach ($estadosPosibles as $estado) {
+                                    $seleccionado = ($p['estado'] === $estado) ? 'selected' : '';
+                                    echo "          <option value='$estado' $seleccionado>$estado</option>";
+                                }
+                                
+                                echo '          </select>';
+                                echo '          <button type="submit" class="btn btn-sm btn-admin-black">Actualizar</button>';
+                                echo '      </form>';
+                                echo '  </td>';
+                                echo '</tr>';
+                            }
+
+                            echo '</tbody>';
+                            echo '</table>';
+                            echo '</div>';
                             break;
                         case 'productos':
-                            // Aquí la gestión de stock y rebajas
                             echo '<h3>Gestión de Productos e Inventario</h3>';
                             break;
                         case 'colecciones':
@@ -133,7 +181,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="public/js/global.js"></script>
+<script src="../public/js/global.js"></script>
 
 </body>
 </html>
