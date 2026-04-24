@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $config = parse_ini_file(__DIR__ . '/../config/config.ini');
         $urlWebhook = $config['base_url'] . $config['citaNueva'];
 
-        $curl = curl_init($urlWebhookCitas);
+        $curl = curl_init($urlWebhook);
         
         curl_setopt($curl, CURLOPT_POST, true); 
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosCita)); 

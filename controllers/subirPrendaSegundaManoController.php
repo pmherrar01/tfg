@@ -42,7 +42,7 @@ if( $_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION["usuario_id"])){
         ];
 
         $config = parse_ini_file(__DIR__ . '/../config/config.ini');
-        $urlWebhook = $config['base_url'] . $config['subidaPrendaSegundaMano'];
+        $urlWebhook = $config['base_url'] . $config['subirPrendaSegundaMano'];
 
         $curl = curl_init($urlWebhook);
             curl_setopt($curl, CURLOPT_POST, true); 
