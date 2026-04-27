@@ -317,19 +317,66 @@ class Producto
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function listarInventarioCompleto()
+public function listarInventarioCompleto()
     {
         $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, 
-                       c.id as color_id, c.color as nombre_color, 
-                       t.talla, t.stock 
+                       c.id as color_id, c.nombre as nombre_color, 
+                       t.talla, IFNULL(t.stock, 0) as stock 
                 FROM productos p
-                LEFT JOIN productos_colores c ON p.id = c.producto_id
-                LEFT JOIN productos_tallas t ON c.id = t.color_id
-                ORDER BY p.id DESC, c.color ASC, t.talla ASC";
+                LEFT JOIN producto_colores pc ON p.id = pc.producto_id
+                LEFT JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN producto_tallas t ON p.id = t.producto_id AND c.id = t.color_id
+                ORDER BY p.id DESC, c.nombre ASC, t.talla ASC";
 
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function contarInventarioCompleto()
+    {
+        $sql = "SELECT COUNT(*) as total 
+                FROM productos p
+                LEFT JOIN producto_colores pc ON p.id = pc.producto_id
+                LEFT JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN producto_tallas t ON p.id = t.producto_id AND c.id = t.color_id";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+        $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+        return $resultado['total'];
+    }
+
+public function listarInventarioCompletoPaginado($limite, $offset)
+    {
+        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, p.activo, 
+                       c.id as color_id, c.nombre as nombre_color, 
+                       t.talla, IFNULL(t.stock, 0) as stock 
+                FROM productos p
+                LEFT JOIN producto_colores pc ON p.id = pc.producto_id
+                LEFT JOIN colores c ON pc.color_id = c.id
+                LEFT JOIN producto_tallas t ON p.id = t.producto_id AND c.id = t.color_id
+                ORDER BY p.id DESC, c.nombre ASC, t.talla ASC
+                LIMIT :limite OFFSET :offset";
+
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+        $sentencia->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $sentencia->execute();
+        
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function actualizarDatosBasicosPrenda($id, $rebaja, $activo) {
+        $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo WHERE id = :id";
+        $stmt = $this->conexionDataBase->prepare($sql);
+        return $stmt->execute([':rebaja' => $rebaja, ':activo' => $activo, ':id' => $id]);
+    }
+
+    public function actualizarStockEspecifico($idP, $idC, $talla, $stock) {
+        $sql = "UPDATE producto_tallas SET stock = :stock 
+                WHERE producto_id = :idP AND color_id = :idC AND talla = :talla";
+        $stmt = $this->conexionDataBase->prepare($sql);
+        return $stmt->execute([':stock' => $stock, ':idP' => $idP, ':idC' => $idC, ':talla' => $talla]);
     }
 
     public function listarTiposPrendas()
