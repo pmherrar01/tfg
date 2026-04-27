@@ -31,29 +31,52 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $rebajas = isset($_POST['rebaja']) ? $_POST['rebaja'] : [];
             $estados = isset($_POST['activo']) ? $_POST['activo'] : [];
             $precios = isset($_POST['precio']) ? $_POST['precio'] : []; 
-            $colecciones = isset($_POST['coleccion']) ? $_POST['coleccion'] : []; // NUEVO ARRAY
+            $colecciones = isset($_POST['coleccion']) ? $_POST['coleccion'] : []; 
 
             $pagRetorno = isset($_POST['pagina_retorno']) ? $_POST['pagina_retorno'] : 1;
 
             $prodObj = new Producto($conexion);
 
-            // Procesamos datos maestros de la prenda
             foreach ($rebajas as $idPrenda => $valorRebaja) {
                 $estadoActivo = $estados[$idPrenda];
                 $precioActualizado = isset($precios[$idPrenda]) ? $precios[$idPrenda] : null;
-                $coleccionActualizada = isset($colecciones[$idPrenda]) ? $colecciones[$idPrenda] : null; // Capturamos la colección
+                $coleccionActualizada = isset($colecciones[$idPrenda]) ? $colecciones[$idPrenda] : null; 
                 
-                // Le pasamos la colección como 5º parámetro
                 $prodObj->actualizarDatosBasicosPrenda($idPrenda, $valorRebaja, $estadoActivo, $precioActualizado, $coleccionActualizada);
             }
 
-            // Procesamos Stocks
             foreach ($stocks as $clave => $cantidad) {
                 list($idP, $idC, $talla) = explode('_', $clave);
                 $prodObj->actualizarStockEspecifico($idP, $idC, $talla, $cantidad);
             }
 
             header("Location: ../admin/admin.php?seccion=productos&pagina=$pagRetorno&mensaje=inventario_actualizado");
+            exit();
+            break;
+        case 'crearColeccion':
+            $nombre = isset($_POST['nombre_coleccion']) ? trim($_POST['nombre_coleccion']) : "";
+            $descripcion = isset($_POST['descripcion_coleccion']) ? trim($_POST['descripcion_coleccion']) : "";
+            
+            if (!empty($nombre)) {
+                $prodObj = new Producto($conexion);
+                $prodObj->crearColeccion($nombre, $descripcion);
+                header("Location: ../admin/admin.php?seccion=colecciones&mensaje=coleccion_creada");
+            } else {
+                header("Location: ../admin/admin.php?seccion=colecciones&error=nombre_vacio");
+            }
+            exit();
+            break;
+
+        case 'actualizarColeccion':
+            $idCol = isset($_POST['id_coleccion']) ? $_POST['id_coleccion'] : 0;
+            $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : "";
+            $descripcion = isset($_POST['descripcion']) ? trim($_POST['descripcion']) : "";
+            $nuevoEstado = isset($_POST['nuevo_estado']) ? $_POST['nuevo_estado'] : 2;
+            
+            $prodObj = new Producto($conexion);
+            $prodObj->actualizarEstadoColeccion($idCol, $nombre, $descripcion, $nuevoEstado);
+            
+            header("Location: ../admin/admin.php?seccion=colecciones&mensaje=coleccion_actualizada");
             exit();
             break;
 

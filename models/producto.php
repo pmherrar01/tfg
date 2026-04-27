@@ -423,12 +423,41 @@ public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = nu
         return $sentencia->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function listarColecciones()
+public function listarColecciones($modoAdmin = false)
     {
-        $sql = "SELECT id, nombre from colecciones where activa = 1";
+        if ($modoAdmin) {
+            $sql = "SELECT * FROM colecciones  ORDER BY nombre ASC";
+        } else {
+            $sql = "SELECT * FROM colecciones WHERE activa = 1 ORDER BY nombre ASC";
+        }
+        
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function crearColeccion($nombre, $descripcion)
+    {
+        $sql = "INSERT INTO colecciones (nombre, descripcion, activa) VALUES (:nombre, :descripcion, 2)";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([
+            ':nombre' => $nombre,
+            ':descripcion' => $descripcion
+        ]);
+    }
+
+    public function actualizarEstadoColeccion($id, $nombre, $descripcion, $estado)
+    {
+        $sql = "UPDATE colecciones 
+                SET nombre = :nombre, descripcion = :descripcion, activa = :estado 
+                WHERE id = :id";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([
+            ':nombre' => $nombre,
+            ':descripcion' => $descripcion,
+            ':estado' => $estado,
+            ':id' => $id
+        ]);
     }
 
     public function obtenerProducto($id)

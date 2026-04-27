@@ -23,7 +23,7 @@ $datosUsu = $usu->obtenerDatosUsu($idUsu);
 $pedido = new Pedido($conexion);
 $producto  = new Producto($conexion);
 $listaProductos = $producto->listarInventarioCompleto();
-$listaColeciones = $producto->listarColecciones();
+$listaColeciones = $producto->listarColecciones(true);
 
 if ($datosUsu["rol_id"] != 1) {
     header("Location: ../index.php?error=noAdmin");
@@ -170,175 +170,234 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                 echo '</div>';
                                 break;
                             case 'productos':
-                            $prod = new Producto($db->conectar());
+                                $prod = new Producto($db->conectar());
 
-                            // --- 1. LÓGICA DE PAGINACIÓN POR MODELO DE PRODUCTO ---
-                            $productosPorPagina = 5; 
-                            $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-                            if ($paginaActual < 1) $paginaActual = 1;
+                                $productosPorPagina = 5;
+                                $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+                                if ($paginaActual < 1) $paginaActual = 1;
 
-                            $totalProductos = $prod->contarProductosTotales();
-                            $totalPaginas = ceil($totalProductos / $productosPorPagina);
-                            $offset = ($paginaActual - 1) * $productosPorPagina;
+                                $totalProductos = $prod->contarProductosTotales();
+                                $totalPaginas = ceil($totalProductos / $productosPorPagina);
+                                $offset = ($paginaActual - 1) * $productosPorPagina;
 
-                            // Obtenemos los productos con sus variantes (usa la función que corregimos ayer)
-                            $listaInventario = $prod->listarProductosConVariantesPaginados($productosPorPagina, $offset);
+                                $listaInventario = $prod->listarProductosConVariantesPaginados($productosPorPagina, $offset);
 
-                            // --- 2. AGRUPAR VARIANTES DENTRO DE CADA PRODUCTO ---
-                            $productosAgrupados = [];
-                            if (!empty($listaInventario)) {
-                                foreach ($listaInventario as $item) {
-                                    $pId = $item['prenda_id'];
-                                    if (!isset($productosAgrupados[$pId])) {
-                                        $productosAgrupados[$pId] = [
-                                            'nombre' => $item['nombre'],
-                                            'precio' => $item['precio'],
-                                            'rebaja' => $item['rebaja'],
-                                            'activo' => $item['activo'],
-                                            'coleccion_id' => $item['coleccion_id'],
-                                            'es_segunda_mano' => $item['es_segunda_mano'],
-                                            'nombre_dueno' => $item['nombre_dueno'],
-                                            'variantes' => []
-                                        ];
-                                    }
-                                    if ($item['color_id']) {
-                                        $productosAgrupados[$pId]['variantes'][] = [
-                                            'color_id' => $item['color_id'],
-                                            'nombre_color' => $item['nombre_color'],
-                                            'talla' => $item['talla'],
-                                            'stock' => $item['stock']
-                                        ];
-                                    }
-                                }
-                            }
-
-                            // --- 3. CABECERA (Botón a la derecha) ---
-                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
-                            echo '  <div>';
-                            echo '      <h3 class="fw-bold m-0 text-uppercase">Gestión de Inventario</h3>';
-                            echo '      <small class="text-muted">Mostrando ' . count($productosAgrupados) . ' de ' . $totalProductos . ' productos totales</small>';
-                            echo '  </div>';
-                            echo '  <a href="#" class="btn btn-admin-black px-4 py-2"><i class="bi bi-plus-lg me-2"></i> Añadir Prenda</a>';
-                            echo '</div>';
-
-                            // Inicio del Formulario Masivo
-                            echo '<form action="../controllers/adminController.php" method="POST">';
-                            echo '<input type="hidden" name="accion" value="actualizarInventarioMasivo">';
-                            echo '<input type="hidden" name="pagina_retorno" value="' . $paginaActual . '">';
-
-                            if (empty($productosAgrupados)) {
-                                echo '<div class="alert alert-secondary text-center py-5">No se han encontrado productos en esta página.</div>';
-                            } else {
-                                // --- 4. DIBUJAR LAS TARJETAS ---
-                                foreach ($productosAgrupados as $id => $datos) {
-                                    $esSegundaMano = ($datos['es_segunda_mano'] == 1);
-                                    // Borde de color según el tipo (Naranja para 2ª mano, Cian para oficial)
-                                    $borderStyle = $esSegundaMano ? 'border-left: 6px solid #fd7e14;' : 'border-left: 6px solid #0dcaf0;';
-
-                                    echo '<div class="card mb-4 border-0 shadow-sm admin-card" style="' . $borderStyle . '">';
-                                    
-                                    // CABECERA DE LA TARJETA (Datos maestros del producto)
-                                    echo '  <div class="card-header bg-dark text-white d-flex flex-wrap justify-content-between align-items-center py-3">';
-                                    echo '      <div class="d-flex align-items-center gap-3">';
-                                    echo '          <span class="text-secondary fw-bold">#' . $id . '</span>';
-                                    echo '          <h5 class="m-0 fw-bold text-uppercase fs-6">' . $datos['nombre'] . '</h5>';
-                                    
-                                    if ($esSegundaMano) {
-                                        echo '      <span class="badge bg-warning text-dark fw-bold px-2">2ª MANO</span>';
-                                        echo '      <small class="text-secondary d-none d-md-inline">Propietario: <b>' . ($datos['nombre_dueno'] ?? 'User') . '</b></small>';
-                                        echo '      <span class="badge bg-light text-dark fs-6">' . $datos['precio'] . ' €</span>';
-                                    } else {
-                                       echo '      <div style="width: 140px;" class="ms-1">';
-                                        echo '          <select name="coleccion[' . $id . ']" class="form-select form-select-sm border-0 bg-light text-dark fw-bold">';
-                                        echo '              <option value="">Sin colección</option>';
-                                        foreach ($listaColecciones as $col) {
-                                            $seleccionado = ($col['id'] == $datos['coleccion_id']) ? 'selected' : '';
-                                            echo '              <option value="' . $col['id'] . '" ' . $seleccionado . '>' . htmlspecialchars($col['nombre']) . '</option>';
+                                $productosAgrupados = [];
+                                if (!empty($listaInventario)) {
+                                    foreach ($listaInventario as $item) {
+                                        $pId = $item['prenda_id'];
+                                        if (!isset($productosAgrupados[$pId])) {
+                                            $productosAgrupados[$pId] = [
+                                                'nombre' => $item['nombre'],
+                                                'precio' => $item['precio'],
+                                                'rebaja' => $item['rebaja'],
+                                                'activo' => $item['activo'],
+                                                'coleccion_id' => $item['coleccion_id'],
+                                                'es_segunda_mano' => $item['es_segunda_mano'],
+                                                'nombre_dueno' => $item['nombre_dueno'],
+                                                'variantes' => []
+                                            ];
                                         }
-                                        echo '          </select>';
-                                        echo '      </div>';
-
-                                        echo '      <div class="input-group input-group-sm" style="width: 120px;">';
-                                        echo '          <input type="number" step="0.01" name="precio[' . $id . ']" value="' . $datos['precio'] . '" class="form-control text-center fw-bold border-0 bg-light text-dark">';
-                                        echo '          <span class="input-group-text bg-light border-0 fw-bold text-dark">€</span>';
-                                        echo '      </div>';
-                                    }
-                                    echo '      </div>';
-                                    
-                                    echo '      <div class="d-flex gap-3 align-items-center mt-3 mt-md-0">';
-                                    // REBAJA
-                                    echo '          <div class="input-group input-group-sm" style="width: 160px;">';
-                                    echo '              <span class="input-group-text bg-secondary text-white border-0 small">Rebaja</span>';
-                                    echo '              <input type="number" name="rebaja[' . $id . ']" value="' . $datos['rebaja'] . '" class="form-control text-center fw-bold" min="0" max="100">';
-                                    echo '              <span class="input-group-text bg-secondary text-white border-0">%</span>';
-                                    echo '          </div>';
-                                    // ESTADO ACTIVO/NO ACTIVO
-                                    echo '          <div style="width: 140px;">';
-                                    echo '              <select name="activo[' . $id . ']" class="form-select form-select-sm fw-bold border-0 ' . ($datos['activo'] == 1 ? 'text-success' : 'text-danger') . '">';
-                                    echo '                  <option value="1" ' . ($datos['activo'] == 1 ? 'selected' : '') . '>ACTIVO</option>';
-                                    echo '                  <option value="0" ' . ($datos['activo'] == 0 ? 'selected' : '') . '>OCULTO</option>';
-                                    echo '              </select>';
-                                    echo '          </div>';
-                                    echo '      </div>';
-                                    echo '  </div>';
-                                    
-                                    // CUERPO DE LA TARJETA (Tabla de variantes/stocks)
-                                    echo '  <div class="card-body p-0">';
-                                    echo '      <table class="table table-sm table-hover m-0 align-middle text-center">';
-                                    echo '          <thead class="table-light text-secondary small text-uppercase">';
-                                    echo '              <tr><th class="py-2">Color disponible</th><th>Talla</th><th style="width: 180px;">Stock en Almacén</th></tr>';
-                                    echo '          </thead>';
-                                    echo '          <tbody>';
-                                    
-                                    if (empty($datos['variantes'])) {
-                                        echo '<tr><td colspan="3" class="text-muted py-3">No hay variantes registradas para este producto.</td></tr>';
-                                    } else {
-                                        foreach ($datos['variantes'] as $v) {
-                                            $claveUnica = $id . '_' . $v['color_id'] . '_' . $v['talla'];
-                                            echo '<tr>';
-                                            echo '  <td class="fw-bold text-dark">' . $v['nombre_color'] . '</td>';
-                                            echo '  <td><span class="badge border border-dark text-dark px-3 py-1 rounded-0">' . ($v['talla'] ?: '-') . '</span></td>';
-                                            echo '  <td class="d-flex justify-content-center">';
-                                            echo '      <input type="number" name="stock[' . $claveUnica . ']" value="' . $v['stock'] . '" class="form-control form-control-sm text-center border-dark shadow-sm" style="width: 80px;">';
-                                            echo '  </td>';
-                                            echo '</tr>';
+                                        if ($item['color_id']) {
+                                            $productosAgrupados[$pId]['variantes'][] = [
+                                                'color_id' => $item['color_id'],
+                                                'nombre_color' => $item['nombre_color'],
+                                                'talla' => $item['talla'],
+                                                'stock' => $item['stock']
+                                            ];
                                         }
                                     }
-                                    echo '          </tbody>';
-                                    echo '      </table>';
-                                    echo '  </div>';
-                                    echo '</div>'; // Fin de la Card
                                 }
-                            }
 
-                            // --- 5. PIE DE PÁGINA (Paginación y Botón Guardar) ---
-                            echo '<div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-5 pt-3 border-top">';
-                            
-                            echo '<nav aria-label="Paginación">';
-                            echo '  <ul class="pagination mb-0 shadow-sm">';
-                            $disabledPrev = ($paginaActual <= 1) ? 'disabled' : '';
-                            $urlPrev = 'admin.php?seccion=productos&pagina=' . ($paginaActual - 1);
-                            echo '    <li class="page-item ' . $disabledPrev . '"><a class="page-link text-dark" href="' . $urlPrev . '">Anterior</a></li>';
-                            
-                            for ($i = 1; $i <= $totalPaginas; $i++) {
-                                $activa = ($i == $paginaActual) ? 'active bg-dark border-dark text-white' : 'text-dark';
-                                echo '    <li class="page-item"><a class="page-link ' . $activa . '" href="admin.php?seccion=productos&pagina=' . $i . '">' . $i . '</a></li>';
-                            }
+                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                                echo '  <div>';
+                                echo '      <h3 class="fw-bold m-0 text-uppercase">Gestión de Inventario</h3>';
+                                echo '      <small class="text-muted">Mostrando ' . count($productosAgrupados) . ' de ' . $totalProductos . ' productos totales</small>';
+                                echo '  </div>';
+                                echo '  <a href="#" class="btn btn-admin-black px-4 py-2"><i class="bi bi-plus-lg me-2"></i> Añadir Prenda</a>';
+                                echo '</div>';
 
-                            $disabledNext = ($paginaActual >= $totalPaginas) ? 'disabled' : '';
-                            $urlNext = 'admin.php?seccion=productos&pagina=' . ($paginaActual + 1);
-                            echo '    <li class="page-item ' . $disabledNext . '"><a class="page-link text-dark" href="' . $urlNext . '">Siguiente</a></li>';
-                            echo '  </ul>';
-                            echo '</nav>';
+                                echo '<form action="../controllers/adminController.php" method="POST">';
+                                echo '<input type="hidden" name="accion" value="actualizarInventarioMasivo">';
+                                echo '<input type="hidden" name="pagina_retorno" value="' . $paginaActual . '">';
 
-                            echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> GUARDAR TODOS LOS CAMBIOS</button>';
-                            echo '</div>';
-                            
-                            echo '</form>'; // Fin del formulario masivo
-                            break;
-                            case 'colecciones':
-                                echo '<h3>Gestión de Colecciones</h3>';
+                                if (empty($productosAgrupados)) {
+                                    echo '<div class="alert alert-secondary text-center py-5">No se han encontrado productos en esta página.</div>';
+                                } else {
+                                    foreach ($productosAgrupados as $id => $datos) {
+                                        $esSegundaMano = ($datos['es_segunda_mano'] == 1);
+                                        $borderStyle = $esSegundaMano ? 'border-left: 6px solid #fd7e14;' : 'border-left: 6px solid #0dcaf0;';
+
+                                        echo '<div class="card mb-4 border-0 shadow-sm admin-card" style="' . $borderStyle . '">';
+
+                                        echo '  <div class="card-header bg-dark text-white d-flex flex-wrap justify-content-between align-items-center py-3">';
+                                        echo '      <div class="d-flex align-items-center gap-3">';
+                                        echo '          <span class="text-secondary fw-bold">#' . $id . '</span>';
+                                        echo '          <h5 class="m-0 fw-bold text-uppercase fs-6">' . $datos['nombre'] . '</h5>';
+
+                                        if ($esSegundaMano) {
+                                            echo '      <span class="badge bg-warning text-dark fw-bold px-2">2ª MANO</span>';
+                                            echo '      <small class="text-secondary d-none d-md-inline">Propietario: <b>' . ($datos['nombre_dueno'] ?? 'User') . '</b></small>';
+                                            echo '      <span class="badge bg-light text-dark fs-6">' . $datos['precio'] . ' €</span>';
+                                        } else {
+                                            echo '      <div style="width: 140px;" class="ms-1">';
+                                            echo '          <select name="coleccion[' . $id . ']" class="form-select form-select-sm border-0 bg-light text-dark fw-bold">';
+                                            echo '              <option value="">Sin colección</option>';
+                                            foreach ($listaColeciones as $col) {
+                                                $seleccionado = ($col['id'] == $datos['coleccion_id']) ? 'selected' : '';
+                                                echo '              <option value="' . $col['id'] . '" ' . $seleccionado . '>' . htmlspecialchars($col['nombre']) . '</option>';
+                                            }
+                                            echo '          </select>';
+                                            echo '      </div>';
+
+                                            echo '      <div class="input-group input-group-sm" style="width: 120px;">';
+                                            echo '          <input type="number" step="0.01" name="precio[' . $id . ']" value="' . $datos['precio'] . '" class="form-control text-center fw-bold border-0 bg-light text-dark">';
+                                            echo '          <span class="input-group-text bg-light border-0 fw-bold text-dark">€</span>';
+                                            echo '      </div>';
+                                        }
+                                        echo '      </div>';
+
+                                        echo '      <div class="d-flex gap-3 align-items-center mt-3 mt-md-0">';
+                                        echo '          <div class="input-group input-group-sm" style="width: 160px;">';
+                                        echo '              <span class="input-group-text bg-secondary text-white border-0 small">Rebaja</span>';
+                                        echo '              <input type="number" name="rebaja[' . $id . ']" value="' . $datos['rebaja'] . '" class="form-control text-center fw-bold" min="0" max="100">';
+                                        echo '              <span class="input-group-text bg-secondary text-white border-0">%</span>';
+                                        echo '          </div>';
+                                        echo '          <div style="width: 140px;">';
+                                        echo '              <select name="activo[' . $id . ']" class="form-select form-select-sm fw-bold border-0 ' . ($datos['activo'] == 1 ? 'text-success' : 'text-danger') . '">';
+                                        echo '                  <option value="1" ' . ($datos['activo'] == 1 ? 'selected' : '') . '>ACTIVO</option>';
+                                        echo '                  <option value="0" ' . ($datos['activo'] == 0 ? 'selected' : '') . '>OCULTO</option>';
+                                        echo '              </select>';
+                                        echo '          </div>';
+                                        echo '      </div>';
+                                        echo '  </div>';
+
+                                        echo '  <div class="card-body p-0">';
+                                        echo '      <table class="table table-sm table-hover m-0 align-middle text-center">';
+                                        echo '          <thead class="table-light text-secondary small text-uppercase">';
+                                        echo '              <tr><th class="py-2">Color disponible</th><th>Talla</th><th style="width: 180px;">Stock en Almacén</th></tr>';
+                                        echo '          </thead>';
+                                        echo '          <tbody>';
+
+                                        if (empty($datos['variantes'])) {
+                                            echo '<tr><td colspan="3" class="text-muted py-3">No hay variantes registradas para este producto.</td></tr>';
+                                        } else {
+                                            foreach ($datos['variantes'] as $v) {
+                                                $claveUnica = $id . '_' . $v['color_id'] . '_' . $v['talla'];
+                                                echo '<tr>';
+                                                echo '  <td class="fw-bold text-dark">' . $v['nombre_color'] . '</td>';
+                                                echo '  <td><span class="badge border border-dark text-dark px-3 py-1 rounded-0">' . ($v['talla'] ?: '-') . '</span></td>';
+                                                echo '  <td class="d-flex justify-content-center">';
+                                                echo '      <input type="number" name="stock[' . $claveUnica . ']" value="' . $v['stock'] . '" class="form-control form-control-sm text-center border-dark shadow-sm" style="width: 80px;">';
+                                                echo '  </td>';
+                                                echo '</tr>';
+                                            }
+                                        }
+                                        echo '          </tbody>';
+                                        echo '      </table>';
+                                        echo '  </div>';
+                                        echo '</div>';
+                                    }
+                                }
+
+                                echo '<div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-5 pt-3 border-top">';
+
+                                echo '<nav aria-label="Paginación">';
+                                echo '  <ul class="pagination mb-0 shadow-sm">';
+                                $disabledPrev = ($paginaActual <= 1) ? 'disabled' : '';
+                                $urlPrev = 'admin.php?seccion=productos&pagina=' . ($paginaActual - 1);
+                                echo '    <li class="page-item ' . $disabledPrev . '"><a class="page-link text-dark" href="' . $urlPrev . '">Anterior</a></li>';
+
+                                for ($i = 1; $i <= $totalPaginas; $i++) {
+                                    $activa = ($i == $paginaActual) ? 'active bg-dark border-dark text-white' : 'text-dark';
+                                    echo '    <li class="page-item"><a class="page-link ' . $activa . '" href="admin.php?seccion=productos&pagina=' . $i . '">' . $i . '</a></li>';
+                                }
+
+                                $disabledNext = ($paginaActual >= $totalPaginas) ? 'disabled' : '';
+                                $urlNext = 'admin.php?seccion=productos&pagina=' . ($paginaActual + 1);
+                                echo '    <li class="page-item ' . $disabledNext . '"><a class="page-link text-dark" href="' . $urlNext . '">Siguiente</a></li>';
+                                echo '  </ul>';
+                                echo '</nav>';
+
+                                echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> GUARDAR TODOS LOS CAMBIOS</button>';
+                                echo '</div>';
+
+                                echo '</form>';
                                 break;
+                            case 'colecciones':
+                            $prod = new Producto($db->conectar());
+                            $todasLasColecciones = $prod->listarColecciones(true);
+
+                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Colecciones</h3>';
+                            echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaColeccion">
+                                        <i class="bi bi-plus-lg me-2"></i> Nueva Colección
+                                    </button>';
+                            echo '</div>';
+
+                            echo '<div class="collapse mb-4" id="formNuevaColeccion">';
+                            echo '  <div class="card card-body admin-card border-0 shadow-sm">';
+                            echo '      <form action="../controllers/adminController.php" method="POST" class="row g-3">';
+                            echo '          <input type="hidden" name="accion" value="crearColeccion">';
+                            echo '          <div class="col-md-4">';
+                            echo '              <label class="fw-bold mb-1">Nombre:</label>';
+                            echo '              <input type="text" name="nombre_coleccion" class="form-control" placeholder="Ej: Invierno 2026" required>';
+                            echo '          </div>';
+                            echo '          <div class="col-md-6">';
+                            echo '              <label class="fw-bold mb-1">Descripción:</label>';
+                            echo '              <textarea name="descripcion_coleccion" class="form-control" rows="1" placeholder="Breve descripción..."></textarea>';
+                            echo '          </div>';
+                            echo '          <div class="col-md-2 d-flex align-items-end">';
+                            echo '              <button type="submit" class="btn btn-dark w-100">Crear</button>';
+                            echo '          </div>';
+                            echo '      </form>';
+                            echo '  </div>';
+                            echo '</div>';
+
+                            echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+                            echo '<table class="table admin-table table-hover align-middle">';
+                            echo '  <thead class="table-dark text-center">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th style="width: 200px;">Nombre</th>
+                                            <th>Descripción</th>
+                                            <th style="width: 150px;">Estado</th>
+                                            <th style="width: 100px;">Acción</th>
+                                        </tr>
+                                    </thead>';
+                            echo '  <tbody>';
+
+                            foreach ($todasLasColecciones as $col) {
+                                echo '<tr>';
+                                echo '  <form action="../controllers/adminController.php" method="POST">';
+                                echo '  <input type="hidden" name="accion" value="actualizarColeccion">';
+                                echo '  <input type="hidden" name="id_coleccion" value="' . $col['id'] . '">';
+                                
+                                echo '  <td class="text-center text-secondary fw-bold">#' . $col['id'] . '</td>';
+                                
+                                echo '  <td><input type="text" name="nombre" value="' . htmlspecialchars($col['nombre']) . '" class="form-control form-control-sm fw-bold"></td>';
+                                
+                                echo '  <td><textarea name="descripcion" class="form-control form-control-sm" rows="1">' . htmlspecialchars($col['descripcion'] ?? '') . '</textarea></td>';
+                                
+                                echo '  <td>';
+                                echo '      <select name="nuevo_estado" class="form-select form-select-sm">';
+                                echo '          <option value="1" '.($col['activa']==1?'selected':'').'>Activa</option>';
+                                echo '          <option value="2" '.($col['activa']==2?'selected':'').'>No Activa</option>';
+                                echo '          <option value="3" '.($col['activa']==3?'selected':'').'>Próximamente</option>';
+                                echo '      </select>';
+                                echo '  </td>';
+
+                                echo '  <td class="text-center">';
+                                echo '      <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-check-lg"></i></button>';
+                                echo '  </td>';
+                                echo '  </form>';
+                                echo '</tr>';
+                            }
+
+                            echo '  </tbody>';
+                            echo '</table>';
+                            echo '</div>';
+                            break;
                             case 'usuarios':
                                 echo '<h3>Gestión de Usuarios y Permisos</h3>';
                                 break;
