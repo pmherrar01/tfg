@@ -342,25 +342,26 @@ public function listarInventarioCompleto()
         return $resultado['total'];
     }
 
-   public function listarProductosConVariantesPaginados($limite, $offset)
+public function listarProductosConVariantesPaginados($limite, $offset)
     {
-        $sql = "SELECT id FROM productos ORDER BY id DESC LIMIT :limite OFFSET :offset";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
-        $sentencia->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
-        $sentencia->execute();
-        $ids = $sentencia->fetchAll(PDO::FETCH_COLUMN);
+        $sqlIds = "SELECT id FROM productos ORDER BY id DESC LIMIT :limite OFFSET :offset";
+        $sentenciaIds = $this->conexionDataBase->prepare($sqlIds);
+        $sentenciaIds->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+        $sentenciaIds->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $sentenciaIds->execute();
+        $ids = $sentenciaIds->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($ids)) return [];
 
         $inQuery = implode(',', array_fill(0, count($ids), '?'));
         
+        // AQUÍ ESTABA EL FALLO: Cambiamos p.usuario_id por p.id_usuario_vendedor
         $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, p.activo, 
                        p.es_segunda_mano, u.nombre as nombre_dueno,
                        c.id as color_id, c.nombre as nombre_color, 
                        t.talla, IFNULL(t.stock, 0) as stock 
                 FROM productos p
-                LEFT JOIN usuarios u ON p.usuario_id = u.id
+                LEFT JOIN usuarios u ON p.id_usuario_vendedor = u.id
                 LEFT JOIN producto_colores pc ON p.id = pc.producto_id
                 LEFT JOIN colores c ON pc.color_id = c.id
                 LEFT JOIN producto_tallas t ON p.id = t.producto_id AND pc.color_id = t.color_id
@@ -375,10 +376,17 @@ public function listarInventarioCompleto()
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function actualizarDatosBasicosPrenda($id, $rebaja, $activo) {
-        $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo WHERE id = :id";
-        $sentencia = $this->conexionDataBase->prepare($sql);
-        return $sentencia->execute([':rebaja' => $rebaja, ':activo' => $activo, ':id' => $id]);
+public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = null) {
+        if ($precio !== null) {
+            $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo, precio = :precio WHERE id = :id";
+            $params = [':rebaja' => $rebaja, ':activo' => $activo, ':precio' => $precio, ':id' => $id];
+        } else {
+            $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo WHERE id = :id";
+            $params = [':rebaja' => $rebaja, ':activo' => $activo, ':id' => $id];
+        }
+        
+        $stmt = $this->conexionDataBase->prepare($sql);
+        return $stmt->execute($params);
     }
 
     public function actualizarStockEspecifico($idP, $idC, $talla, $stock) {

@@ -26,19 +26,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $pedido->actualizarEstadoPedido($idPedido, $nuevoEstado);
             header("Location: ../admin/admin.php?seccion=pedidos&mensaje=estado_actualizado");
             break;
-        case 'actualizar_inventario_masivo':
+        case 'actualizarInventarioMasivo':
             $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
             $rebajas = isset($_POST['rebaja']) ? $_POST['rebaja'] : [];
             $estados = isset($_POST['activo']) ? $_POST['activo'] : [];
+            $precios = isset($_POST['precio']) ? $_POST['precio'] : []; // NUEVO: Array de precios
             $pagRetorno = isset($_POST['pagina_retorno']) ? $_POST['pagina_retorno'] : 1;
 
             $prodObj = new Producto($conexion);
 
+            // Procesamos datos de la PRENDA (Rebaja, Estado y ahora Precio)
             foreach ($rebajas as $idPrenda => $valorRebaja) {
                 $estadoActivo = $estados[$idPrenda];
-                $prodObj->actualizarDatosBasicosPrenda($idPrenda, $valorRebaja, $estadoActivo);
+                // Miramos si para este ID ha llegado un precio (solo llegará para oficiales)
+                $precioActualizado = isset($precios[$idPrenda]) ? $precios[$idPrenda] : null;
+                
+                $prodObj->actualizarDatosBasicosPrenda($idPrenda, $valorRebaja, $estadoActivo, $precioActualizado);
             }
 
+            // Procesamos STOCKS (Esto sigue igual)
             foreach ($stocks as $clave => $cantidad) {
                 list($idP, $idC, $talla) = explode('_', $clave);
                 $prodObj->actualizarStockEspecifico($idP, $idC, $talla, $cantidad);
