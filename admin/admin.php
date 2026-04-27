@@ -23,6 +23,7 @@ $datosUsu = $usu->obtenerDatosUsu($idUsu);
 $pedido = new Pedido($conexion);
 $producto  = new Producto($conexion);
 $listaProductos = $producto->listarInventarioCompleto();
+$listaColeciones = $producto->listarColecciones();
 
 if ($datosUsu["rol_id"] != 1) {
     header("Location: ../index.php?error=noAdmin");
@@ -194,6 +195,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                             'precio' => $item['precio'],
                                             'rebaja' => $item['rebaja'],
                                             'activo' => $item['activo'],
+                                            'coleccion_id' => $item['coleccion_id'],
                                             'es_segunda_mano' => $item['es_segunda_mano'],
                                             'nombre_dueno' => $item['nombre_dueno'],
                                             'variantes' => []
@@ -246,7 +248,17 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                         echo '      <small class="text-secondary d-none d-md-inline">Propietario: <b>' . ($datos['nombre_dueno'] ?? 'User') . '</b></small>';
                                         echo '      <span class="badge bg-light text-dark fs-6">' . $datos['precio'] . ' €</span>';
                                     } else {
-                                        echo '      <div class="input-group input-group-sm" style="width: 130px;">';
+                                       echo '      <div style="width: 140px;" class="ms-1">';
+                                        echo '          <select name="coleccion[' . $id . ']" class="form-select form-select-sm border-0 bg-light text-dark fw-bold">';
+                                        echo '              <option value="">Sin colección</option>';
+                                        foreach ($listaColecciones as $col) {
+                                            $seleccionado = ($col['id'] == $datos['coleccion_id']) ? 'selected' : '';
+                                            echo '              <option value="' . $col['id'] . '" ' . $seleccionado . '>' . htmlspecialchars($col['nombre']) . '</option>';
+                                        }
+                                        echo '          </select>';
+                                        echo '      </div>';
+
+                                        echo '      <div class="input-group input-group-sm" style="width: 120px;">';
                                         echo '          <input type="number" step="0.01" name="precio[' . $id . ']" value="' . $datos['precio'] . '" class="form-control text-center fw-bold border-0 bg-light text-dark">';
                                         echo '          <span class="input-group-text bg-light border-0 fw-bold text-dark">€</span>';
                                         echo '      </div>';

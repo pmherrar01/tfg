@@ -30,21 +30,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
             $rebajas = isset($_POST['rebaja']) ? $_POST['rebaja'] : [];
             $estados = isset($_POST['activo']) ? $_POST['activo'] : [];
-            $precios = isset($_POST['precio']) ? $_POST['precio'] : []; // NUEVO: Array de precios
+            $precios = isset($_POST['precio']) ? $_POST['precio'] : []; 
+            $colecciones = isset($_POST['coleccion']) ? $_POST['coleccion'] : []; // NUEVO ARRAY
+
             $pagRetorno = isset($_POST['pagina_retorno']) ? $_POST['pagina_retorno'] : 1;
 
             $prodObj = new Producto($conexion);
 
-            // Procesamos datos de la PRENDA (Rebaja, Estado y ahora Precio)
+            // Procesamos datos maestros de la prenda
             foreach ($rebajas as $idPrenda => $valorRebaja) {
                 $estadoActivo = $estados[$idPrenda];
-                // Miramos si para este ID ha llegado un precio (solo llegará para oficiales)
                 $precioActualizado = isset($precios[$idPrenda]) ? $precios[$idPrenda] : null;
+                $coleccionActualizada = isset($colecciones[$idPrenda]) ? $colecciones[$idPrenda] : null; // Capturamos la colección
                 
-                $prodObj->actualizarDatosBasicosPrenda($idPrenda, $valorRebaja, $estadoActivo, $precioActualizado);
+                // Le pasamos la colección como 5º parámetro
+                $prodObj->actualizarDatosBasicosPrenda($idPrenda, $valorRebaja, $estadoActivo, $precioActualizado, $coleccionActualizada);
             }
 
-            // Procesamos STOCKS (Esto sigue igual)
+            // Procesamos Stocks
             foreach ($stocks as $clave => $cantidad) {
                 list($idP, $idC, $talla) = explode('_', $clave);
                 $prodObj->actualizarStockEspecifico($idP, $idC, $talla, $cantidad);

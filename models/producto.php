@@ -356,7 +356,7 @@ public function listarProductosConVariantesPaginados($limite, $offset)
         $inQuery = implode(',', array_fill(0, count($ids), '?'));
         
         // AQUÍ ESTABA EL FALLO: Cambiamos p.usuario_id por p.id_usuario_vendedor
-        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, p.activo, 
+        $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, p.activo, p.coleccion_id, 
                        p.es_segunda_mano, u.nombre as nombre_dueno,
                        c.id as color_id, c.nombre as nombre_color, 
                        t.talla, IFNULL(t.stock, 0) as stock 
@@ -375,18 +375,21 @@ public function listarProductosConVariantesPaginados($limite, $offset)
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
-
-public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = null) {
-        if ($precio !== null) {
-            $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo, precio = :precio WHERE id = :id";
-            $params = [':rebaja' => $rebaja, ':activo' => $activo, ':precio' => $precio, ':id' => $id];
-        } else {
+public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = null, $coleccionId = null) {
+        if ($precio !== null) { // Tienda Oficial
+            // Si viene vacío del select, lo pasamos a null
+            if ($coleccionId === "") {
+                $coleccionId = null;
+            }
+            $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo, precio = :precio, coleccion_id = :coleccion_id WHERE id = :id";
+            $params = [':rebaja' => $rebaja, ':activo' => $activo, ':precio' => $precio, ':coleccion_id' => $coleccionId, ':id' => $id];
+        } else { // Segunda Mano (no tocamos precio ni colección)
             $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo WHERE id = :id";
             $params = [':rebaja' => $rebaja, ':activo' => $activo, ':id' => $id];
         }
         
-        $stmt = $this->conexionDataBase->prepare($sql);
-        return $stmt->execute($params);
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute($params);
     }
 
     public function actualizarStockEspecifico($idP, $idC, $talla, $stock) {
