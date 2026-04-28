@@ -24,6 +24,9 @@ $pedido = new Pedido($conexion);
 $producto  = new Producto($conexion);
 $listaProductos = $producto->listarInventarioCompleto();
 $listaColeciones = $producto->listarColecciones(true);
+$listaUsuarios = $usu->listarUsuarios(); 
+
+
 
 if ($datosUsu["rol_id"] != 1) {
     header("Location: ../index.php?error=noAdmin");
@@ -322,12 +325,9 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '</form>';
                                 break;
                                 case 'segundaMano':
-                                $prod = new Producto($db->conectar());
-                                $usuario = new Usuario($db->conectar()); 
-                                $todosLosUsuarios = $usuario->listarUsuarios(); 
 
-                                $totalSM = $prod->contarProductosPorTipo(true);
-                                $listaSM = $prod->listarProductosPaginados(true, 50, 0); 
+                                $totalSM = $producto->contarProductosPorTipo(true);
+                                $listaSM = $producto->listarProductosPaginados(true, 50, 0); 
 
                                 echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
                                 
@@ -370,7 +370,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         // Selector de Usuario
                                         echo '  <td>';
                                         echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm border-0 bg-light fw-bold">';
-                                        foreach ($todosLosUsuarios as $u) {
+                                        foreach ($listaUsuarios as $u) {
                                             $sel = ($u['id'] == $p['id_usuario_vendedor']) ? 'selected' : '';
                                             echo '          <option value="' . $u['id'] . '" ' . $sel . '>' . htmlspecialchars($u['nombre']) . '</option>';
                                         }
@@ -481,13 +481,55 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '</table>';
                                 echo '</div>';
                                 break;
-                            case 'segundaMano':
-                                echo '<h3>Gestión de productos de segunda mano</h3>';
-                                break;
                             case 'usuarios':
-                                echo '<h3>Gestión de Usuarios y Permisos</h3>';
-                                break;
+
+                                
+                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Usuarios</h3>';
+                            echo '  <span class="badge bg-secondary fs-6">' . count($listaUsuarios) . ' Registrados</span>';
+                            echo '</div>';
+
+                            echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+                            echo '<table class="table admin-table table-hover align-middle">';
+                            echo '  <thead class="table-dark text-center">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nombre / Username</th>
+                                            <th>Email</th>
+                                            <th>Rol Actual</th>
+                                            <th style="width: 250px;">Cambiar Permisos</th>
+                                        </tr>
+                                    </thead>';
+                            echo '  <tbody>';
+
+                            if (empty($listaUsuarios)) {
+                                echo '<tr><td colspan="5" class="text-center py-4 text-muted">No hay usuarios registrados.</td></tr>';
+                            } else {
+                                foreach ($listaUsuarios as $u) {
+                                    $esAdmin = (strtolower($u['rol_id']) == 'admin' || $u['rol_id'] == 1);
+                                    
+                                    echo '<tr>';
+                                    echo '  <td class="text-center text-secondary fw-bold">#' . $u['id'] . '</td>';
+                                    echo '  <td class="fw-bold">' . htmlspecialchars($u['nombre']) . '</td>';
+                                    echo '  <td class="text-muted">' . htmlspecialchars($u['email']) . '</td>';
+                                    
+                                    echo '  <td class="text-center">';
+                                    if ($esAdmin) {
+                                        echo '<span class="badge bg-danger px-3 py-2"><i class="bi bi-star-fill me-1"></i> ' . strtoupper($u['rol_id']) . '</span>';
+                                    } else {
+                                        echo '<span class="badge bg-secondary px-3 py-2">' . strtoupper($u['nombre_rol']) . '</span>';
+                                    }
+                                    echo '  </td>';
+
+                                }
+                            }
+
+                            echo '  </tbody>';
+                            echo '</table>';
+                            echo '</div>';
+                            break;
                             default:
+                            break;
                         }
                         ?>
                     </div>

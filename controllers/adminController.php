@@ -4,6 +4,7 @@ session_start();
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/producto.php";
+require_once __DIR__ . "/../models/usuario.php";
 
 if (!isset($_SESSION["usuario_id"]) || $_SESSION["rol_id"] != 1) {
     header("Location: ../index.php?error=acceso_denegado");
@@ -22,11 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $accion = isset($_POST["accion"]) ? $_POST["accion"] : "";
 
     switch ($accion) {
-        case 'cambiarEstadoPedido':
+        case "cambiarEstadoPedido":
             $pedido->actualizarEstadoPedido($idPedido, $nuevoEstado);
             header("Location: ../admin/admin.php?seccion=pedidos&mensaje=estado_actualizado");
             break;
-        case 'actualizarInventarioMasivo':
+        case "actualizarInventarioMasivo":
             $stocks = isset($_POST['stock']) ? $_POST['stock'] : [];
             $rebajas = isset($_POST['rebaja']) ? $_POST['rebaja'] : [];
             $estados = isset($_POST['activo']) ? $_POST['activo'] : [];
@@ -53,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: ../admin/admin.php?seccion=productos&pagina=$pagRetorno&mensaje=inventario_actualizado");
             exit();
             
-        case 'crearColeccion':
+        case "crearColeccion":
             $nombre = isset($_POST['nombre_coleccion']) ? trim($_POST['nombre_coleccion']) : "";
             $descripcion = isset($_POST['descripcion_coleccion']) ? trim($_POST['descripcion_coleccion']) : "";
             
@@ -79,15 +80,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: ../admin/admin.php?seccion=colecciones&mensaje=coleccion_actualizada");
             exit();
 
-            case 'actualizarSegundaMano':
+            case "actualizarSegundaMano":
             $revisiones = isset($_POST['revision']) ? $_POST['revision'] : [];
             $vendedores = isset($_POST['vendedor']) ? $_POST['vendedor'] : [];
             
             $prodObj = new Producto($conexion);
             
-            // Recorremos de forma segura
             foreach ($revisiones as $idPrenda => $estado) {
-                // Comprobamos que exista el vendedor para esa prenda, si no, lo saltamos
                 if (isset($vendedores[$idPrenda])) {
                     $idVendedor = $vendedores[$idPrenda];
                     $prodObj->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
@@ -96,11 +95,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
             header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=revision_completada");
             exit();
-            break;
-            
+            case "actualizarRol":
+                $idUsu = isset($_POST["idUsu"]) ? $_POST["idUsu"] : 0;
+                $nuevoRol = isset($_POST['nuevoRol']) ? (int)$_POST['nuevoRol'] : 2;
+
+
+                if($idUsu > 0){
+                    $usu = new Usuario($conexion);
+                    $usu->actualizarRolUsu($idUsu, $nuevoRol);
+                    header("Location: ../admin/admin.php?seccion=usuarios&mensaje=rolActualizado");
+                    exit;
+                }else{
+                    header("Location: ../admin/admin.php?seccion=usuarios&error=usuarioInvalido");
+                    exit;
+                }            
 
         default:
-            header("Location: ../admin/admin.php?error=accion_desconocida");
+            header("Location: ../admin/admin.php");
             break;
     }
 } else {
