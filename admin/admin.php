@@ -30,7 +30,7 @@ if ($datosUsu["rol_id"] != 1) {
     exit();
 }
 
-$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
+$seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
 ?>
 
 <!DOCTYPE html>
@@ -59,11 +59,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                     </div>
 
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link admin-nav-link <?= ($seccion == 'dashboard') ? 'active' : '' ?>" href="admin.php?seccion=dashboard">
-                                <i class="bi bi-speedometer2"></i> Dashboard
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link admin-nav-link <?= ($seccion == 'pedidos') ? 'active' : '' ?>" href="admin.php?seccion=pedidos">
                                 <i class="bi bi-bag-check"></i> Pedidos
@@ -121,9 +116,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                     <div class="col-12">
                         <?php
                         switch ($seccion) {
-                            case 'dashboard':
-                                echo '<div class="alert alert-dark">Bienvenido al panel de control. Selecciona una opción en el menú lateral.</div>';
-                                break;
                             case 'pedidos':
 
                                 $listaPedidos = $pedido->listarPedidos();
@@ -330,72 +322,91 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                 echo '</form>';
                                 break;
                                 case 'segundaMano':
-    $prod = new Producto($db->conectar());
-    $usuario = new Usuario($db->conectar()); 
-    $todosLosUsuarios = $usuario->listarUsuarios(); 
+                                $prod = new Producto($db->conectar());
+                                $usuario = new Usuario($db->conectar()); 
+                                $todosLosUsuarios = $usuario->listarUsuarios(); 
 
-    $totalSM = $prod->contarProductosPorTipo(true);
-    $listaSM = $prod->listarProductosPaginados(true, 10, 0); 
+                                $totalSM = $prod->contarProductosPorTipo(true);
+                                $listaSM = $prod->listarProductosPaginados(true, 50, 0); 
 
-    echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
-    echo '<form action="../controllers/adminController.php" method="POST">';
-    echo '<input type="hidden" name="accion" value="actualizarSegundaMano">';
-    
-    echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
-    echo '<table class="table align-middle text-center">';
-    echo '  <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Prenda</th>
-                    <th>Vendedor (Usuario)</th>
-                    <th>Estado de Revisión</th>
-                    <th>Precio</th>
-                </tr>
-            </thead>';
-    echo '  <tbody>';
+                                echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
+                                
+                                // INICIO DEL FORMULARIO
+                                echo '<form action="../controllers/adminController.php" method="POST">';
+                                echo '<input type="hidden" name="accion" value="actualizarSegundaMano">';
+                                
+                                echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+                                echo '<table class="table align-middle text-center table-hover">';
+                                echo '  <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Prenda</th>
+                                                <th>Vendedor (Usuario)</th>
+                                                <th>Estado de Revisión</th>
+                                                <th>Precio</th>
+                                            </tr>
+                                        </thead>';
+                                echo '  <tbody>';
 
-    foreach ($listaSM as $item) {
-        if (!isset($agrupadosSM[$item['prenda_id']])) {
-            $agrupadosSM[$item['prenda_id']] = $item;
-        }
-    }
+                                // ¡LÍNEA CLAVE! Inicializar el array antes de usarlo
+                                $agrupadosSM = []; 
+                                
+                                if (!empty($listaSM)) {
+                                    foreach ($listaSM as $item) {
+                                        if (!isset($agrupadosSM[$item['prenda_id']])) {
+                                            $agrupadosSM[$item['prenda_id']] = $item;
+                                        }
+                                    }
+                                }
 
-    foreach ($agrupadosSM as $id => $p) {
-        echo '<tr>';
-        echo '  <td class="fw-bold">#' . $id . '</td>';
-        echo '  <td class="text-uppercase">' . $p['nombre'] . '</td>';
-        
-        // Selector de Usuario (para cambiar el dueño si es necesario)
-        echo '  <td>';
-        echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm">';
-        foreach ($todosLosUsuarios as $u) {
-            $sel = ($u['id'] == $p['id_usuario_vendedor']) ? 'selected' : '';
-            echo '          <option value="' . $u['id'] . '" ' . $sel . '>' . $u['nombre'] . '</option>';
-        }
-        echo '      </select>';
-        echo '  </td>';
+                                if (empty($agrupadosSM)) {
+                                    echo '<tr><td colspan="5" class="py-4 text-muted">No hay prendas de segunda mano registradas.</td></tr>';
+                                } else {
+                                    foreach ($agrupadosSM as $id => $p) {
+                                        echo '<tr>';
+                                        echo '  <td class="fw-bold text-secondary">#' . $id . '</td>';
+                                        echo '  <td class="text-uppercase fw-bold">' . htmlspecialchars($p['nombre']) . '</td>';
+                                        
+                                        // Selector de Usuario
+                                        echo '  <td>';
+                                        echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm border-0 bg-light fw-bold">';
+                                        foreach ($todosLosUsuarios as $u) {
+                                            $sel = ($u['id'] == $p['id_usuario_vendedor']) ? 'selected' : '';
+                                            echo '          <option value="' . $u['id'] . '" ' . $sel . '>' . htmlspecialchars($u['nombre']) . '</option>';
+                                        }
+                                        echo '      </select>';
+                                        echo '  </td>';
 
-        // Selector de Estado de Revisión
-        echo '  <td>';
-        echo '      <select name="revision[' . $id . ']" class="form-select form-select-sm fw-bold">';
-        $estados = ['Pendiente', 'Aprobado', 'Rechazado'];
-        foreach ($estados as $est) {
-            $sel = ($est == $p['estado_revision']) ? 'selected' : '';
-            echo '          <option value="' . $est . '" ' . $sel . '>' . $est . '</option>';
-        }
-        echo '      </select>';
-        echo '  </td>';
+                                        // Selector de Estado de Revisión
+                                        echo '  <td>';
+                                        // Coloreamos el select para que sea visualmente más claro
+                                        $colorSelect = ($p['estado_revision'] == 'Aprobado') ? 'text-success' : (($p['estado_revision'] == 'Rechazado') ? 'text-danger' : 'text-warning');
+                                        
+                                        echo '      <select name="revision[' . $id . ']" class="form-select form-select-sm fw-bold border-0 bg-light ' . $colorSelect . '">';
+                                        $estados = ['Pendiente', 'Aprobado', 'Rechazado'];
+                                        foreach ($estados as $est) {
+                                            $sel = ($est == $p['estado_revision']) ? 'selected' : '';
+                                            echo '          <option value="' . $est . '" ' . $sel . '>' . $est . '</option>';
+                                        }
+                                        echo '      </select>';
+                                        echo '  </td>';
 
-        echo '  <td>' . $p['precio'] . ' €</td>';
-        echo '</tr>';
-    }
+                                        echo '  <td><span class="badge bg-dark">' . $p['precio'] . ' €</span></td>';
+                                        echo '</tr>';
+                                    }
+                                }
 
-    echo '  </tbody>';
-    echo '</table>';
-    echo '</div>';
-    echo '<div class="text-end mt-4"><button type="submit" class="btn btn-admin-black px-5">Guardar Cambios de Revisión</button></div>';
-    echo '</form>';
-    break;
+                                echo '  </tbody>';
+                                echo '</table>';
+                                echo '</div>';
+                                
+                                // BOTÓN DE GUARDADO DENTRO DEL FORM
+                                echo '<div class="text-end mt-4 mb-5">';
+                                echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> Guardar Cambios de Revisión</button>';
+                                echo '</div>';
+                                
+                                echo '</form>'; // FIN DEL FORMULARIO
+                                break;
                             case 'colecciones':
                                 $prod = new Producto($db->conectar());
                                 $todasLasColecciones = $prod->listarColecciones(true);
@@ -477,8 +488,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                 echo '<h3>Gestión de Usuarios y Permisos</h3>';
                                 break;
                             default:
-                                echo '<div class="alert alert-danger">Sección no encontrada.</div>';
-                                break;
                         }
                         ?>
                     </div>

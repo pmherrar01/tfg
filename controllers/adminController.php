@@ -80,19 +80,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
 
             case 'actualizarSegundaMano':
-    $revisiones = $_POST['revision'] ?? [];
-    $vendedores = $_POST['vendedor'] ?? [];
-    
-    $prodObj = new Producto($conexion);
-    
-    foreach ($revisiones as $idPrenda => $estado) {
-        $idVendedor = $vendedores[$idPrenda];
-        $prodObj->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
-    }
-    
-    header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=revision_completada");
-    exit();
-    break;
+            $revisiones = isset($_POST['revision']) ? $_POST['revision'] : [];
+            $vendedores = isset($_POST['vendedor']) ? $_POST['vendedor'] : [];
+            
+            $prodObj = new Producto($conexion);
+            
+            // Recorremos de forma segura
+            foreach ($revisiones as $idPrenda => $estado) {
+                // Comprobamos que exista el vendedor para esa prenda, si no, lo saltamos
+                if (isset($vendedores[$idPrenda])) {
+                    $idVendedor = $vendedores[$idPrenda];
+                    $prodObj->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
+                }
+            }
+            
+            header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=revision_completada");
+            exit();
+            break;
             
 
         default:

@@ -980,10 +980,20 @@ public function buscarPorNombreChatBot($nombreABuscar)
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-    public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
-        $sql = "UPDATE productos SET estado_revision = :estado, id_usuario_vendedor = :idV WHERE id = :id";
-        $stmt = $this->conexionDataBase->prepare($sql);
-        return $stmt->execute([':estado' => $estado, ':idV' => $idVendedor, ':id' => $id]);
+
+public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
+        try {
+            $sql = "UPDATE productos SET estado_revision = :estado, id_usuario_vendedor = :idV WHERE id = :id";
+            $stmt = $this->conexionDataBase->prepare($sql);
+            return $stmt->execute([
+                ':estado' => (string)$estado, 
+                ':idV' => (int)$idVendedor, 
+                ':id' => (int)$id
+            ]);
+        } catch (PDOException $e) {
+            // Si hay un error, lo guardará en el registro del servidor para poder verlo
+            error_log("Error actualizando segunda mano: " . $e->getMessage());
+            return false;
+        }
     }
 }
