@@ -333,7 +333,6 @@ public function listarInventarioCompleto()
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // 1. Contar productos filtrando por tipo
     public function contarProductosPorTipo($esSegundaMano)
     {
         $sql = "SELECT COUNT(*) as total FROM productos WHERE es_segunda_mano = :esm";
@@ -343,10 +342,8 @@ public function listarInventarioCompleto()
         return $resultado['total'];
     }
 
-    // 2. Listar productos filtrando por tipo (Oficial o Segunda Mano)
     public function listarProductosPaginados($esSegundaMano, $limite, $offset)
     {
-        // Primero sacamos los IDs de los productos que tocan
         $sqlIds = "SELECT id FROM productos WHERE es_segunda_mano = :esm ORDER BY id DESC LIMIT :limite OFFSET :offset";
         $stmtIds = $this->conexionDataBase->prepare($sqlIds);
         $stmtIds->bindValue(':esm', (int)$esSegundaMano, PDO::PARAM_INT);
@@ -379,14 +376,13 @@ public function listarInventarioCompleto()
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = null, $coleccionId = null) {
-        if ($precio !== null) { // Tienda Oficial
-            // Si viene vacío del select, lo pasamos a null
+        if ($precio !== null) { 
             if ($coleccionId === "") {
                 $coleccionId = null;
             }
             $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo, precio = :precio, coleccion_id = :coleccion_id WHERE id = :id";
             $params = [':rebaja' => $rebaja, ':activo' => $activo, ':precio' => $precio, ':coleccion_id' => $coleccionId, ':id' => $id];
-        } else { // Segunda Mano (no tocamos precio ni colección)
+        } else { 
             $sql = "UPDATE productos SET rebaja = :rebaja, activo = :activo WHERE id = :id";
             $params = [':rebaja' => $rebaja, ':activo' => $activo, ':id' => $id];
         }
@@ -991,7 +987,6 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
                 ':id' => (int)$id
             ]);
         } catch (PDOException $e) {
-            // Si hay un error, lo guardará en el registro del servidor para poder verlo
             error_log("Error actualizando segunda mano: " . $e->getMessage());
             return false;
         }

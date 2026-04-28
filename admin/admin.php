@@ -331,7 +331,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
 
                                 echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
                                 
-                                // INICIO DEL FORMULARIO
                                 echo '<form action="../controllers/adminController.php" method="POST">';
                                 echo '<input type="hidden" name="accion" value="actualizarSegundaMano">';
                                 
@@ -348,7 +347,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         </thead>';
                                 echo '  <tbody>';
 
-                                // ¡LÍNEA CLAVE! Inicializar el array antes de usarlo
                                 $agrupadosSM = []; 
                                 
                                 if (!empty($listaSM)) {
@@ -367,7 +365,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         echo '  <td class="fw-bold text-secondary">#' . $id . '</td>';
                                         echo '  <td class="text-uppercase fw-bold">' . htmlspecialchars($p['nombre']) . '</td>';
                                         
-                                        // Selector de Usuario
                                         echo '  <td>';
                                         echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm border-0 bg-light fw-bold">';
                                         foreach ($listaUsuarios as $u) {
@@ -377,9 +374,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         echo '      </select>';
                                         echo '  </td>';
 
-                                        // Selector de Estado de Revisión
                                         echo '  <td>';
-                                        // Coloreamos el select para que sea visualmente más claro
                                         $colorSelect = ($p['estado_revision'] == 'Aprobado') ? 'text-success' : (($p['estado_revision'] == 'Rechazado') ? 'text-danger' : 'text-warning');
                                         
                                         echo '      <select name="revision[' . $id . ']" class="form-select form-select-sm fw-bold border-0 bg-light ' . $colorSelect . '">';
@@ -400,12 +395,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '</table>';
                                 echo '</div>';
                                 
-                                // BOTÓN DE GUARDADO DENTRO DEL FORM
                                 echo '<div class="text-end mt-4 mb-5">';
                                 echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> Guardar Cambios de Revisión</button>';
                                 echo '</div>';
                                 
-                                echo '</form>'; // FIN DEL FORMULARIO
+                                echo '</form>';
                                 break;
                             case 'colecciones':
                                 $prod = new Producto($db->conectar());
@@ -482,9 +476,10 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '</div>';
                                 break;
                             case 'usuarios':
+                            $usuarioObj = new Usuario($db->conectar());
+                            $listaUsuarios = $usuarioObj->listarUsuarios();
 
-                                
-                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
                             echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Usuarios</h3>';
                             echo '  <span class="badge bg-secondary fs-6">' . count($listaUsuarios) . ' Registrados</span>';
                             echo '</div>';
@@ -497,7 +492,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                             <th>Nombre / Username</th>
                                             <th>Email</th>
                                             <th>Rol Actual</th>
-                                            <th style="width: 250px;">Cambiar Permisos</th>
+                                            <th style="width: 200px;">Acción</th>
                                         </tr>
                                     </thead>';
                             echo '  <tbody>';
@@ -506,8 +501,10 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '<tr><td colspan="5" class="text-center py-4 text-muted">No hay usuarios registrados.</td></tr>';
                             } else {
                                 foreach ($listaUsuarios as $u) {
-                                    $esAdmin = (strtolower($u['rol_id']) == 'admin' || $u['rol_id'] == 1);
+                                    $esAdmin = ($u['rol_id'] == 1);
                                     
+                                    $nuevoRol = $esAdmin ? 2 : 1; 
+
                                     echo '<tr>';
                                     echo '  <td class="text-center text-secondary fw-bold">#' . $u['id'] . '</td>';
                                     echo '  <td class="fw-bold">' . htmlspecialchars($u['nombre']) . '</td>';
@@ -515,20 +512,33 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     
                                     echo '  <td class="text-center">';
                                     if ($esAdmin) {
-                                        echo '<span class="badge bg-danger px-3 py-2"><i class="bi bi-star-fill me-1"></i> ' . strtoupper($u['rol_id']) . '</span>';
+                                        echo '<span class="badge bg-danger px-3 py-2"><i class="bi bi-star-fill me-1"></i> ADMIN</span>';
                                     } else {
-                                        echo '<span class="badge bg-secondary px-3 py-2">' . strtoupper($u['nombre_rol']) . '</span>';
+                                        echo '<span class="badge bg-secondary px-3 py-2">CLIENTE</span>';
                                     }
                                     echo '  </td>';
 
+                                    echo '  <td class="text-center">';
+                                    echo '      <form action="../controllers/adminController.php" method="POST" class="m-0">';
+                                    echo '          <input type="hidden" name="accion" value="actualizarRol">';
+                                    echo '          <input type="hidden" name="id_usuario" value="' . $u['id'] . '">';
+                                    echo '          <input type="hidden" name="nuevo_rol" value="' . $nuevoRol . '">';
+                                    
+                                    if ($esAdmin) {
+                                        echo '          <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-bold">Quitar Admin</button>';
+                                    } else {
+                                        echo '          <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold">Hacer Admin</button>';
+                                    }
+                                    
+                                    echo '      </form>';
+                                    echo '  </td>';
+                                    echo '</tr>';
                                 }
                             }
 
                             echo '  </tbody>';
                             echo '</table>';
                             echo '</div>';
-                            break;
-                            default:
                             break;
                         }
                         ?>

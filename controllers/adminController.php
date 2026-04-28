@@ -80,21 +80,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             header("Location: ../admin/admin.php?seccion=colecciones&mensaje=coleccion_actualizada");
             exit();
 
-            case "actualizarSegundaMano":
-            $revisiones = isset($_POST['revision']) ? $_POST['revision'] : [];
-            $vendedores = isset($_POST['vendedor']) ? $_POST['vendedor'] : [];
+        case "actualizarRol":
+            $idUsuario = isset($_POST['id_usuario']) ? (int)$_POST['id_usuario'] : 0;
+            $nuevoRol = isset($_POST['nuevo_rol']) ? (int)$_POST['nuevo_rol'] : 2; 
             
-            $prodObj = new Producto($conexion);
-            
-            foreach ($revisiones as $idPrenda => $estado) {
-                if (isset($vendedores[$idPrenda])) {
-                    $idVendedor = $vendedores[$idPrenda];
-                    $prodObj->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
-                }
+            if ($idUsuario > 0) {
+                $userObj = new Usuario($conexion);
+                $userObj->actualizarRolUsuario($idUsuario, $nuevoRol);
+                header("Location: ../admin/admin.php?seccion=usuarios&mensaje=rol_actualizado");
+            } else {
+                header("Location: ../admin/admin.php?seccion=usuarios&error=usuario_invalido");
             }
-            
-            header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=revision_completada");
             exit();
+            break;
             case "actualizarRol":
                 $idUsu = isset($_POST["idUsu"]) ? $_POST["idUsu"] : 0;
                 $nuevoRol = isset($_POST['nuevoRol']) ? (int)$_POST['nuevoRol'] : 2;
@@ -102,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 if($idUsu > 0){
                     $usu = new Usuario($conexion);
-                    $usu->actualizarRolUsu($idUsu, $nuevoRol);
+                    $usu->actualizarRolUsuario($idUsu, $nuevoRol);
                     header("Location: ../admin/admin.php?seccion=usuarios&mensaje=rolActualizado");
                     exit;
                 }else{

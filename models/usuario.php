@@ -460,24 +460,20 @@ class Usuario
 
     }
 
-    public function listarUsuarios(){
+    public function listarUsuarios() {
         $sql = "SELECT u.id, u.nombre, u.email, u.rol_id, r.nombre_rol as nombre_rol 
                 FROM usuarios u
                 LEFT JOIN roles r ON u.rol_id = r.id
                 ORDER BY u.id DESC";
-        $sentencia  = $this->conexionDataBase->prepare($sql);
-        $sentencia -> execute();
-
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function actualizarRolUsu($idUsu, $idRol){
-        $sql = "UPDATE usuarios SET rol_id  = :idRol WHERE id = :idUsu";
-        $senetncia = $this->conexionDataBase->prepare($sql);
-        return $senetncia->execute([
-            ":idRol" => $idRol,
-            ":idUsu" => $idUsu
-        ]);
+    public function actualizarRolUsuario($idUsuario, $idRol) {
+        $sql = "UPDATE usuarios SET rol_id = :rol_id WHERE id = :id";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([':rol_id' => $idRol, ':id' => $idUsuario]);
     }
 
 
