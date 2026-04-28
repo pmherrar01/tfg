@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $db = new Database();
             $conexion = $db->conectar(); 
             
-            $usuarioId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+            $usuarioId = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
             $sessionId = session_id(); 
             
             $sql = "INSERT INTO chat_logs (usuario_id, session_id, mensaje) VALUES (:user_id, :session_id, :mensaje)";

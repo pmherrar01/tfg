@@ -74,6 +74,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                 <i class="bi bi-box-seam"></i> Productos
                             </a>
                         </li>
+                                                <li class="nav-item">
+                            <a class="nav-link admin-nav-link <?= ($seccion == 'segundaMano') ? 'active' : '' ?>" href="admin.php?seccion=segundaMano">
+                                <i class="bi bi-box-seam"></i>  Segunda mano
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link admin-nav-link <?= ($seccion == 'colecciones') ? 'active' : '' ?>" href="admin.php?seccion=colecciones">
                                 <i class="bi bi-collection"></i> Colecciones
@@ -176,11 +181,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                 $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
                                 if ($paginaActual < 1) $paginaActual = 1;
 
-                                $totalProductos = $prod->contarProductosTotales();
+                                $totalProductos = $prod->contarProductosPorTipo(false);
                                 $totalPaginas = ceil($totalProductos / $productosPorPagina);
                                 $offset = ($paginaActual - 1) * $productosPorPagina;
 
-                                $listaInventario = $prod->listarProductosConVariantesPaginados($productosPorPagina, $offset);
+                                $listaInventario = $prod->listarProductosPaginados(false, $productosPorPagina, $offset);
 
                                 $productosAgrupados = [];
                                 if (!empty($listaInventario)) {
@@ -324,39 +329,106 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
 
                                 echo '</form>';
                                 break;
-                            case 'colecciones':
-                            $prod = new Producto($db->conectar());
-                            $todasLasColecciones = $prod->listarColecciones(true);
+                                case 'segundaMano':
+    $prod = new Producto($db->conectar());
+    $usuario = new Usuario($db->conectar()); 
+    $todosLosUsuarios = $usuario->listarUsuarios(); 
 
-                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
-                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Colecciones</h3>';
-                            echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaColeccion">
+    $totalSM = $prod->contarProductosPorTipo(true);
+    $listaSM = $prod->listarProductosPaginados(true, 10, 0); 
+
+    echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
+    echo '<form action="../controllers/adminController.php" method="POST">';
+    echo '<input type="hidden" name="accion" value="actualizarSegundaMano">';
+    
+    echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+    echo '<table class="table align-middle text-center">';
+    echo '  <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Prenda</th>
+                    <th>Vendedor (Usuario)</th>
+                    <th>Estado de Revisión</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>';
+    echo '  <tbody>';
+
+    foreach ($listaSM as $item) {
+        if (!isset($agrupadosSM[$item['prenda_id']])) {
+            $agrupadosSM[$item['prenda_id']] = $item;
+        }
+    }
+
+    foreach ($agrupadosSM as $id => $p) {
+        echo '<tr>';
+        echo '  <td class="fw-bold">#' . $id . '</td>';
+        echo '  <td class="text-uppercase">' . $p['nombre'] . '</td>';
+        
+        // Selector de Usuario (para cambiar el dueño si es necesario)
+        echo '  <td>';
+        echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm">';
+        foreach ($todosLosUsuarios as $u) {
+            $sel = ($u['id'] == $p['id_usuario_vendedor']) ? 'selected' : '';
+            echo '          <option value="' . $u['id'] . '" ' . $sel . '>' . $u['nombre'] . '</option>';
+        }
+        echo '      </select>';
+        echo '  </td>';
+
+        // Selector de Estado de Revisión
+        echo '  <td>';
+        echo '      <select name="revision[' . $id . ']" class="form-select form-select-sm fw-bold">';
+        $estados = ['Pendiente', 'Aprobado', 'Rechazado'];
+        foreach ($estados as $est) {
+            $sel = ($est == $p['estado_revision']) ? 'selected' : '';
+            echo '          <option value="' . $est . '" ' . $sel . '>' . $est . '</option>';
+        }
+        echo '      </select>';
+        echo '  </td>';
+
+        echo '  <td>' . $p['precio'] . ' €</td>';
+        echo '</tr>';
+    }
+
+    echo '  </tbody>';
+    echo '</table>';
+    echo '</div>';
+    echo '<div class="text-end mt-4"><button type="submit" class="btn btn-admin-black px-5">Guardar Cambios de Revisión</button></div>';
+    echo '</form>';
+    break;
+                            case 'colecciones':
+                                $prod = new Producto($db->conectar());
+                                $todasLasColecciones = $prod->listarColecciones(true);
+
+                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                                echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Colecciones</h3>';
+                                echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaColeccion">
                                         <i class="bi bi-plus-lg me-2"></i> Nueva Colección
                                     </button>';
-                            echo '</div>';
+                                echo '</div>';
 
-                            echo '<div class="collapse mb-4" id="formNuevaColeccion">';
-                            echo '  <div class="card card-body admin-card border-0 shadow-sm">';
-                            echo '      <form action="../controllers/adminController.php" method="POST" class="row g-3">';
-                            echo '          <input type="hidden" name="accion" value="crearColeccion">';
-                            echo '          <div class="col-md-4">';
-                            echo '              <label class="fw-bold mb-1">Nombre:</label>';
-                            echo '              <input type="text" name="nombre_coleccion" class="form-control" placeholder="Ej: Invierno 2026" required>';
-                            echo '          </div>';
-                            echo '          <div class="col-md-6">';
-                            echo '              <label class="fw-bold mb-1">Descripción:</label>';
-                            echo '              <textarea name="descripcion_coleccion" class="form-control" rows="1" placeholder="Breve descripción..."></textarea>';
-                            echo '          </div>';
-                            echo '          <div class="col-md-2 d-flex align-items-end">';
-                            echo '              <button type="submit" class="btn btn-dark w-100">Crear</button>';
-                            echo '          </div>';
-                            echo '      </form>';
-                            echo '  </div>';
-                            echo '</div>';
+                                echo '<div class="collapse mb-4" id="formNuevaColeccion">';
+                                echo '  <div class="card card-body admin-card border-0 shadow-sm">';
+                                echo '      <form action="../controllers/adminController.php" method="POST" class="row g-3">';
+                                echo '          <input type="hidden" name="accion" value="crearColeccion">';
+                                echo '          <div class="col-md-4">';
+                                echo '              <label class="fw-bold mb-1">Nombre:</label>';
+                                echo '              <input type="text" name="nombre_coleccion" class="form-control" placeholder="Ej: Invierno 2026" required>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-6">';
+                                echo '              <label class="fw-bold mb-1">Descripción:</label>';
+                                echo '              <textarea name="descripcion_coleccion" class="form-control" rows="1" placeholder="Breve descripción..."></textarea>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-2 d-flex align-items-end">';
+                                echo '              <button type="submit" class="btn btn-dark w-100">Crear</button>';
+                                echo '          </div>';
+                                echo '      </form>';
+                                echo '  </div>';
+                                echo '</div>';
 
-                            echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
-                            echo '<table class="table admin-table table-hover align-middle">';
-                            echo '  <thead class="table-dark text-center">
+                                echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+                                echo '<table class="table admin-table table-hover align-middle">';
+                                echo '  <thead class="table-dark text-center">
                                         <tr>
                                             <th>ID</th>
                                             <th style="width: 200px;">Nombre</th>
@@ -365,39 +437,42 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'dashboard';
                                             <th style="width: 100px;">Acción</th>
                                         </tr>
                                     </thead>';
-                            echo '  <tbody>';
+                                echo '  <tbody>';
 
-                            foreach ($todasLasColecciones as $col) {
-                                echo '<tr>';
-                                echo '  <form action="../controllers/adminController.php" method="POST">';
-                                echo '  <input type="hidden" name="accion" value="actualizarColeccion">';
-                                echo '  <input type="hidden" name="id_coleccion" value="' . $col['id'] . '">';
-                                
-                                echo '  <td class="text-center text-secondary fw-bold">#' . $col['id'] . '</td>';
-                                
-                                echo '  <td><input type="text" name="nombre" value="' . htmlspecialchars($col['nombre']) . '" class="form-control form-control-sm fw-bold"></td>';
-                                
-                                echo '  <td><textarea name="descripcion" class="form-control form-control-sm" rows="1">' . htmlspecialchars($col['descripcion'] ?? '') . '</textarea></td>';
-                                
-                                echo '  <td>';
-                                echo '      <select name="nuevo_estado" class="form-select form-select-sm">';
-                                echo '          <option value="1" '.($col['activa']==1?'selected':'').'>Activa</option>';
-                                echo '          <option value="2" '.($col['activa']==2?'selected':'').'>No Activa</option>';
-                                echo '          <option value="3" '.($col['activa']==3?'selected':'').'>Próximamente</option>';
-                                echo '      </select>';
-                                echo '  </td>';
+                                foreach ($todasLasColecciones as $col) {
+                                    echo '<tr>';
+                                    echo '  <form action="../controllers/adminController.php" method="POST">';
+                                    echo '  <input type="hidden" name="accion" value="actualizarColeccion">';
+                                    echo '  <input type="hidden" name="id_coleccion" value="' . $col['id'] . '">';
 
-                                echo '  <td class="text-center">';
-                                echo '      <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-check-lg"></i></button>';
-                                echo '  </td>';
-                                echo '  </form>';
-                                echo '</tr>';
-                            }
+                                    echo '  <td class="text-center text-secondary fw-bold">#' . $col['id'] . '</td>';
 
-                            echo '  </tbody>';
-                            echo '</table>';
-                            echo '</div>';
-                            break;
+                                    echo '  <td><input type="text" name="nombre" value="' . htmlspecialchars($col['nombre']) . '" class="form-control form-control-sm fw-bold"></td>';
+
+                                    echo '  <td><textarea name="descripcion" class="form-control form-control-sm" rows="1">' . htmlspecialchars($col['descripcion'] ?? '') . '</textarea></td>';
+
+                                    echo '  <td>';
+                                    echo '      <select name="nuevo_estado" class="form-select form-select-sm">';
+                                    echo '          <option value="1" ' . ($col['activa'] == 1 ? 'selected' : '') . '>Activa</option>';
+                                    echo '          <option value="2" ' . ($col['activa'] == 2 ? 'selected' : '') . '>No Activa</option>';
+                                    echo '          <option value="3" ' . ($col['activa'] == 3 ? 'selected' : '') . '>Próximamente</option>';
+                                    echo '      </select>';
+                                    echo '  </td>';
+
+                                    echo '  <td class="text-center">';
+                                    echo '      <button type="submit" class="btn btn-sm btn-dark"><i class="bi bi-check-lg"></i></button>';
+                                    echo '  </td>';
+                                    echo '  </form>';
+                                    echo '</tr>';
+                                }
+
+                                echo '  </tbody>';
+                                echo '</table>';
+                                echo '</div>';
+                                break;
+                            case 'segundaMano':
+                                echo '<h3>Gestión de productos de segunda mano</h3>';
+                                break;
                             case 'usuarios':
                                 echo '<h3>Gestión de Usuarios y Permisos</h3>';
                                 break;

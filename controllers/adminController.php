@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             header("Location: ../admin/admin.php?seccion=productos&pagina=$pagRetorno&mensaje=inventario_actualizado");
             exit();
-            break;
+            
         case 'crearColeccion':
             $nombre = isset($_POST['nombre_coleccion']) ? trim($_POST['nombre_coleccion']) : "";
             $descripcion = isset($_POST['descripcion_coleccion']) ? trim($_POST['descripcion_coleccion']) : "";
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=colecciones&error=nombre_vacio");
             }
             exit();
-            break;
+            
 
         case 'actualizarColeccion':
             $idCol = isset($_POST['id_coleccion']) ? $_POST['id_coleccion'] : 0;
@@ -78,7 +78,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
             header("Location: ../admin/admin.php?seccion=colecciones&mensaje=coleccion_actualizada");
             exit();
-            break;
+
+            case 'actualizarSegundaMano':
+    $revisiones = $_POST['revision'] ?? [];
+    $vendedores = $_POST['vendedor'] ?? [];
+    
+    $prodObj = new Producto($conexion);
+    
+    foreach ($revisiones as $idPrenda => $estado) {
+        $idVendedor = $vendedores[$idPrenda];
+        $prodObj->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
+    }
+    
+    header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=revision_completada");
+    exit();
+    break;
+            
 
         default:
             header("Location: ../admin/admin.php?error=accion_desconocida");

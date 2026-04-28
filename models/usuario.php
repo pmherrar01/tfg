@@ -376,7 +376,6 @@ class Usuario
     {
         $token = bin2hex(random_bytes(32));
 
-        date_default_timezone_set('Europe/Madrid');
         $fechaCaducidad = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         try {
@@ -459,6 +458,14 @@ class Usuario
             ":tipo" => $tipo
         ]);
 
+    }
+
+    public function listarUsuarios(){
+        $sql = "SELECT id, nombre from usuarios";
+        $sentencia  = $this->conexionDataBase->prepare($sql);
+        $sentencia -> execute();
+
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

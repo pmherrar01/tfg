@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set('Europe/Madrid');
 
 class Database
 {
@@ -18,8 +19,8 @@ class Database
             return $pdo;
 
         } catch (PDOException $e) {
-            error_log("Error de conexión a la BD: " . $e->getMessage());
-            die("Error interno: No se pudo conectar a la base de datos.");
+    error_log("Error de conexión a la BD: " . $e->getMessage());
+    throw new Exception("Error de conexión con la base de datos.");
         }
     }
 }

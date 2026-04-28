@@ -333,31 +333,34 @@ public function listarInventarioCompleto()
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function contarProductosTotales()
+    // 1. Contar productos filtrando por tipo
+    public function contarProductosPorTipo($esSegundaMano)
     {
-        $sql = "SELECT COUNT(*) as total FROM productos";
+        $sql = "SELECT COUNT(*) as total FROM productos WHERE es_segunda_mano = :esm";
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute();
+        $sentencia->execute([':esm' => $esSegundaMano ? 1 : 0]);
         $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
         return $resultado['total'];
     }
 
-public function listarProductosConVariantesPaginados($limite, $offset)
+    // 2. Listar productos filtrando por tipo (Oficial o Segunda Mano)
+    public function listarProductosPaginados($esSegundaMano, $limite, $offset)
     {
-        $sqlIds = "SELECT id FROM productos ORDER BY id DESC LIMIT :limite OFFSET :offset";
-        $sentenciaIds = $this->conexionDataBase->prepare($sqlIds);
-        $sentenciaIds->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
-        $sentenciaIds->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
-        $sentenciaIds->execute();
-        $ids = $sentenciaIds->fetchAll(PDO::FETCH_COLUMN);
+        // Primero sacamos los IDs de los productos que tocan
+        $sqlIds = "SELECT id FROM productos WHERE es_segunda_mano = :esm ORDER BY id DESC LIMIT :limite OFFSET :offset";
+        $stmtIds = $this->conexionDataBase->prepare($sqlIds);
+        $stmtIds->bindValue(':esm', (int)$esSegundaMano, PDO::PARAM_INT);
+        $stmtIds->bindValue(':limite', (int)$limite, PDO::PARAM_INT);
+        $stmtIds->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmtIds->execute();
+        $ids = $stmtIds->fetchAll(PDO::FETCH_COLUMN);
 
         if (empty($ids)) return [];
 
         $inQuery = implode(',', array_fill(0, count($ids), '?'));
         
-        // AQUÍ ESTABA EL FALLO: Cambiamos p.usuario_id por p.id_usuario_vendedor
         $sql = "SELECT p.id as prenda_id, p.nombre, p.precio, p.rebaja, p.activo, p.coleccion_id, 
-                       p.es_segunda_mano, u.nombre as nombre_dueno,
+                       p.es_segunda_mano, p.estado_revision, p.id_usuario_vendedor, u.nombre as nombre_dueno,
                        c.id as color_id, c.nombre as nombre_color, 
                        t.talla, IFNULL(t.stock, 0) as stock 
                 FROM productos p
@@ -368,12 +371,12 @@ public function listarProductosConVariantesPaginados($limite, $offset)
                 WHERE p.id IN ($inQuery)
                 ORDER BY p.id DESC, c.nombre ASC, t.talla ASC";
 
-        $sentencia = $this->conexionDataBase->prepare($sql);
+        $stmt = $this->conexionDataBase->prepare($sql);
         foreach ($ids as $k => $id) {
-            $sentencia->bindValue(($k+1), $id);
+            $stmt->bindValue(($k+1), $id);
         }
-        $sentencia->execute();
-        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 public function actualizarDatosBasicosPrenda($id, $rebaja, $activo, $precio = null, $coleccionId = null) {
         if ($precio !== null) { // Tienda Oficial
@@ -976,5 +979,11 @@ public function buscarPorNombreChatBot($nombreABuscar)
         $sentencia = $this->conexionDataBase->prepare($sql);
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
+        $sql = "UPDATE productos SET estado_revision = :estado, id_usuario_vendedor = :idV WHERE id = :id";
+        $stmt = $this->conexionDataBase->prepare($sql);
+        return $stmt->execute([':estado' => $estado, ':idV' => $idVendedor, ':id' => $id]);
     }
 }
