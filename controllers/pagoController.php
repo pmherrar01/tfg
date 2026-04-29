@@ -42,6 +42,7 @@ if (isset($_GET['status']) && $_GET['status'] == 'success') {
 
             // Tu función segura que busca el precio ella misma
             $pedidoObj->crearDetallesPedidos($idPedido, $idProducto, $idColor, $talla, $cantidad);
+            $productoObj->actualizarStock($idProducto, $idColor, $talla, $cantidad);
         }
 
         // 3. Limpiar carrito y datos temporales
