@@ -85,7 +85,7 @@ include './includes/header.php';
                     </div>
                     <div class="d-flex justify-content-between mb-3 text-muted border-bottom pb-3">
                         <span>Gastos de envío</span>
-                        <span>Calculado en el siguiente paso</span>
+                        <span>4.99</span>
                     </div>
 
                     

@@ -67,6 +67,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         'direccion' => $_POST['direccion'] ?? 'Dirección no proporcionada'
     ];
 
+    $metodo_pago = $_POST['metodo_pago'] ?? 'tarjeta';
+
+    if ($metodo_pago == 'bizum') {
+        // Si es Bizum, no vamos a Stripe. Simulamos que el pago se hizo con éxito y redirigimos.
+        header("Location: ../controllers/pagoController.php?status=success");
+        exit();
+    }
+
     $line_items = [];
     $subtotal = 0;
 
