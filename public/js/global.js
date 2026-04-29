@@ -311,6 +311,7 @@ function pintarPrendasRecientes() {
     carruselInner.innerHTML = "";
     let htmlAcumulado = "";
 
+
     aPrendasRecientes.forEach((prenda, index) => {
 
         if (index % 4 === 0) {
@@ -323,22 +324,22 @@ function pintarPrendasRecientes() {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // --- CÁLCULO DE REBAJAS ---
-        // Parseamos por si en la BBDD el precio viene con coma en vez de punto
-        let rebaja = prenda.rebaja ? parseInt(prenda.rebaja) : 0;
-        let precioString = prenda.precio ? prenda.precio.toString().replace(',', '.') : '0';
-        let precioNormal = parseFloat(precioString);
-        
+        let rebaja = 0;
+        if (prenda.rebaja && !isNaN(prenda.rebaja) && prenda.rebaja !== "0" && prenda.rebaja !== "") {
+            rebaja = parseInt(prenda.rebaja);
+        }
+
+        let precioNormal = parseFloat((prenda.precio || '0').toString().replace(',', '.'));
         let htmlPrecio = `<p class="card-text mb-0 fw-bold">${precioNormal.toFixed(2)} €</p>`;
         let htmlBadge = '';
 
+
         if (rebaja > 0) {
+            
             let precioFinal = precioNormal - (precioNormal * rebaja / 100);
             
-            // La etiqueta roja
             htmlBadge = `<span class="position-absolute top-0 end-0 m-2 badge bg-danger text-white rounded-0 fw-bold px-2 py-1 shadow-sm" style="font-size: 0.8rem; letter-spacing: 1px; z-index: 10;">-${rebaja}%</span>`;
             
-            // El precio tachado y el nuevo precio
             htmlPrecio = `
                 <p class="card-text mb-0">
                     <span class="text-muted text-decoration-line-through small me-2">${precioNormal.toFixed(2)} €</span>
@@ -346,7 +347,6 @@ function pintarPrendasRecientes() {
                 </p>
             `;
         }
-        // --------------------------
 
         htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
@@ -355,7 +355,8 @@ function pintarPrendasRecientes() {
                     <div class="img-wrapper position-relative overflow-hidden">
                         
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
-                            ${htmlBadge} <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                            ${htmlBadge}
+                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
                         
                         <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
@@ -374,20 +375,6 @@ function pintarPrendasRecientes() {
                             ${htmlPrecio}
                         </a>
                     </div>
-                </div>
-
-                <div class="d-flex align-items-center justify-content-between gap-2 mt-2 px-1">
-                    <button type="button" class="btn btn-principal rounded-0 flex-grow-1 text-uppercase fw-bold" 
-                            style="height: 40px; font-size: 0.75rem; letter-spacing: 1px;"
-                            onclick="abrirOverlayTallas(event, ${prenda.id}, ${prenda.colorPrenda})">
-                        Añadir <i class="bi bi-plus-lg ms-1"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0" 
-                            data-id="${prenda.id}" 
-                            data-color="${prenda.colorPrenda}">
-                        <i class="bi ${iconoCorazon}"></i>
-                    </button>
                 </div>
             </div>
         `;
