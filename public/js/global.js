@@ -323,18 +323,22 @@ function pintarPrendasRecientes() {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // --- MAGIA DE LAS REBAJAS CORREGIDA PARA QUE SEA IGUAL A PHP ---
+        // --- CÁLCULO DE REBAJAS ---
+        // Parseamos por si en la BBDD el precio viene con coma en vez de punto
         let rebaja = prenda.rebaja ? parseInt(prenda.rebaja) : 0;
-        let precioNormal = parseFloat(prenda.precio);
+        let precioString = prenda.precio ? prenda.precio.toString().replace(',', '.') : '0';
+        let precioNormal = parseFloat(precioString);
+        
         let htmlPrecio = `<p class="card-text mb-0 fw-bold">${precioNormal.toFixed(2)} €</p>`;
         let htmlBadge = '';
 
         if (rebaja > 0) {
             let precioFinal = precioNormal - (precioNormal * rebaja / 100);
             
-            // Etiqueta EXACTAMENTE IGUAL a la del index.php
+            // La etiqueta roja
             htmlBadge = `<span class="position-absolute top-0 end-0 m-2 badge bg-danger text-white rounded-0 fw-bold px-2 py-1 shadow-sm" style="font-size: 0.8rem; letter-spacing: 1px; z-index: 10;">-${rebaja}%</span>`;
             
+            // El precio tachado y el nuevo precio
             htmlPrecio = `
                 <p class="card-text mb-0">
                     <span class="text-muted text-decoration-line-through small me-2">${precioNormal.toFixed(2)} €</span>
@@ -342,16 +346,16 @@ function pintarPrendasRecientes() {
                 </p>
             `;
         }
-        // ------------------------------------------
+        // --------------------------
 
         htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
                     <div class="img-wrapper position-relative overflow-hidden">
-                        ${htmlBadge}
+                        
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
-                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                            ${htmlBadge} <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
                         
                         <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">
