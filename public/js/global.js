@@ -323,12 +323,30 @@ function pintarPrendasRecientes() {
             iconoCorazon = 'bi-heart-fill';
         }
 
+        // --- MAGIA DE LAS REBAJAS AÑADIDA AQUÍ ---
+        let rebaja = prenda.rebaja ? parseInt(prenda.rebaja) : 0;
+        let precioNormal = parseFloat(prenda.precio);
+        let htmlPrecio = `<p class="card-text mb-0 fw-bold">${precioNormal.toFixed(2)} €</p>`;
+        let htmlBadge = '';
+
+        if (rebaja > 0) {
+            let precioFinal = precioNormal - (precioNormal * rebaja / 100);
+            htmlBadge = `<span class="badge bg-danger position-absolute top-0 start-0 m-2 z-2 fs-6 rounded-0 shadow-sm">-${rebaja}%</span>`;
+            htmlPrecio = `
+                <p class="card-text mb-0">
+                    <span class="text-muted text-decoration-line-through small me-2">${precioNormal.toFixed(2)} €</span>
+                    <span class="fw-bold text-danger">${precioFinal.toFixed(2)} €</span>
+                </p>
+            `;
+        }
+        // ------------------------------------------
+
         htmlAcumulado += `
             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
                     <div class="img-wrapper position-relative overflow-hidden">
-                    
+                        ${htmlBadge}
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
@@ -346,7 +364,7 @@ function pintarPrendasRecientes() {
                     <div class="card-body text-center px-0 pb-1 mt-2">
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate">${prenda.nombre}</h5>
-                            <p class="card-text mb-0">${prenda.precio} €</p>
+                            ${htmlPrecio}
                         </a>
                     </div>
                 </div>

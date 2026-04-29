@@ -340,7 +340,9 @@ function guardarPrendasRecientes() {
         nombre: mainProducto.dataset.nombre,
         precio: mainProducto.dataset.precio,
         imagen: mainProducto.dataset.imagen,
-        colorPrenda: mainProducto.dataset.colorPrenda
+        colorPrenda: mainProducto.dataset.colorPrenda,
+        rebaja: mainProducto.dataset.rebaja
+
     }
 
 
