@@ -991,4 +991,55 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             return false;
         }
     }
+
+    public function crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $urls_imagenes) {
+        try {
+            $this->conexionDataBase->beginTransaction();
+
+            $sql = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja, talla, stock) 
+                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, :talla, :stock)";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([
+                ':nombre' => $nombre,
+                ':descripcion' => $descripcion,
+                ':precio' => $precio,
+                ':tipo_id' => $tipo_id ?: null,
+                ':coleccion_id' => $coleccion_id ?: null,
+                ':genero' => $genero,
+                ':talla' => $talla,
+                ':stock' => $stock
+            ]);
+            $idProducto = $this->conexionDataBase->lastInsertId();
+
+            $sql = "INSERT INTO producto_colores (producto_id, color_id) VALUES (:id_prod, :id_color)";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
+
+            $sql = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock)";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => $stock]);
+
+            if (!empty($urls_imagenes) && is_array($urls_imagenes)) {
+                $sql = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:id_prod, :id_color, :url_img, :es_principal)";
+                $sentencia = $this->conexionDataBase->prepare($sql);
+                
+                foreach ($urls_imagenes as $index => $url) {
+                    $esPrincipal = ($index === 0) ? 1 : 0;
+                    $sentencia->execute([
+                        ':id_prod' => $idProducto, 
+                        ':color_id' => $color_id, 
+                        ':url_img' => $url,
+                        ':es_principal' => $esPrincipal
+                    ]);
+                }
+            }
+
+            $this->conexionDataBase->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conexionDataBase->rollBack();
+            error_log("Error crearPrendaNueva: " . $e->getMessage());
+            return false;
+        }
+    }
 }

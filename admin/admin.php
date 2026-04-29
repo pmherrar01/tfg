@@ -220,7 +220,84 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '      <h3 class="fw-bold m-0 text-uppercase">Gestión de Inventario</h3>';
                                 echo '      <small class="text-muted">Mostrando ' . count($productosAgrupados) . ' de ' . $totalProductos . ' productos totales</small>';
                                 echo '  </div>';
-                                echo '  <a href="#" class="btn btn-admin-black px-4 py-2"><i class="bi bi-plus-lg me-2"></i> Añadir Prenda</a>';
+                                echo '  <button class="btn btn-admin-black px-4 py-2" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaPrenda">
+                                            <i class="bi bi-plus-lg me-2"></i> Añadir Prenda
+                                        </button>';
+                                echo '</div>';
+
+                                // --- FORMULARIO DESPLEGABLE CREAR PRENDA ---
+                                echo '<div class="collapse mb-4 mt-3" id="formNuevaPrenda">';
+                                echo '  <div class="card card-body admin-card border-0 shadow-sm bg-light">';
+                                echo '      <h5 class="fw-bold mb-3 text-uppercase"><i class="bi bi-box-seam me-2"></i>Subir Nueva Prenda al Catálogo</h5>';
+                                echo '      <form action="../controllers/adminController.php" method="POST" enctype="multipart/form-data" class="row g-3">';
+                                echo '          <input type="hidden" name="accion" value="crearPrenda">';
+                                
+                                echo '          <div class="col-md-4">';
+                                echo '              <label class="fw-bold small">Nombre de la Prenda:</label>';
+                                echo '              <input type="text" name="nombre" class="form-control border-dark" placeholder="Ej: Camiseta Oversize Negra" required>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-2">';
+                                echo '              <label class="fw-bold small">Precio (€):</label>';
+                                echo '              <input type="number" step="0.01" name="precio" class="form-control border-dark" placeholder="29.99" required>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-3">';
+                                echo '              <label class="fw-bold small">Tipo de Prenda:</label>';
+                                echo '              <select name="tipo_id" class="form-select border-dark" required>';
+                                echo '                  <option value="">-- Seleccionar --</option>';
+                                foreach($prod->listarTiposPrendas() as $t) { echo "<option value='{$t['id']}'>{$t['nombre']}</option>"; }
+                                echo '              </select>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-3">';
+                                echo '              <label class="fw-bold small">Colección:</label>';
+                                echo '              <select name="coleccion_id" class="form-select border-dark">';
+                                echo '                  <option value="">Ninguna</option>';
+                                foreach($listaColeciones as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                echo '              </select>';
+                                echo '          </div>';
+                                
+                                echo '          <div class="col-md-12">';
+                                echo '              <label class="fw-bold small">Descripción del producto:</label>';
+                                echo '              <textarea name="descripcion" class="form-control border-dark" rows="2" placeholder="Escribe aquí los detalles del material, estilo..."></textarea>';
+                                echo '          </div>';
+
+                                echo '          <div class="col-md-2">';
+                                echo '              <label class="fw-bold small">Género:</label>';
+                                echo '              <select name="genero" class="form-select border-dark" required>';
+                                echo '                  <option value="1">Hombre</option>';
+                                echo '                  <option value="2">Mujer</option>';
+                                echo '                  <option value="3" selected>Unisex</option>';
+                                echo '              </select>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-3">';
+                                echo '              <label class="fw-bold small">Color Principal:</label>';
+                                echo '              <select name="color_id" class="form-select border-dark" required>';
+                                echo '                  <option value="">-- Seleccionar --</option>';
+                                foreach($prod->listaColores() as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                echo '              </select>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-2">';
+                                echo '              <label class="fw-bold small">Talla (Inicial):</label>';
+                                echo '              <input type="text" name="talla" class="form-control border-dark text-uppercase" placeholder="Ej: M" required>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-2">';
+                                echo '              <label class="fw-bold small">Stock (Inicial):</label>';
+                                echo '              <input type="number" name="stock" class="form-control border-dark" value="10" required>';
+                                echo '          </div>';
+                                echo '          <div class="col-md-3">';
+                                echo '              <label class="fw-bold small">Subir Foto:</label>';
+                                echo '              <input type="file" name="imagenes[]" class="form-control border-dark" accept="image/*" multiple required>';
+                                echo '          </div>';
+
+                                echo '          <div class="col-12 text-end mt-4">';
+                                echo '              <button type="submit" class="btn btn-dark fw-bold px-4 shadow"><i class="bi bi-cloud-arrow-up me-2"></i>Guardar y Publicar Prenda</button>';
+                                echo '          </div>';
+                                echo '      </form>';
+                                echo '  </div>';
+                                echo '</div>';
+                                // ------------------------------------------
+
+                                // Aquí sigue tu formulario masivo que ya tenías:
+                                echo '<form action="../controllers/adminController.php" method="POST">';
                                 echo '</div>';
 
                                 echo '<form action="../controllers/adminController.php" method="POST">';
@@ -616,7 +693,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     echo '          <div class="d-flex gap-2">';
                                     echo '              <button class="btn btn-sm btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#editLook'.$id.'">Editar</button>';
                                     echo '              <form action="../controllers/adminController.php" method="POST" onsubmit="return confirm(\'¿Borrar este look?\')">';
-                                    echo '                  <input type="hidden" name="accion" value="eliminar_look">';
+                                    echo '                  <input type="hidden" name="accion" value="eliminarLook">';
                                     echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
                                     echo '                  <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>';
                                     echo '              </form>';

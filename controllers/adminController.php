@@ -93,12 +93,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=usuarios&error=usuario_invalido");
             }
             exit();
-        // --- LOOKS ---
         case 'crear_look':
             $prendasRaw = $_POST['prendas'] ?? [];
             $prendasLimpias = [];
             
-            // Separamos el "5_12" en producto_id=5 y color_id=12
             foreach ($prendasRaw as $combo) {
                 if (!empty($combo) && strpos($combo, '_') !== false) {
                     list($pId, $cId) = explode('_', $combo);
@@ -113,7 +111,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=looks&error=error_creacion");
             }
             exit();
-            break;
 
         case 'editar_look':
             $idLook = $_POST['id_look'] ?? 0;
@@ -122,7 +119,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             
             $prendasLimpias = [];
             
-            // Separamos el "5_12" en producto_id=5 y color_id=12
             foreach ($prendasRaw as $combo) {
                 if (!empty($combo) && strpos($combo, '_') !== false) {
                     list($pId, $cId) = explode('_', $combo);
@@ -134,15 +130,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $lookObj->editarLook($idLook, $activo, $prendasLimpias);
             header("Location: ../admin/admin.php?seccion=looks&mensaje=look_actualizado");
             exit();
-            break;
 
-        case 'eliminar_look':
+        case 'eliminarLook':
             $id = $_POST['id_look'] ?? 0;
             $lookObj = new Look($conexion);
             $lookObj->eliminarLook($id);
             header("Location: ../admin/admin.php?seccion=looks&mensaje=look_eliminado");
             exit();
-            break;
+
+        case 'crearPrenda':
+            $nombre = $_POST['nombre'] ?? '';
+            $descripcion = $_POST['descripcion'] ?? '';
+            $precio = $_POST['precio'] ?? 0;
+            $tipo_id = $_POST['tipo_id'] ?? null;
+            $coleccion_id = empty($_POST['coleccion_id']) ? null : $_POST['coleccion_id'];
+            $genero = $_POST['genero'] ?? 3;
+            $color_id = $_POST['color_id'] ?? null;
+            $talla = strtoupper($_POST['talla'] ?? ''); 
+            $stock = $_POST['stock'] ?? 0;
+            
+            $rutasDestino = [];
+            if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'])) {
+                $totalImagenes = count($_FILES['imagenes']['name']);
+                $rutaDirectorio = __DIR__ . '/../public/img/';
+                
+                for ($i = 0; $i < $totalImagenes; $i++) {
+                    if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
+                        // Nombre único para cada foto
+                        $nombreArchivo = time() . '_' . $i . '_' . preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
+                        
+                        if (move_uploaded_file($_FILES['imagenes']['tmp_name'][$i], $rutaDirectorio . $nombreArchivo)) {
+                            $rutasDestino[] = 'public/img/' . $nombreArchivo;
+                        }
+                    }
+                }
+            }
+
+            $prodObj = new Producto($conexion);
+            if ($prodObj->crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $rutasDestino)) {
+                header("Location: ../admin/admin.php?seccion=productos&mensaje=prenda_subida");
+            } else {
+                header("Location: ../admin/admin.php?seccion=productos&error=error_subida");
+            }
+            exit();
 
         default:
             header("Location: ../admin/admin.php");
