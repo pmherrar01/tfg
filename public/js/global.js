@@ -46,7 +46,7 @@ function inicializarBuscadorEnVivo() {
             let texto = this.value.trim();
 
             if (texto.length >= 2) {
-                fetch('controllers/apiBuscarController.php?q=' + texto)
+                fetch('controllers/apiBuscarController.php?q=' + texto + '&apiKey=Z5qbS7OXmHrLOoxa8BXWEDxjh5P5qffBQHCH9aV2mDrWtXxTcKsFssJvwFc4Todc')
                     .then(respuesta => respuesta.json())
                     .then(datos => {
                         if (datos.length > 0) {

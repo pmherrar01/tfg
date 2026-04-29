@@ -92,21 +92,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=usuarios&error=usuario_invalido");
             }
             exit();
+        case "crearLook":
+            $prendasRaw = $_POST['prendas'] ?? [];
+            $lookObj = new Look($conexion);
+            
+            if ($lookObj->crearLook($prendasRaw)) {
+                header("Location: ../admin/admin.php?seccion=looks&mensaje=look_creado");
+            } else {
+                header("Location: ../admin/admin.php?seccion=looks&error=error_creacion");
+            }
+            exit();
+
+        case 'editarLook':
+            $idLook = $_POST['id_look'] ?? 0;
+            $activo = $_POST['activo'] ?? 1;
+            $prendasRaw = $_POST['prendas'] ?? [];
+            
+            $lookObj = new Look($conexion);
+            $lookObj->editarLook($idLook, $activo, $prendasRaw);
+            header("Location: ../admin/admin.php?seccion=looks&mensaje=look_actualizado");
+            exit();
             break;
-            case "actualizarRol":
-                $idUsu = isset($_POST["idUsu"]) ? $_POST["idUsu"] : 0;
-                $nuevoRol = isset($_POST['nuevoRol']) ? (int)$_POST['nuevoRol'] : 2;
 
-
-                if($idUsu > 0){
-                    $usu = new Usuario($conexion);
-                    $usu->actualizarRolUsuario($idUsu, $nuevoRol);
-                    header("Location: ../admin/admin.php?seccion=usuarios&mensaje=rolActualizado");
-                    exit;
-                }else{
-                    header("Location: ../admin/admin.php?seccion=usuarios&error=usuarioInvalido");
-                    exit;
-                }            
+        case 'eliminarLook':
+            $id = $_POST['id_look'] ?? 0;
+            $lookObj = new Look($conexion);
+            $lookObj->eliminarLook($id);
+            header("Location: ../admin/admin.php?seccion=looks&mensaje=look_eliminado");
+            exit();
 
         default:
             header("Location: ../admin/admin.php");

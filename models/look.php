@@ -170,6 +170,79 @@ class Look{
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+    public function listarLooksAdmin() {
+        $sql = "SELECT l.id as look_id, l.activo, 
+                       lp.producto_id, p.nombre as nombre_producto, 
+                       lp.color_id, c.nombre as nombre_color
+                FROM looks l
+                LEFT JOIN look_prendas lp ON l.id = lp.look_id
+                LEFT JOIN productos p ON lp.producto_id = p.id
+                LEFT JOIN colores c ON lp.color_id = c.id
+                ORDER BY l.id DESC";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        $sentencia->execute();
+        return $sentencia->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function crearLook($prendas) {
+        try {
+            $this->conexionDataBase->beginTransaction();
+
+            $sqlLook = "INSERT INTO looks (activo) VALUES (1)";
+            $this->conexionDataBase->prepare($sqlLook)->execute();
+            $lookId = $this->conexionDataBase->lastInsertId();
+
+            $sql = "INSERT INTO look_prendas (look_id, producto_id, color_id) VALUES (?, ?, ?)";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+
+            foreach ($prendas as $p) {
+                if (!empty($p['producto_id']) && !empty($p['color_id'])) {
+                    $sentencia->execute([$lookId, $p['producto_id'], $p['color_id']]);
+                }
+            }
+
+            $this->conexionDataBase->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conexionDataBase->rollBack();
+            return false;
+        }
+    }
+
+    public function editarLook($lookId, $activo, $prendas) {
+        try {
+            $this->conexionDataBase->beginTransaction();
+            
+            $sql = "UPDATE looks SET activo = ? WHERE id = ?";
+            $this->conexionDataBase->prepare($sql)->execute([$activo, $lookId]);
+
+            $sql = "DELETE FROM look_prendas WHERE look_id = ?";
+            $this->conexionDataBase->prepare($sql)->execute([$lookId]);
+
+            $sqlPrenda = "INSERT INTO look_prendas (look_id, producto_id, color_id) VALUES (?, ?, ?)";
+            $sentencia = $this->conexionDataBase->prepare($sqlPrenda);
+
+            foreach ($prendas as $p) {
+                if (!empty($p['producto_id']) && !empty($p['color_id'])) {
+                    $sentencia->execute([$lookId, $p['producto_id'], $p['color_id']]);
+                }
+            }
+
+            $this->conexionDataBase->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conexionDataBase->rollBack();
+            return false;
+        }
+    }
+
+    public function eliminarLook($id) {
+        $this->conexionDataBase->prepare("DELETE FROM look_prendas WHERE look_id = ?")->execute([$id]);
+        return $this->conexionDataBase->prepare("DELETE FROM looks WHERE id = ?")->execute([$id]);
+    }
+
 }
 
 ?>

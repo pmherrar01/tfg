@@ -9,6 +9,7 @@ require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/usuario.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/producto.php";
+require_once __DIR__ . "/../models/look.php";
 
 if (!isset($_SESSION["usuario_id"])) {
     header("Location: ../index.php?error=debes_iniciar_sesion");
@@ -85,6 +86,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                         <li class="nav-item">
                             <a class="nav-link admin-nav-link <?= ($seccion == 'usuarios') ? 'active' : '' ?>" href="admin.php?seccion=usuarios">
                                 <i class="bi bi-people"></i> Usuarios
+                            </a>
+                        </li>
+                                                <li class="nav-item">
+                            <a class="nav-link admin-nav-link <?= ($seccion == 'looks') ? 'active' : '' ?>" href="admin.php?seccion=looks">
+                                <i class="bi bi-people"></i> Looks
                             </a>
                         </li>
                     </ul>
@@ -539,6 +545,139 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                             echo '  </tbody>';
                             echo '</table>';
                             echo '</div>';
+                            break;
+                            case 'looks':
+                            $lookObj = new Look($db->conectar());
+                            $prodObj = new Producto($db->conectar());
+                            
+                            $looks = $lookObj->listarLooksAdmin();
+                            $productos = $prodObj->listarProductosPaginados(false, 200, 0); // Traemos oficiales
+                            $colores = $db->conectar()->query("SELECT * FROM colores")->fetchAll(PDO::FETCH_ASSOC);
+
+                            // Agrupar prendas por Look
+                            $looksAgrupados = [];
+                            foreach ($looks as $l) {
+                                $looksAgrupados[$l['look_id']]['activo'] = $l['activo'];
+                                if ($l['producto_id']) {
+                                    $looksAgrupados[$l['look_id']]['prendas'][] = $l;
+                                }
+                            }
+
+                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Looks</h3>';
+                            echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevoLook"><i class="bi bi-plus-lg me-2"></i> Crear Nuevo Look</button>';
+                            echo '</div>';
+
+                            // --- FORMULARIO CREAR LOOK ---
+                            echo '<div class="collapse mb-4" id="formNuevoLook">';
+                            echo '  <div class="card card-body admin-card border-0 shadow-sm bg-light">';
+                            echo '      <form action="../controllers/adminController.php" method="POST">';
+                            echo '          <input type="hidden" name="accion" value="crear_look">';
+                            echo '          <h6 class="fw-bold text-uppercase mb-3">Prendas que forman el look:</h6>';
+                            echo '          <div class="row g-3">';
+                            for ($i=0; $i < 4; $i++) { 
+                                echo '          <div class="col-md-6 border-bottom pb-2">';
+                                echo '              <span class="badge bg-dark mb-1">Prenda '.($i+1).'</span>';
+                                echo '              <div class="d-flex gap-2">';
+                                echo '                  <select name="prendas['.$i.'][producto_id]" class="form-select form-select-sm">';
+                                echo '                      <option value="">Seleccionar Prenda...</option>';
+                                foreach ($productos as $p) echo "<option value='{$p['prenda_id']}'>{$p['nombre']}</option>";
+                                echo '                  </select>';
+                                echo '                  <select name="prendas['.$i.'][color_id]" class="form-select form-select-sm w-50">';
+                                foreach ($colores as $c) echo "<option value='{$c['id']}'>{$c['nombre']}</option>";
+                                echo '                  </select>';
+                                echo '              </div>';
+                                echo '          </div>';
+                            }
+                            echo '          </div>';
+                            echo '          <div class="text-end mt-3"><button type="submit" class="btn btn-dark fw-bold px-4">Guardar Look</button></div>';
+                            echo '      </form>';
+                            echo '  </div>';
+                            echo '</div>';
+
+                            // --- LISTADO DE LOOKS (TARJETAS) ---
+                            if (empty($looksAgrupados)) {
+                                echo '<div class="alert alert-secondary text-center">No hay looks configurados.</div>';
+                            } else {
+                                echo '<div class="row">';
+                                foreach ($looksAgrupados as $id => $datos) {
+                                    $estadoHTML = ($datos['activo'] == 1) ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
+                                    
+                                    echo '<div class="col-md-6 col-lg-6 mb-4">';
+                                    echo '  <div class="card h-100 border-0 shadow-sm admin-card">';
+                                    
+                                    // Cabecera (Botones Eliminar y Editar)
+                                    echo '      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">';
+                                    echo '          <div><span class="fw-bold fs-5">LOOK #'.$id.'</span> <span class="ms-2">'.$estadoHTML.'</span></div>';
+                                    echo '          <div class="d-flex gap-2">';
+                                    echo '              <button class="btn btn-sm btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#editLook'.$id.'">Editar</button>';
+                                    echo '              <form action="../controllers/adminController.php" method="POST" onsubmit="return confirm(\'¿Borrar este look?\')">';
+                                    echo '                  <input type="hidden" name="accion" value="eliminar_look">';
+                                    echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
+                                    echo '                  <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>';
+                                    echo '              </form>';
+                                    echo '          </div>';
+                                    echo '      </div>';
+                                    
+                                    // Cuerpo (Lista de prendas actual)
+                                    echo '      <div class="card-body">';
+                                    echo '          <ul class="list-group list-group-flush mb-3">';
+                                    $prendasActuales = $datos['prendas'] ?? [];
+                                    if (empty($prendasActuales)) echo '<li class="list-group-item text-muted">Look vacío</li>';
+                                    foreach ($prendasActuales as $prenda) {
+                                        echo '          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">';
+                                        echo '              <span class="text-uppercase small"><i class="bi bi-check2-circle me-1 text-success"></i>'.$prenda['nombre_producto'] . ' color: ' .$prenda['nombre_color'].'</span>';
+                                        echo '              <span class="badge bg-secondary">'.$prenda['nombre_color'].'</span>';
+                                        echo '          </li>';
+                                    }
+                                    echo '          </ul>';
+
+                                    // --- FORMULARIO DE EDICIÓN OCULTO (Se abre al darle a editar) ---
+                                    echo '          <div class="collapse mt-3 border-top pt-3" id="editLook'.$id.'">';
+                                    echo '              <form action="../controllers/adminController.php" method="POST">';
+                                    echo '                  <input type="hidden" name="accion" value="editar_look">';
+                                    echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
+                                    
+                                    // Selector de estado
+                                    echo '                  <div class="mb-3 d-flex align-items-center gap-2">';
+                                    echo '                      <label class="fw-bold small">Estado del Look:</label>';
+                                    echo '                      <select name="activo" class="form-select form-select-sm w-auto">';
+                                    echo '                          <option value="1" '.($datos['activo']==1?'selected':'').'>🟢 Activo</option>';
+                                    echo '                          <option value="0" '.($datos['activo']==0?'selected':'').'>🔴 Oculto</option>';
+                                    echo '                      </select>';
+                                    echo '                  </div>';
+
+                                    // Pre-cargar 4 huecos (los que tengan prenda se seleccionan, los vacíos no)
+                                    for ($i=0; $i < 4; $i++) { 
+                                        $pIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['producto_id'] : '';
+                                        $cIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['color_id'] : '';
+                                        
+                                        echo '              <div class="d-flex gap-1 mb-2">';
+                                        echo '                  <select name="prendas['.$i.'][producto_id]" class="form-select form-select-sm">';
+                                        echo '                      <option value="">- Vacío -</option>';
+                                        foreach ($productos as $p) {
+                                            $sel = ($p['prenda_id'] == $pIdActual) ? 'selected' : '';
+                                            echo "<option value='{$p['prenda_id']}' $sel>{$p['nombre']}</option>";
+                                        }
+                                        echo '                  </select>';
+                                        echo '                  <select name="prendas['.$i.'][color_id]" class="form-select form-select-sm" style="width: 120px;">';
+                                        foreach ($colores as $c) {
+                                            $sel = ($c['id'] == $cIdActual) ? 'selected' : '';
+                                            echo "<option value='{$c['id']}' $sel>{$c['nombre']}</option>";
+                                        }
+                                        echo '                  </select>';
+                                        echo '              </div>';
+                                    }
+                                    echo '                  <button type="submit" class="btn btn-dark btn-sm w-100 mt-2">Guardar Cambios</button>';
+                                    echo '              </form>';
+                                    echo '          </div>'; // Fin collapse editar
+                                    
+                                    echo '      </div>';
+                                    echo '  </div>';
+                                    echo '</div>';
+                                }
+                                echo '</div>';
+                            }
                             break;
                         }
                         ?>
