@@ -14,10 +14,10 @@ include './includes/header.php';
 
     <form id="formPago" action="controllers/pagoController.php" method="POST">
         <div class="row g-5">
-            
+
             <div class="col-lg-7">
                 <h4 class="fw-bold text-uppercase mb-4 border-bottom pb-2 mt-5">2. Método de Pago</h4>
-                
+
                 <div class="card border border-dark border-2 rounded-0 p-3 bg-white mb-3" id="caja_tarjeta">
                     <div class="form-check d-flex align-items-center m-0">
                         <input class="form-check-input me-3" type="radio" name="metodo_pago" id="pago_tarjeta" value="tarjeta" checked style="transform: scale(1.2);" onchange="cambiarMetodoPago()">
@@ -54,7 +54,11 @@ include './includes/header.php';
                         if (isset($_SESSION['carrito'])):
                             foreach ($_SESSION['carrito'] as $item):
                                 $producto = $productoModel->obtenerProducto($item['idPrenda']);
-                                $subtotalItem = $producto['precio'] * $item['cantidad'];
+
+                                $rebaja = isset($producto['rebaja']) ? (int)$producto['rebaja'] : 0;
+                                $precioUnitario = $producto['precio'] - ($producto['precio'] * $rebaja / 100);
+
+                                $subtotalItem = $precioUnitario * $item['cantidad'];
                                 $subtotalCheckout += $subtotalItem;
                         ?>
                                 <div class="d-flex justify-content-between mb-2 small">
@@ -74,13 +78,13 @@ include './includes/header.php';
                         <span><?php echo number_format($subtotalCheckout, 2); ?> €</span>
                     </div>
 
-                    <?php 
+                    <?php
                     $descuentoCheckout = 0;
                     if (isset($_SESSION['descuento'])) {
                         $porcentaje = $_SESSION['descuento']['porcentaje'];
                         $descuentoCheckout = $subtotalCheckout * ($porcentaje / 100);
                     }
-                    
+
                     if ($descuentoCheckout > 0): ?>
                         <div class="d-flex justify-content-between mb-2 text-danger fw-bold">
                             <span>Descuento (<?= $_SESSION['descuento']['porcentaje'] ?>%)</span>
@@ -88,7 +92,7 @@ include './includes/header.php';
                         </div>
                     <?php endif; ?>
 
-                    <?php 
+                    <?php
                     $envio = (($subtotalCheckout - $descuentoCheckout) > 50) ? 0 : 4.99;
                     $totalFinalCheckout = ($subtotalCheckout - $descuentoCheckout) + $envio;
                     ?>

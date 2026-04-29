@@ -192,7 +192,10 @@ foreach ($carritoActual as $indice => $item) {
         }
     }
 
-    $subtotal = $datosProd['precio'] * $item['cantidad'];
+    $rebaja = isset($datosProd['rebaja']) ? (int)$datosProd['rebaja'] : 0;
+    $precioUnitario = $datosProd['precio'] - ($datosProd['precio'] * $rebaja / 100);
+
+    $subtotal = $precioUnitario * $item['cantidad'];
     $totalCarrito += $subtotal;
 
     $carritoDetallado[] = [
@@ -200,7 +203,7 @@ foreach ($carritoActual as $indice => $item) {
         'idPrenda' => $item['idPrenda'],
         'color_id' => $item['color_id'],
         'nombre' => $datosProd['nombre'],
-        'precio' => $datosProd['precio'],
+        'precio' => number_format($precioUnitario, 2),
         'talla' => $item['talla'],
         'color_nombre' => $nombreColor,
         'cantidad' => $item['cantidad'],

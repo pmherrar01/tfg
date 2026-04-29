@@ -55,7 +55,20 @@ include './includes/header.php';
         <div class="col-md-6 ps-md-5 d-flex flex-column justify-content-center">
 
             <h1 class="display-5 fw-bold text-uppercase mb-2"><?php echo $datosPrenda["nombre"] ?> </h1>
-            <p class="fs-3 fw-light mb-4"> <?php echo $datosPrenda["precio"] ?> €</p>
+            <div class="mb-4">
+                <?php 
+                $rebaja = isset($datosPrenda['rebaja']) ? (int)$datosPrenda['rebaja'] : 0;
+                $precioFinal = $datosPrenda['precio'] - ($datosPrenda['precio'] * $rebaja / 100);
+                
+                if ($rebaja > 0){
+                ?>
+                    <span class="fs-4 text-muted text-decoration-line-through me-2"><?php echo number_format($datosPrenda['precio'], 2); ?> €</span>
+                    <span class="fs-3 fw-bold text-danger"><?php echo number_format($precioFinal, 2); ?> €</span>
+                    <span class="badge bg-danger ms-2 mb-2 align-middle fs-6">-<?php echo $rebaja; ?>%</span>
+                <?php } else{ ?>
+                    <span class="fs-3 fw-light"><?php echo number_format($datosPrenda['precio'], 2); ?> €</span>
+                <?php }; ?>
+            </div>
 
             <div class="mb-5">
                 <p class="text-muted text-uppercase" style="letter-spacing: 2px; font-size: 0.85rem;">Descripción</p>

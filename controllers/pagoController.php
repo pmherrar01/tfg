@@ -78,13 +78,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $line_items = [];
     $subtotal = 0;
 
-    // Preparamos los productos para Stripe consultando su info real
+// Preparamos los productos para Stripe consultando su info real
     foreach ($_SESSION['carrito'] as $item) {
         
         // Buscamos en la BD el nombre y precio real para Stripe
         $datosProd = $productoObj->obtenerProducto($item['idPrenda']);
-        $precioReal = $datosProd['precio'];
         $nombreReal = $datosProd['nombre'];
+        
+        $rebaja = isset($datosProd['rebaja']) ? (int)$datosProd['rebaja'] : 0;
+        $precioReal = $datosProd['precio'] - ($datosProd['precio'] * $rebaja / 100);
 
         $subtotal += ($precioReal * $item['cantidad']);
         

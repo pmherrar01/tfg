@@ -55,12 +55,15 @@ class Pedido
         return $this->conexionDataBase->lastInsertId();
     }
 
-    public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad)
+public function crearDetallesPedidos($idPedido, $idPrenda, $idColor, $talla, $cantidad)
     {
-        $sqlPrecio = "SELECT precio FROM productos WHERE id = :idProducto";
-        $stmtPrecio = $this->conexionDataBase->prepare($sqlPrecio);
-        $stmtPrecio->execute([":idProducto" => $idPrenda]);
-        $precioUnitario = $stmtPrecio->fetchColumn();
+        $sqlInfo = "SELECT precio, rebaja FROM productos WHERE id = :idProducto";
+        $stmtInfo = $this->conexionDataBase->prepare($sqlInfo);
+        $stmtInfo->execute([":idProducto" => $idPrenda]);
+        $infoProducto = $stmtInfo->fetch(PDO::FETCH_ASSOC);
+        
+        $rebaja = isset($infoProducto['rebaja']) ? (int)$infoProducto['rebaja'] : 0;
+        $precioUnitario = $infoProducto['precio'] - ($infoProducto['precio'] * $rebaja / 100);
 
         $sql = "INSERT INTO lineas_pedido (pedido_id, producto_id, color_id, talla, cantidad, precio_unitario) 
                 VALUES (:idPedido, :idProducto, :idColor, :talla, :cantidad, :precio)";
