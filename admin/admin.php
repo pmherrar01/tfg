@@ -548,11 +548,16 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                             break;
                             case 'looks':
                             $lookObj = new Look($db->conectar());
-                            $prodObj = new Producto($db->conectar());
-                            
                             $looks = $lookObj->listarLooksAdmin();
-                            $productos = $prodObj->listarProductosPaginados(false, 200, 0); // Traemos oficiales
-                            $colores = $db->conectar()->query("SELECT * FROM colores")->fetchAll(PDO::FETCH_ASSOC);
+
+                            // LA MAGIA: Consultamos las combinaciones reales de Producto + Color
+                            $sqlCombos = "SELECT p.id as producto_id, p.nombre as producto_nombre, c.id as color_id, c.nombre as color_nombre
+                                          FROM productos p
+                                          INNER JOIN producto_colores pc ON p.id = pc.producto_id
+                                          INNER JOIN colores c ON pc.color_id = c.id
+                                          WHERE p.es_segunda_mano = 0
+                                          ORDER BY p.nombre ASC, c.nombre ASC";
+                            $combinaciones = $db->conectar()->query($sqlCombos)->fetchAll(PDO::FETCH_ASSOC);
 
                             // Agrupar prendas por Look
                             $looksAgrupados = [];
@@ -573,20 +578,20 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                             echo '  <div class="card card-body admin-card border-0 shadow-sm bg-light">';
                             echo '      <form action="../controllers/adminController.php" method="POST">';
                             echo '          <input type="hidden" name="accion" value="crear_look">';
-                            echo '          <h6 class="fw-bold text-uppercase mb-3">Prendas que forman el look:</h6>';
+                            echo '          <h6 class="fw-bold text-uppercase mb-3">Elige hasta 4 prendas para el look:</h6>';
                             echo '          <div class="row g-3">';
                             for ($i=0; $i < 4; $i++) { 
                                 echo '          <div class="col-md-6 border-bottom pb-2">';
                                 echo '              <span class="badge bg-dark mb-1">Prenda '.($i+1).'</span>';
-                                echo '              <div class="d-flex gap-2">';
-                                echo '                  <select name="prendas['.$i.'][producto_id]" class="form-select form-select-sm">';
-                                echo '                      <option value="">Seleccionar Prenda...</option>';
-                                foreach ($productos as $p) echo "<option value='{$p['prenda_id']}'>{$p['nombre']}</option>";
-                                echo '                  </select>';
-                                echo '                  <select name="prendas['.$i.'][color_id]" class="form-select form-select-sm w-50">';
-                                foreach ($colores as $c) echo "<option value='{$c['id']}'>{$c['nombre']}</option>";
-                                echo '                  </select>';
-                                echo '              </div>';
+                                // UN SOLO SELECTOR COMBINADO
+                                echo '              <select name="prendas['.$i.']" class="form-select form-select-sm">';
+                                echo '                  <option value="">-- Seleccionar Prenda y Color --</option>';
+                                foreach ($combinaciones as $combo) {
+                                    $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
+                                    $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
+                                    echo "              <option value='{$valorCompuesto}'>{$textoAmostrar}</option>";
+                                }
+                                echo '              </select>';
                                 echo '          </div>';
                             }
                             echo '          </div>';
@@ -606,7 +611,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     echo '<div class="col-md-6 col-lg-6 mb-4">';
                                     echo '  <div class="card h-100 border-0 shadow-sm admin-card">';
                                     
-                                    // Cabecera (Botones Eliminar y Editar)
                                     echo '      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">';
                                     echo '          <div><span class="fw-bold fs-5">LOOK #'.$id.'</span> <span class="ms-2">'.$estadoHTML.'</span></div>';
                                     echo '          <div class="d-flex gap-2">';
@@ -619,26 +623,24 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     echo '          </div>';
                                     echo '      </div>';
                                     
-                                    // Cuerpo (Lista de prendas actual)
                                     echo '      <div class="card-body">';
                                     echo '          <ul class="list-group list-group-flush mb-3">';
                                     $prendasActuales = $datos['prendas'] ?? [];
                                     if (empty($prendasActuales)) echo '<li class="list-group-item text-muted">Look vacío</li>';
                                     foreach ($prendasActuales as $prenda) {
-                                        echo '          <li class="list-group-item d-flex justify-content-between px-0 py-1 border-0">';
-                                        echo '              <span class="text-uppercase small"><i class="bi bi-check2-circle me-1 text-success"></i>'.$prenda['nombre_producto'] . ' color: ' .$prenda['nombre_color'].'</span>';
-                                        echo '              <span class="badge bg-secondary">'.$prenda['nombre_color'].'</span>';
+                                        echo '          <li class="list-group-item px-0 py-2 border-0">';
+                                        // TU LÍNEA DE CÓDIGO APLICADA AQUÍ:
+                                        echo '              <span class="text-uppercase small fw-bold text-secondary"><i class="bi bi-check2-circle me-1 text-success"></i>' . htmlspecialchars($prenda['nombre_producto']) . ' <span class="text-dark">- Color: ' . htmlspecialchars($prenda['nombre_color']) . '</span></span>';
                                         echo '          </li>';
                                     }
                                     echo '          </ul>';
 
-                                    // --- FORMULARIO DE EDICIÓN OCULTO (Se abre al darle a editar) ---
+                                    // --- FORMULARIO DE EDICIÓN OCULTO ---
                                     echo '          <div class="collapse mt-3 border-top pt-3" id="editLook'.$id.'">';
                                     echo '              <form action="../controllers/adminController.php" method="POST">';
                                     echo '                  <input type="hidden" name="accion" value="editar_look">';
                                     echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
                                     
-                                    // Selector de estado
                                     echo '                  <div class="mb-3 d-flex align-items-center gap-2">';
                                     echo '                      <label class="fw-bold small">Estado del Look:</label>';
                                     echo '                      <select name="activo" class="form-select form-select-sm w-auto">';
@@ -647,23 +649,20 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     echo '                      </select>';
                                     echo '                  </div>';
 
-                                    // Pre-cargar 4 huecos (los que tengan prenda se seleccionan, los vacíos no)
+                                    // SELECTORES COMBINADOS PARA EDICIÓN
                                     for ($i=0; $i < 4; $i++) { 
                                         $pIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['producto_id'] : '';
                                         $cIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['color_id'] : '';
+                                        $valorCompuestoActual = ($pIdActual && $cIdActual) ? ($pIdActual . '_' . $cIdActual) : '';
                                         
-                                        echo '              <div class="d-flex gap-1 mb-2">';
-                                        echo '                  <select name="prendas['.$i.'][producto_id]" class="form-select form-select-sm">';
-                                        echo '                      <option value="">- Vacío -</option>';
-                                        foreach ($productos as $p) {
-                                            $sel = ($p['prenda_id'] == $pIdActual) ? 'selected' : '';
-                                            echo "<option value='{$p['prenda_id']}' $sel>{$p['nombre']}</option>";
-                                        }
-                                        echo '                  </select>';
-                                        echo '                  <select name="prendas['.$i.'][color_id]" class="form-select form-select-sm" style="width: 120px;">';
-                                        foreach ($colores as $c) {
-                                            $sel = ($c['id'] == $cIdActual) ? 'selected' : '';
-                                            echo "<option value='{$c['id']}' $sel>{$c['nombre']}</option>";
+                                        echo '              <div class="mb-2">';
+                                        echo '                  <select name="prendas['.$i.']" class="form-select form-select-sm">';
+                                        echo '                      <option value="">- Hueco Vacío -</option>';
+                                        foreach ($combinaciones as $combo) {
+                                            $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
+                                            $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
+                                            $sel = ($valorCompuesto == $valorCompuestoActual) ? 'selected' : '';
+                                            echo "                  <option value='{$valorCompuesto}' $sel>{$textoAmostrar}</option>";
                                         }
                                         echo '                  </select>';
                                         echo '              </div>';

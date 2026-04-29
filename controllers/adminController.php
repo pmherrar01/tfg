@@ -5,6 +5,7 @@ require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../models/pedido.php";
 require_once __DIR__ . "/../models/producto.php";
 require_once __DIR__ . "/../models/usuario.php";
+require_once __DIR__ . "/../models/look.php";
 
 if (!isset($_SESSION["usuario_id"]) || $_SESSION["rol_id"] != 1) {
     header("Location: ../index.php?error=acceso_denegado");
@@ -92,34 +93,56 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=usuarios&error=usuario_invalido");
             }
             exit();
-        case "crearLook":
+        // --- LOOKS ---
+        case 'crear_look':
             $prendasRaw = $_POST['prendas'] ?? [];
-            $lookObj = new Look($conexion);
+            $prendasLimpias = [];
             
-            if ($lookObj->crearLook($prendasRaw)) {
+            // Separamos el "5_12" en producto_id=5 y color_id=12
+            foreach ($prendasRaw as $combo) {
+                if (!empty($combo) && strpos($combo, '_') !== false) {
+                    list($pId, $cId) = explode('_', $combo);
+                    $prendasLimpias[] = ['producto_id' => $pId, 'color_id' => $cId];
+                }
+            }
+            
+            $lookObj = new Look($conexion);
+            if ($lookObj->crearLook($prendasLimpias)) {
                 header("Location: ../admin/admin.php?seccion=looks&mensaje=look_creado");
             } else {
                 header("Location: ../admin/admin.php?seccion=looks&error=error_creacion");
             }
             exit();
+            break;
 
-        case 'editarLook':
+        case 'editar_look':
             $idLook = $_POST['id_look'] ?? 0;
             $activo = $_POST['activo'] ?? 1;
             $prendasRaw = $_POST['prendas'] ?? [];
             
+            $prendasLimpias = [];
+            
+            // Separamos el "5_12" en producto_id=5 y color_id=12
+            foreach ($prendasRaw as $combo) {
+                if (!empty($combo) && strpos($combo, '_') !== false) {
+                    list($pId, $cId) = explode('_', $combo);
+                    $prendasLimpias[] = ['producto_id' => $pId, 'color_id' => $cId];
+                }
+            }
+            
             $lookObj = new Look($conexion);
-            $lookObj->editarLook($idLook, $activo, $prendasRaw);
+            $lookObj->editarLook($idLook, $activo, $prendasLimpias);
             header("Location: ../admin/admin.php?seccion=looks&mensaje=look_actualizado");
             exit();
             break;
 
-        case 'eliminarLook':
+        case 'eliminar_look':
             $id = $_POST['id_look'] ?? 0;
             $lookObj = new Look($conexion);
             $lookObj->eliminarLook($id);
             header("Location: ../admin/admin.php?seccion=looks&mensaje=look_eliminado");
             exit();
+            break;
 
         default:
             header("Location: ../admin/admin.php");
