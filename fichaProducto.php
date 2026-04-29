@@ -11,6 +11,7 @@ include './includes/header.php';
     data-precio="<?php echo $datosPrenda['precio']; ?>"
     data-imagen=""
     data-color-prenda="">
+    data-rebaja="<?php echo isset($datosPrenda['rebaja']) ? (int)$datosPrenda['rebaja'] : 0; ?>">
     <div class="row">
 
         <div class="col-md-6 mb-4 mb-md-0">
