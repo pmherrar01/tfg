@@ -323,7 +323,7 @@ function pintarPrendasRecientes() {
             iconoCorazon = 'bi-heart-fill';
         }
 
-        // --- MAGIA DE LAS REBAJAS AÑADIDA AQUÍ ---
+        // --- MAGIA DE LAS REBAJAS CORREGIDA PARA QUE SEA IGUAL A PHP ---
         let rebaja = prenda.rebaja ? parseInt(prenda.rebaja) : 0;
         let precioNormal = parseFloat(prenda.precio);
         let htmlPrecio = `<p class="card-text mb-0 fw-bold">${precioNormal.toFixed(2)} €</p>`;
@@ -331,7 +331,10 @@ function pintarPrendasRecientes() {
 
         if (rebaja > 0) {
             let precioFinal = precioNormal - (precioNormal * rebaja / 100);
-            htmlBadge = `<span class="badge bg-danger position-absolute top-0 start-0 m-2 z-2 fs-6 rounded-0 shadow-sm">-${rebaja}%</span>`;
+            
+            // Etiqueta EXACTAMENTE IGUAL a la del index.php
+            htmlBadge = `<span class="position-absolute top-0 end-0 m-2 badge bg-danger text-white rounded-0 fw-bold px-2 py-1 shadow-sm" style="font-size: 0.8rem; letter-spacing: 1px; z-index: 10;">-${rebaja}%</span>`;
+            
             htmlPrecio = `
                 <p class="card-text mb-0">
                     <span class="text-muted text-decoration-line-through small me-2">${precioNormal.toFixed(2)} €</span>
@@ -376,11 +379,11 @@ function pintarPrendasRecientes() {
                         Añadir <i class="bi bi-plus-lg ms-1"></i>
                     </button>
 
-<button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0" 
-        data-id="${prenda.id}" 
-        data-color="${prenda.colorPrenda}">
-    <i class="bi ${iconoCorazon}"></i>
-</button>
+                    <button type="button" class="btn btn-toggle-favorito btn-favorito-custom btn-favorito-std d-flex justify-content-center align-items-center rounded-0" 
+                            data-id="${prenda.id}" 
+                            data-color="${prenda.colorPrenda}">
+                        <i class="bi ${iconoCorazon}"></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -392,7 +395,6 @@ function pintarPrendasRecientes() {
 
     carruselInner.innerHTML = htmlAcumulado;
 }
-
 
 
 function abrirOverlayTallas(event, idPrenda, idColor) {

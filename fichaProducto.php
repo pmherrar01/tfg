@@ -10,7 +10,7 @@ include './includes/header.php';
     data-nombre="<?php echo $datosPrenda['nombre']; ?>"
     data-precio="<?php echo $datosPrenda['precio']; ?>"
     data-imagen=""
-    data-color-prenda="">
+    data-color-prenda=""
     data-rebaja="<?php echo isset($datosPrenda['rebaja']) ? (int)$datosPrenda['rebaja'] : 0; ?>">
     <div class="row">
 
