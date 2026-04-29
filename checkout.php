@@ -49,7 +49,7 @@ include './includes/header.php';
                     <h4 class="fw-bold text-uppercase mb-4">Resumen del Pedido</h4>
 
                     <div class="border-bottom pb-3 mb-3" style="max-height: 250px; overflow-y: auto;">
-                        <?php
+<?php
                         $subtotalCheckout = 0;
                         if (isset($_SESSION['carrito'])):
                             foreach ($_SESSION['carrito'] as $item):
@@ -59,13 +59,24 @@ include './includes/header.php';
                                 $precioUnitario = $producto['precio'] - ($producto['precio'] * $rebaja / 100);
 
                                 $subtotalItem = $precioUnitario * $item['cantidad'];
+                                $subtotalOriginal = $producto['precio'] * $item['cantidad'];
                                 $subtotalCheckout += $subtotalItem;
                         ?>
-                                <div class="d-flex justify-content-between mb-2 small">
+                                <div class="d-flex justify-content-between mb-3 small align-items-center border-bottom pb-2">
                                     <span class="text-truncate pe-2" style="max-width: 250px;">
                                         <?php echo $item['cantidad']; ?>x <?php echo $producto['nombre']; ?> (Talla: <?php echo $item['talla']; ?>)
+                                        <?php if ($rebaja > 0): ?>
+                                            <span class="badge bg-danger ms-1">-<?php echo $rebaja; ?>%</span>
+                                        <?php endif; ?>
                                     </span>
-                                    <span class="text-nowrap fw-bold"><?php echo number_format($subtotalItem, 2); ?> €</span>
+                                    <span class="text-nowrap text-end">
+                                        <?php if ($rebaja > 0): ?>
+                                            <span class="text-muted text-decoration-line-through d-block" style="font-size: 0.75rem;"><?php echo number_format($subtotalOriginal, 2); ?> €</span>
+                                            <span class="fw-bold text-danger"><?php echo number_format($subtotalItem, 2); ?> €</span>
+                                        <?php else: ?>
+                                            <span class="fw-bold d-block mt-3"><?php echo number_format($subtotalItem, 2); ?> €</span>
+                                        <?php endif; ?>
+                                    </span>
                                 </div>
                         <?php
                             endforeach;

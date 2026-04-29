@@ -31,7 +31,7 @@ include './includes/header.php';
     <?php else: ?>
         <div class="row g-5">
             <div class="col-lg-8">
-                <?php foreach ($carritoDetallado as $item): ?>
+                <?php foreach ($carritoDetallado as $item){ ?>
                     <div class="card border-0 border-bottom rounded-0 mb-3 pb-3">
                         <div class="row g-0 align-items-center">
 
@@ -64,15 +64,22 @@ include './includes/header.php';
                             </div>
 
                             <div class="col-2 col-md-2 text-end">
-                                <span class="fw-bold fs-5"><?php echo number_format($item['subtotal'], 2); ?> €</span>
-                                <?php if ($item['cantidad'] > 1): ?>
+                                <?php if ($item['rebaja'] > 0){ ?>
+                                    <span class="text-muted text-decoration-line-through small"><?php echo number_format($item['precio_original'] * $item['cantidad'], 2); ?> €</span><br>
+                                    <span class="fw-bold fs-5 text-danger"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                    <div class="mt-1"><span class="badge bg-danger">-<?php echo $item['rebaja']; ?>%</span></div>
+                                <?php } else{ ?>
+                                    <span class="fw-bold fs-5"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                <?php } ?>
+
+                                <?php if ($item['cantidad'] > 1){ ?>
                                     <br><span class="text-muted small">(<?php echo $item['precio']; ?> €/u)</span>
-                                <?php endif; ?>
+                                <?php } ?>
                             </div>
 
                         </div>
                     </div>
-                <?php endforeach; ?>
+                <?php } ?>
             </div>
 
             <div class="col-lg-4">
@@ -88,20 +95,20 @@ include './includes/header.php';
                         <span>4.99</span>
                     </div>
 
-                    
 
-                        <div class="mb-4 p-3 bg-light border border-dark">
+
+                    <div class="mb-4 p-3 bg-light border border-dark">
                         <label class="form-label fw-bold text-uppercase small" style="letter-spacing: 1px;">¿Tienes un código de descuento?</label>
 
                         <?php if (isset($_GET['error'])): ?>
                             <div class="alert alert-danger py-2 rounded-0 small fw-bold mb-3 border-2 border-danger">
                                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                <?php 
-                                    if ($_GET['error'] == 'no_sesion') {
-                                        echo 'Debes iniciar sesión para usar un código.';
-                                    } elseif ($_GET['error'] == 'codigo_invalido') {
-                                        echo 'El código no existe, está caducado o no está vinculado a tu correo.';
-                                    }
+                                <?php
+                                if ($_GET['error'] == 'no_sesion') {
+                                    echo 'Debes iniciar sesión para usar un código.';
+                                } elseif ($_GET['error'] == 'codigo_invalido') {
+                                    echo 'El código no existe, está caducado o no está vinculado a tu correo.';
+                                }
                                 ?>
                             </div>
                         <?php endif; ?>
@@ -121,7 +128,7 @@ include './includes/header.php';
                     </div>
 
 
-<?php
+                    <?php
                     $descuentoCantidad = 0;
                     if (isset($_SESSION['descuento'])) {
                         $porcentaje = $_SESSION['descuento']['porcentaje'];
