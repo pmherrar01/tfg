@@ -125,5 +125,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } catch (Exception $e) {
         die("Error al conectar con Stripe: " . $e->getMessage());
     }
-}
+}//
 ?>
