@@ -1,71 +1,129 @@
 <?php
-
 session_start();
+require_once '../config/db.php';
+require_once '../models/pedido.php';
+require_once '../models/producto.php'; // Necesario para sacar los precios
+require_once '../vendor/autoload.php';
 
-require_once __DIR__ . "/../includes/auth.php";
-require_once __DIR__ . "/../config/db.php";
-require_once __DIR__ . "/../models/pedido.php";
-require_once __DIR__ . "/../models/producto.php";
-require_once __DIR__ . "/../models/usuario.php";
-
-if ($_SERVER["REQUEST_METHOD"] != "POST" && empty($_SESSION["carrito"])) {
-    header("Location: ./index.php");
-    exit;
+if (!isset($_SESSION['usuario_id']) || empty($_SESSION['carrito'])) {
+    header("Location: ../carrito.php");
+    exit();
 }
 
-$db = new Database();
-$conexion = $db->conectar();
-$pedido = new Pedido($conexion);
-$producto = new Producto($conexion);
-$usu = new Usuario($conexion);
+// ---------------------------------------------------------
+// 1. CONFIGURACIÓN DE STRIPE 
+// ---------------------------------------------------------
+\Stripe\Stripe::setApiKey('sk_test_51TRSRfHJPlhS3OiOmWvQ9M4K1TuNPsHDsBNsV9l99ziXgumDDGjjQtGNQNprptcmSqS0QYrdrGx4AMaOr2HAcy5o006E97tSH6');
 
-$idUsu = $_SESSION["usuario_id"];
-$totalPedido = isset($_POST["totalPedido"]) ? $_POST["totalPedido"] : 0;
-$datosUsu = $usu->obtenerDatosUsu($idUsu);
+$conexion = new Database();
+$db = $conexion->conectar();
+$pedidoObj = new Pedido($db);
+$productoObj = new Producto($db); 
+$idUsuario = $_SESSION['usuario_id'];
 
-$direccionUsu = $datosUsu['direccion'] . ", " . $datosUsu['codigo_postal'] . " - " . $datosUsu['ciudad'];
+// =========================================================
+// CASO A: EL USUARIO VUELVE DE STRIPE TRAS PAGAR CON ÉXITO
+// =========================================================
+if (isset($_GET['status']) && $_GET['status'] == 'success') {
+    
+    $total = $_SESSION['checkout_data']['total'] ?? 0;
+    $direccion = $_SESSION['checkout_data']['direccion'] ?? 'Dirección no proporcionada';
 
+    // 1. Crear el pedido principal en la BD
+    $idPedido = $pedidoObj->crearPedido($idUsuario, $total, $direccion);
 
-try {
-    $conexion->beginTransaction();
+    if ($idPedido) {
+        // 2. Extraer correctamente los datos de la sesión para la BD
+        foreach ($_SESSION['carrito'] as $item) {
+            $idProducto = $item['idPrenda']; // Aquí sacamos el ID limpio
+            $idColor    = $item['color_id'];
+            $talla      = $item['talla'];
+            $cantidad   = $item['cantidad'];
 
-    $idPedido = $pedido->crearPedido($idUsu, $totalPedido, $direccionUsu);
+            // Tu función segura que busca el precio ella misma
+            $pedidoObj->crearDetallesPedidos($idPedido, $idProducto, $idColor, $talla, $cantidad);
+        }
 
+        // 3. Limpiar carrito y datos temporales
+        unset($_SESSION['carrito']);
+        unset($_SESSION['checkout_data']);
 
-
-    foreach ($_SESSION["carrito"] as $productoCarrito) {
-        $pedido->crearDetallesPedidos($idPedido, $productoCarrito["idPrenda"], $productoCarrito["color_id"], $productoCarrito["talla"], $productoCarrito["cantidad"]);
-        $producto->actualizarStock($productoCarrito["idPrenda"], $productoCarrito["color_id"], $productoCarrito["talla"], $productoCarrito["cantidad"]);
+        // 4. Redirigir a la página final
+        header("Location: ../gracias.php");
+        exit();
+    } else {
+        die("Error al procesar el pedido en la base de datos.");
     }
+}
 
-    $conexion->commit();
-
-    $datosPedido = [
-        "nombreUsu" => $datosUsu['nombre'],
-        "email"     => $datosUsu['email'],
-        "idPedido"  => $idPedido,
-        "total"     => $totalPedido,
-        "direccion" => $direccionUsu,
-        "articulos" => count($_SESSION["carrito"]) 
+// =========================================================
+// CASO B: EL USUARIO ENVÍA EL FORMULARIO PARA IR A PAGAR
+// =========================================================
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    $_SESSION['checkout_data'] = [
+        'total' => $_POST['total'] ?? 0,
+        'direccion' => $_POST['direccion'] ?? 'Dirección no proporcionada'
     ];
 
-    $config = parse_ini_file(__DIR__ . '/../config/config.ini');
-    $urlWebhook = $config['base_url'] . $config['confirmacionCompra'];
+    $line_items = [];
+    $subtotal = 0;
 
-    $curl = curl_init($urlWebhook);
-    curl_setopt($curl, CURLOPT_POST, true); 
-    curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($datosPedido)); 
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); 
-    curl_setopt($curl, CURLOPT_TIMEOUT, 2);
-    
-    curl_exec($curl);
+    // Preparamos los productos para Stripe consultando su info real
+    foreach ($_SESSION['carrito'] as $item) {
+        
+        // Buscamos en la BD el nombre y precio real para Stripe
+        $datosProd = $productoObj->obtenerProducto($item['idPrenda']);
+        $precioReal = $datosProd['precio'];
+        $nombreReal = $datosProd['nombre'];
 
-    unset($_SESSION['carrito']);
-    header("Location: ../gracias.php");
-} catch (Exception $e) {
+        $subtotal += ($precioReal * $item['cantidad']);
+        
+        $line_items[] = [
+            'price_data' => [
+                'currency' => 'eur',
+                'product_data' => [
+                    'name' => $nombreReal . ' (Talla: ' . $item['talla'] . ')',
+                ],
+                // Stripe exige céntimos (ej: 25.50€ -> 2550)
+                'unit_amount' => round($precioReal * 100), 
+            ],
+            'quantity' => $item['cantidad'],
+        ];
+    }
 
-$conexion->rollBack();
+    // Añadimos los gastos de envío si no supera los 50€
+    if ($subtotal < 50) {
+        $line_items[] = [
+            'price_data' => [
+                'currency' => 'eur',
+                'product_data' => [
+                    'name' => 'Gastos de envío',
+                ],
+                'unit_amount' => 499, // 4.99€
+            ],
+            'quantity' => 1,
+        ];
+    }
 
-    header("Location: ../gracias.php");
+    // Ojo a la ruta, si no estás en /tfg, ajústala
+    $dominio = "http://" . $_SERVER['HTTP_HOST'] ; 
+
+    try {
+        $checkout_session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $line_items,
+            'mode' => 'payment',
+            'success_url' => $dominio . '/controllers/pagoController.php?status=success',
+            'cancel_url' => $dominio . '/checkout.php',
+        ]);
+
+        header("HTTP/1.1 303 See Other");
+        header("Location: " . $checkout_session->url);
+        exit();
+
+    } catch (Exception $e) {
+        die("Error al conectar con Stripe: " . $e->getMessage());
+    }
 }
+?>
