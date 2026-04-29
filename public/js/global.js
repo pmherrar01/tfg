@@ -328,6 +328,7 @@ function pintarPrendasRecientes() {
                 <div class="card product-card border-0 bg-transparent position-relative">
                     
                     <div class="img-wrapper position-relative overflow-hidden">
+                    
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
                         </a>
@@ -490,13 +491,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Comprobamos si existe el contenedor de la página "prendaSubida"
     const contenedorPrendaSubida = document.getElementById('prendaSubida');
     
     if (contenedorPrendaSubida) {
         setTimeout(function() {
             window.location.href = 'perfil.php?mensaje=prenda_subida';
-        }, 4000); // 4 segundos de espera
+        }, 4000); 
     }
 
 });

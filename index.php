@@ -121,11 +121,20 @@ include './includes/header.php';
                             ?>
                             <div class="col-6 col-md-3 position-relative d-flex flex-column mb-4">
 
-                                <div class="card product-card border-0 bg-transparent position-relative">
+<div class="card product-card border-0 bg-transparent position-relative">
 
                                     <div class="img-wrapper position-relative overflow-hidden">
-
                                         <a href="fichaProducto.php?idPrenda=<?= $prenda["id"] ?>&color=<?= $prenda["color_id"] ?>" class="text-decoration-none text-dark d-block">
+                                            
+                                            <?php 
+                                            $rebaja = isset($prenda['rebaja']) ? (int)$prenda['rebaja'] : 0;
+                                            $precioFinal = $prenda['precio'] - ($prenda['precio'] * $rebaja / 100);
+                                            
+                                            if ($rebaja > 0){
+                                            ?>
+                                                <span class="position-absolute top-0 end-0 m-2 badge bg-danger text-white rounded-0 fw-bold px-2 py-1 shadow-sm" style="font-size: 0.8rem; letter-spacing: 1px; z-index: 10;" >-<?= $rebaja; ?>%</span>
+                                            <?php } ?>
+
                                             <img src="<?= $prenda['url_imagen'] ?>" class="card-img-top rounded-0" alt="<?= $prenda['nombre'] ?>" style="height: 380px; object-fit: cover;">
                                         </a>
 
@@ -144,7 +153,16 @@ include './includes/header.php';
                                     <div class="card-body text-center px-0 pb-1 mt-2">
                                         <a href="fichaProducto.php?idPrenda=<?= $prenda["id"] ?>&color=<?= $prenda["color_id"] ?>" class="text-decoration-none text-dark d-block">
                                             <h5 class="card-title text-uppercase fw-bold fs-6 mb-1 text-truncate"><?= $prenda['nombre'] ?></h5>
-                                            <p class="card-text mb-0"><?= $prenda['precio'] ?> €</p>
+                                            
+                                            <?php if ($rebaja > 0): ?>
+                                                <p class="card-text mb-0">
+                                                    <span class="text-muted text-decoration-line-through small me-2"><?= number_format($prenda['precio'], 2) ?> €</span>
+                                                    <span class="fw-bold text-danger"><?= number_format($precioFinal, 2) ?> €</span>
+                                                </p>
+                                            <?php else: ?>
+                                                <p class="card-text mb-0 fw-bold"><?= number_format($prenda['precio'], 2) ?> €</p>
+                                            <?php endif; ?>
+                                            
                                         </a>
                                     </div>
 
