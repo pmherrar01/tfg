@@ -1029,7 +1029,7 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
                     $esPrincipal = ($index === 0) ? 1 : 0;
                     $sentenciaImg->execute([
                         ':id_prod' => $idProducto, 
-                        ':color_id' => $color_id, 
+                        ':id_color' => $color_id, // <--- ¡AQUÍ ESTABA EL BENDITO ERROR! Ya está arreglado.
                         ':url_img' => $url,
                         ':es_principal' => $esPrincipal
                     ]);
@@ -1040,7 +1040,9 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             return true;
         } catch (Exception $e) {
             $this->conexionDataBase->rollBack();
+            // Esto escribe el error exacto para leerlo en pantalla
             return $e->getMessage(); 
         }
+    
     }
 }
