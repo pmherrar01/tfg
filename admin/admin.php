@@ -303,6 +303,8 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '      </form>';
                                 echo '  </div>';
                                 echo '</div>';
+
+                                
                                 // ------------------------------------------
 
                                 // Aquí sigue tu formulario masivo que ya tenías:
@@ -388,8 +390,39 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         echo '          </tbody>';
                                         echo '      </table>';
                                         echo '  </div>';
-                                        echo '</div>';
+                                        if (!$esSegundaMano) {
+                                            echo '  <div class="card-footer bg-white text-end border-0 pb-3">';
+                                            echo '      <button type="button" class="btn btn-sm btn-outline-dark fw-bold" data-bs-toggle="modal" data-bs-target="#modalColor'.$id.'"><i class="bi bi-palette me-2"></i>Añadir Nuevo Color</button>';
+                                            echo '  </div>';
+
+                                            echo '  <div class="modal fade text-start" id="modalColor'.$id.'" tabindex="-1" aria-hidden="true">';
+                                            echo '      <div class="modal-dialog modal-lg">';
+                                            echo '          <div class="modal-content rounded-0 border-dark shadow-lg">';
+                                            echo '              <div class="modal-header bg-dark text-white border-0"><h5 class="modal-title fw-bold text-uppercase"><i class="bi bi-palette me-2"></i>Añadir Color a: '.htmlspecialchars($datos['nombre']).'</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>';
+                                            echo '              <div class="modal-body p-4">';
+                                            echo '                  <form action="../controllers/adminController.php" method="POST" enctype="multipart/form-data">';
+                                            echo '                      <input type="hidden" name="accion" value="anadirColor">';
+                                            echo '                      <input type="hidden" name="producto_id" value="'.$id.'">';
+                                            echo '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Elige el nuevo Color:</label><select name="color_id" class="form-select border-dark" required><option value="">-- Seleccionar Color --</option>';
+                                            foreach($prod->listaColores() as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                            echo '                      </select></div>';
+                                            echo '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Stock por tallas:</label><div class="d-flex flex-wrap gap-2">';
+                                            foreach(['XS', 'S', 'M', 'L', 'XL', 'Única'] as $t) {
+                                                echo '                  <div class="input-group input-group-sm" style="width: 110px;"><span class="input-group-text bg-dark text-white fw-bold">'.$t.'</span><input type="number" name="stock['.$t.']" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                            }
+                                            echo '                      </div></div>';
+                                            echo '                      <div class="mb-4 mt-4"><label class="fw-bold small text-uppercase">Fotos de este nuevo color (Puedes seleccionar varias):</label><input type="file" name="imagenes[]" class="form-control border-dark" accept="image/*" multiple required></div>';
+                                            echo '                      <button type="submit" class="btn btn-dark w-100 fw-bold py-3 text-uppercase">Guardar Variante</button>';
+                                            echo '                  </form>';
+                                            echo '              </div>';
+                                            echo '          </div>';
+                                            echo '      </div>';
+                                            echo '  </div>';
+                                        }
+
+                                        echo '</div>'; 
                                     }
+                                    
                                 }
 
                                 echo '<div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-5 pt-3 border-top">';
