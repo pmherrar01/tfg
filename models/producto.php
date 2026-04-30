@@ -992,21 +992,31 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
         }
     }
 
-    public function crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $urls_imagenes) {
+   public function crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $urls_imagenes) {
         try {
             $this->conexionDataBase->beginTransaction();
 
-            // 1. Inserción en PRODUCTOS (¡SIN talla ni stock, que van en su propia tabla!)
-            $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja) 
-                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0)";
+            // Aseguramos los tipos exactos para que MySQL no salte con errores raros
+            $precio = (float)$precio;
+            $tipo_id = $tipo_id ? (int)$tipo_id : null;
+            $coleccion_id = $coleccion_id ? (int)$coleccion_id : null;
+            $genero = (int)$genero;
+            $color_id = (int)$color_id;
+            $stock = (int)$stock;
+
+            // 1. Inserción en PRODUCTOS (¡Ahora SÍ incluimos talla y stock para que no salga NULL!)
+            $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja, talla, stock) 
+                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, :talla, :stock)";
             $sentenciaProd = $this->conexionDataBase->prepare($sqlProd);
             $sentenciaProd->execute([
                 ':nombre' => $nombre,
                 ':descripcion' => $descripcion,
                 ':precio' => $precio,
-                ':tipo_id' => $tipo_id ?: null,
-                ':coleccion_id' => $coleccion_id ?: null,
-                ':genero' => $genero
+                ':tipo_id' => $tipo_id,
+                ':coleccion_id' => $coleccion_id,
+                ':genero' => $genero,
+                ':talla' => $talla,
+                ':stock' => $stock
             ]);
             $idProducto = $this->conexionDataBase->lastInsertId();
 
@@ -1015,21 +1025,21 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
             $sentenciaColor->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
 
-            // 3. Inserción en PRODUCTO_TALLAS (Aquí es donde se guarda la talla y el stock real)
+            // 3. Inserción en PRODUCTO_TALLAS (También se guarda aquí por si en un futuro añades más tallas)
             $sqlTalla = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock)";
             $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
             $sentenciaTalla->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => $stock]);
 
-            // 4. Inserción de IMÁGENES
+            // 4. Inserción de IMÁGENES MÚLTIPLES
             if (!empty($urls_imagenes) && is_array($urls_imagenes)) {
                 $sqlImg = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:id_prod, :id_color, :url_img, :es_principal)";
                 $sentenciaImg = $this->conexionDataBase->prepare($sqlImg);
                 
                 foreach ($urls_imagenes as $index => $url) {
-                    $esPrincipal = ($index === 0) ? 1 : 0;
+                    $esPrincipal = ($index === 0) ? 1 : 0; // La primera foto es la de portada
                     $sentenciaImg->execute([
                         ':id_prod' => $idProducto, 
-                        ':id_color' => $color_id, // <--- ¡AQUÍ ESTABA EL BENDITO ERROR! Ya está arreglado.
+                        ':id_color' => $color_id, 
                         ':url_img' => $url,
                         ':es_principal' => $esPrincipal
                     ]);
@@ -1043,6 +1053,5 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             // Esto escribe el error exacto para leerlo en pantalla
             return $e->getMessage(); 
         }
-    
     }
 }
