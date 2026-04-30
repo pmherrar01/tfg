@@ -522,7 +522,6 @@ public function listarColecciones($modoAdmin = false)
  public function filtrarCombinado($parametros, $esModoSecreto = false) {
         $activa = $esModoSecreto ? 3 : 1;
         
-        // Empezamos la consulta base
         $sql = "SELECT p.*, c.id as color_id, c.nombre as color_nombre, MIN(i.url_imagen) as url_imagen
                 FROM productos p
                 INNER JOIN producto_colores pc ON p.id = pc.producto_id
@@ -532,39 +531,37 @@ public function listarColecciones($modoAdmin = false)
                 LEFT JOIN producto_tallas pt ON p.id = pt.producto_id AND c.id = pt.color_id 
                 WHERE p.activo = 1 AND col.activa = $activa";
                 
-        $valoresQuery = [];
+        $valoresFiltrado = [];
 
-        // Vamos añadiendo condiciones a la consulta según lo que haya en la URL
         if (!empty($parametros['genero'])) {
             $sql .= " AND p.genero = :genero";
-            $valoresQuery[':genero'] = (int)$parametros['genero'];
+            $valoresFiltrado[':genero'] = (int)$parametros['genero'];
         }
         if (!empty($parametros['coleccion'])) {
             $sql .= " AND p.coleccion_id = :coleccion";
-            $valoresQuery[':coleccion'] = (int)$parametros['coleccion'];
+            $valoresFiltrado[':coleccion'] = (int)$parametros['coleccion'];
         }
         if (!empty($parametros['tipo'])) {
             $sql .= " AND p.tipo_id = :tipo";
-            $valoresQuery[':tipo'] = (int)$parametros['tipo'];
+            $valoresFiltrado[':tipo'] = (int)$parametros['tipo'];
         }
         if (!empty($parametros['color'])) {
             $sql .= " AND c.nombre = :color";
-            $valoresQuery[':color'] = $parametros['color'];
+            $valoresFiltrado[':color'] = $parametros['color'];
         }
         if (!empty($parametros['talla'])) {
             $sql .= " AND pt.talla = :talla AND pt.stock > 0";
-            $valoresQuery[':talla'] = $parametros['talla'];
+            $valoresFiltrado[':talla'] = $parametros['talla'];
         }
         if (!empty($parametros['rebajas'])) {
             $sql .= " AND p.rebaja > 0";
         }
         if (isset($parametros['precioMin']) && isset($parametros['precioMax'])) {
             $sql .= " AND p.precio BETWEEN :min AND :max";
-            $valoresQuery[':min'] = (float)$parametros['precioMin'];
-            $valoresQuery[':max'] = (float)$parametros['precioMax'];
+            $valoresFiltrado[':min'] = (float)$parametros['precioMin'];
+            $valoresFiltrado[':max'] = (float)$parametros['precioMax'];
         }
 
-        // Agrupamos y añadimos el orden final
         $sql .= " GROUP BY p.id, c.id";
         
         if (!empty($parametros['orden'])) {
@@ -574,7 +571,7 @@ public function listarColecciones($modoAdmin = false)
         }
 
         $sentencia = $this->conexionDataBase->prepare($sql);
-        $sentencia->execute($valoresQuery);
+        $sentencia->execute($valoresFiltrado);
         return $sentencia->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -594,6 +591,27 @@ public function listarColecciones($modoAdmin = false)
         } catch (PDOException $e) {
             error_log("Error en Producto->obtenerColoresPorProducto: " . $e->getMessage());
             return false;
+        }
+    }
+    public function obtenerPrecioMinMax($valor, $esModoSecreto = false) {
+        $funcionSql = "MAX";
+        if (strtoupper($valor) === "MIN") {
+            $funcionSql = "MIN";
+        }
+        $activa = $esModoSecreto ? 3 : 1;
+        try {
+            $sql = "SELECT {$funcionSql}(p.precio) as precio_limite
+                    FROM productos p
+                    INNER JOIN colecciones col ON p.coleccion_id = col.id
+                    WHERE p.activo = 1 AND col.activa = $activa";
+            $sentencia = $this->conexionDataBase->prepare($sql);
+            $sentencia->execute();
+            $resultado = $sentencia->fetch(PDO::FETCH_ASSOC);
+            $precio = isset($resultado['precio_limite']) ? $resultado['precio_limite'] : 0;
+            return round((float)$precio, 2);
+        } catch (PDOException $e) {
+            error_log("Error en Producto->obtenerPrecioMinMax: " . $e->getMessage());
+            return 0;
         }
     }
 

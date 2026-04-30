@@ -22,7 +22,18 @@ include './includes/header.php';
     <div class="sticky-top" style="top: 100px; z-index: 1;">
         <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
             <h5 class="fw-bold text-uppercase m-0">Filtros</h5>
+            <?php
+            if(!$esModoSecreto){
+            ?>
             <a href="catalogo.php" class="text-muted small text-decoration-underline">Limpiar</a>
+            <?php
+            }else{
+            ?>
+                        <a href="catalogo.php?especial=herror" class="text-muted small text-decoration-underline">Limpiar</a>
+                        <?php
+            }
+
+            ?>
         </div>
         <div class="accordion accordion-flush" id="acordeonFiltros">
             
@@ -116,6 +127,7 @@ include './includes/header.php';
                 <div id="filtroTalla" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
                     <div class="accordion-body px-0 py-2">
                         <div class="d-flex flex-wrap gap-2">
+                            <a href="<?php echo crearUrl('talla', 'Única'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">ÚNICA</a>
                             <a href="<?php echo crearUrl('talla', 'XS'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XS</a>
                             <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">S</a>
                             <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">M</a>
