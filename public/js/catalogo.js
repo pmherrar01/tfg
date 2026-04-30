@@ -1,60 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let sliderMin = document.getElementById("slider-min");
-    let sliderMax = document.getElementById("slider-max");
-    let displayMin = document.getElementById("precio-min-val");
-    let displayMax = document.getElementById("precio-max-val");
-
-    if (sliderMin && sliderMax) {
-        let minGap = 1; 
-
-        function controlarSliders(event) {
-            let valorMin = parseInt(sliderMin.value);
-            let valorMax = parseInt(sliderMax.value);
-
-            
-            if (valorMax - valorMin <= minGap) {
-                if (event.target === sliderMin) {
-                    sliderMin.value = valorMax - minGap;
-                    valorMin = sliderMin.value;
-                } else {
-                    sliderMax.value = valorMin + minGap;
-                    valorMax = sliderMax.value;
-                }
-            }
-
-            displayMin.textContent = valorMin;
-            displayMax.textContent = valorMax;
-        }
-
-        sliderMin.addEventListener("input", controlarSliders);
-        sliderMax.addEventListener("input", controlarSliders);
-    }
-});
-
-function aplicarFiltroPrecio() {
-    let min = document.getElementById("slider-min").value;
-    let max = document.getElementById("slider-max").value;
-
-    let urlParams = new URLSearchParams(window.location.search);
-    let orden = urlParams.get('orden');
-
-    let urlDestino = '?precioMin=' + min + '&precioMax=' + max;
-    if (orden) {
-        urlDestino += '&orden=' + orden;
-    }
-
-    window.location.href = urlDestino;
-}
-
-document.addEventListener("DOMContentLoaded", function () {
     const sliderMin = document.getElementById("slider-min");
     const sliderMax = document.getElementById("slider-max");
     const minVal = document.getElementById("precio-min-val");
     const maxVal = document.getElementById("precio-max-val");
     const sliderTrack = document.querySelector(".slider-track");
-
+    
     if (!sliderMin || !sliderMax) return;
-
+    
     const gap = 1;
 
     function updateSliderTrack() {
@@ -62,30 +14,53 @@ document.addEventListener("DOMContentLoaded", function () {
         const max = parseInt(sliderMax.value);
         const minAttr = parseInt(sliderMin.min);
         const maxAttr = parseInt(sliderMax.max);
-
+        
         const percent1 = ((min - minAttr) / (maxAttr - minAttr)) * 100;
         const percent2 = ((max - minAttr) / (maxAttr - minAttr)) * 100;
-
+        
         sliderTrack.style.left = percent1 + "%";
         sliderTrack.style.width = (percent2 - percent1) + "%";
     }
 
-    sliderMin.addEventListener("input", function () {
-        if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
-            sliderMin.value = parseInt(sliderMax.value) - gap;
+    function controlarSliders(event) {
+        let valorMin = parseInt(sliderMin.value);
+        let valorMax = parseInt(sliderMax.value);
+                     
+        if (valorMax - valorMin <= gap) {
+            if (event.target === sliderMin) {
+                sliderMin.value = valorMax - gap;
+            } else {
+                sliderMax.value = valorMin + gap;
+            }
         }
+        
         minVal.textContent = sliderMin.value;
-        updateSliderTrack();
-    });
-
-    sliderMax.addEventListener("input", function () {
-        if (parseInt(sliderMax.value) - parseInt(sliderMin.value) <= gap) {
-            sliderMax.value = parseInt(sliderMin.value) + gap;
-        }
         maxVal.textContent = sliderMax.value;
         updateSliderTrack();
-    });
+    }
 
+    sliderMin.addEventListener("input", controlarSliders);
+    sliderMax.addEventListener("input", controlarSliders);
+    
+    // Inicializar visualmente la barra al cargar la página
     updateSliderTrack();
 });
 
+// Función global para aplicar el filtro (fuera del DOMContentLoaded para que el botón la encuentre)
+function aplicarFiltroPrecio() {
+    let min = document.getElementById("slider-min").value;
+    let max = document.getElementById("slider-max").value;
+    
+    // Capturamos la URL actual con todos sus parámetros
+    let urlParams = new URLSearchParams(window.location.search);
+    
+    // Le inyectamos los nuevos valores del precio
+    urlParams.set('precioMin', min);
+    urlParams.set('precioMax', max);
+    
+    // Si cambian el precio, quitamos la paginación para volver a la página 1
+    urlParams.delete('pagina');
+    
+    // Redirigimos conservando absolutamente TODO lo demás (incluido ?especial=herror)
+    window.location.href = 'catalogo.php?' + urlParams.toString();
+}

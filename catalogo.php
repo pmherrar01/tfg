@@ -116,6 +116,7 @@ include './includes/header.php';
                 <div id="filtroTalla" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
                     <div class="accordion-body px-0 py-2">
                         <div class="d-flex flex-wrap gap-2">
+                            <a href="<?php echo crearUrl('talla', 'XS'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XS</a>
                             <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">S</a>
                             <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">M</a>
                             <a href="<?php echo crearUrl('talla', 'L'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">L</a>

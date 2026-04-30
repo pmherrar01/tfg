@@ -17,30 +17,13 @@ $esModoSecreto = (isset($_GET['especial']) && $_GET['especial'] == 'herror');
 
 function crearUrl($clave, $valor)
 {
-    $parametros = [];
+    $parametros = $_GET;
     
-    if ($clave === 'orden') {
-        if (isset($_GET['genero'])) $parametros['genero'] = $_GET['genero'];
-        if (isset($_GET['coleccion'])) $parametros['coleccion'] = $_GET['coleccion'];
-        if (isset($_GET['tipo'])) $parametros['tipo'] = $_GET['tipo'];
-        if (isset($_GET['talla'])) $parametros['talla'] = $_GET['talla'];
-        if (isset($_GET['color'])) $parametros['color'] = $_GET['color'];
-        if (isset($_GET['rebajas'])) $parametros['rebajas'] = $_GET['rebajas'];
-        if (isset($_GET['precioMin'])) {
-            $parametros['precioMin'] = $_GET['precioMin'];
-            $parametros['precioMax'] = $_GET['precioMax'];
-        }
-    } 
-    else {
-        if (isset($_GET['orden'])) $parametros['orden'] = $_GET['orden'];
-        
-        if ($clave === 'precioMin' || $clave === 'precioMax') {
-            if (isset($_GET['precioMin'])) $parametros['precioMin'] = $_GET['precioMin'];
-            if (isset($_GET['precioMax'])) $parametros['precioMax'] = $_GET['precioMax'];
-        }
-    }
-
     $parametros[$clave] = $valor;
+    
+    if (isset($parametros['pagina'])) {
+        unset($parametros['pagina']);
+    }
     
     return '?' . http_build_query($parametros);
 }
