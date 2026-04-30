@@ -304,13 +304,10 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '  </div>';
                                 echo '</div>';
 
-                                
-                                // ------------------------------------------
+                                // VARIABLE PARA RECOPILAR LOS MODALES Y MOSTRARLOS FUERA DEL FORMULARIO MASIVO
+                                $modalesHTML = '';
 
-                                // Aquí sigue tu formulario masivo que ya tenías:
-                                echo '<form action="../controllers/adminController.php" method="POST">';
-                                echo '</div>';
-
+                                // INICIO DEL FORMULARIO MASIVO (Limpio y sin duplicar)
                                 echo '<form action="../controllers/adminController.php" method="POST">';
                                 echo '<input type="hidden" name="accion" value="actualizarInventarioMasivo">';
                                 echo '<input type="hidden" name="pagina_retorno" value="' . $paginaActual . '">';
@@ -389,40 +386,41 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         }
                                         echo '          </tbody>';
                                         echo '      </table>';
-                                        echo '  </div>';
+                                        echo '  </div>'; // Fin del card-body
+
+                                        // BOTÓN AÑADIR COLOR Y CREACIÓN DEL MODAL (Guardándolo en la variable)
                                         if (!$esSegundaMano) {
                                             echo '  <div class="card-footer bg-white text-end border-0 pb-3">';
                                             echo '      <button type="button" class="btn btn-sm btn-outline-dark fw-bold" data-bs-toggle="modal" data-bs-target="#modalColor'.$id.'"><i class="bi bi-palette me-2"></i>Añadir Nuevo Color</button>';
                                             echo '  </div>';
 
-                                            echo '  <div class="modal fade text-start" id="modalColor'.$id.'" tabindex="-1" aria-hidden="true">';
-                                            echo '      <div class="modal-dialog modal-lg">';
-                                            echo '          <div class="modal-content rounded-0 border-dark shadow-lg">';
-                                            echo '              <div class="modal-header bg-dark text-white border-0"><h5 class="modal-title fw-bold text-uppercase"><i class="bi bi-palette me-2"></i>Añadir Color a: '.htmlspecialchars($datos['nombre']).'</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>';
-                                            echo '              <div class="modal-body p-4">';
-                                            echo '                  <form action="../controllers/adminController.php" method="POST" enctype="multipart/form-data">';
-                                            echo '                      <input type="hidden" name="accion" value="anadirColor">';
-                                            echo '                      <input type="hidden" name="producto_id" value="'.$id.'">';
-                                            echo '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Elige el nuevo Color:</label><select name="color_id" class="form-select border-dark" required><option value="">-- Seleccionar Color --</option>';
-                                            foreach($prod->listaColores() as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
-                                            echo '                      </select></div>';
-                                            echo '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Stock por tallas:</label><div class="d-flex flex-wrap gap-2">';
+                                            $modalesHTML .= '  <div class="modal fade text-start" id="modalColor'.$id.'" tabindex="-1" aria-hidden="true">';
+                                            $modalesHTML .= '      <div class="modal-dialog modal-lg">';
+                                            $modalesHTML .= '          <div class="modal-content rounded-0 border-dark shadow-lg">';
+                                            $modalesHTML .= '              <div class="modal-header bg-dark text-white border-0"><h5 class="modal-title fw-bold text-uppercase"><i class="bi bi-palette me-2"></i>Añadir Color a: '.htmlspecialchars($datos['nombre']).'</h5><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>';
+                                            $modalesHTML .= '              <div class="modal-body p-4">';
+                                            $modalesHTML .= '                  <form action="../controllers/adminController.php" method="POST" enctype="multipart/form-data">';
+                                            $modalesHTML .= '                      <input type="hidden" name="accion" value="anadirColor">';
+                                            $modalesHTML .= '                      <input type="hidden" name="producto_id" value="'.$id.'">';
+                                            $modalesHTML .= '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Elige el nuevo Color:</label><select name="color_id" class="form-select border-dark" required><option value="">-- Seleccionar Color --</option>';
+                                            foreach($prod->listaColores() as $c) { $modalesHTML .= "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                            $modalesHTML .= '                      </select></div>';
+                                            $modalesHTML .= '                      <div class="mb-3"><label class="fw-bold small text-uppercase">Stock por tallas:</label><div class="d-flex flex-wrap gap-2">';
                                             foreach(['XS', 'S', 'M', 'L', 'XL', 'Única'] as $t) {
-                                                echo '                  <div class="input-group input-group-sm" style="width: 110px;"><span class="input-group-text bg-dark text-white fw-bold">'.$t.'</span><input type="number" name="stock['.$t.']" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                                $modalesHTML .= '                  <div class="input-group input-group-sm" style="width: 110px;"><span class="input-group-text bg-dark text-white fw-bold">'.$t.'</span><input type="number" name="stock['.$t.']" class="form-control text-center border-dark" value="0" min="0"></div>';
                                             }
-                                            echo '                      </div></div>';
-                                            echo '                      <div class="mb-4 mt-4"><label class="fw-bold small text-uppercase">Fotos de este nuevo color (Puedes seleccionar varias):</label><input type="file" name="imagenes[]" class="form-control border-dark" accept="image/*" multiple required></div>';
-                                            echo '                      <button type="submit" class="btn btn-dark w-100 fw-bold py-3 text-uppercase">Guardar Variante</button>';
-                                            echo '                  </form>';
-                                            echo '              </div>';
-                                            echo '          </div>';
-                                            echo '      </div>';
-                                            echo '  </div>';
+                                            $modalesHTML .= '                      </div></div>';
+                                            $modalesHTML .= '                      <div class="mb-4 mt-4"><label class="fw-bold small text-uppercase">Fotos de este nuevo color (Puedes seleccionar varias):</label><input type="file" name="imagenes[]" class="form-control border-dark" accept="image/*" multiple required></div>';
+                                            $modalesHTML .= '                      <button type="submit" class="btn btn-dark w-100 fw-bold py-3 text-uppercase">Guardar Variante</button>';
+                                            $modalesHTML .= '                  </form>';
+                                            $modalesHTML .= '              </div>';
+                                            $modalesHTML .= '          </div>';
+                                            $modalesHTML .= '      </div>';
+                                            $modalesHTML .= '  </div>';
                                         }
 
-                                        echo '</div>'; 
+                                        echo '</div>'; // Fin de la Tarjeta (Card)
                                     }
-                                    
                                 }
 
                                 echo '<div class="d-flex flex-wrap justify-content-between align-items-center mt-5 mb-5 pt-3 border-top">';
@@ -447,7 +445,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> GUARDAR TODOS LOS CAMBIOS</button>';
                                 echo '</div>';
 
-                                echo '</form>';
+                                echo '</form>'; // ESTE ES EL FIN REAL DEL FORMULARIO MASIVO
+
+                                // AHORA IMPRIMIMOS TODOS LOS MODALES RECOPILADOS
+                                echo $modalesHTML;
+
                                 break;
                             case 'segundaMano':
 
