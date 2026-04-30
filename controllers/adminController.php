@@ -139,17 +139,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
 
         case 'crearPrenda':
-            // 1. DETECCIÓN DE EXCESO DE PESO EN LAS FOTOS
-            if (empty($_POST) && isset($_SERVER['CONTENT_LENGTH']) && $_SERVER['CONTENT_LENGTH'] > 0) {
-                // Si el POST está vacío pero se enviaron datos, significa que los archivos eran demasiado grandes
-                header("Location: ../admin/admin.php?seccion=productos&error=error_subida");
-                exit();
-            }
-
-            // 2. RECOGIDA Y LIMPIEZA DE DATOS (A prueba de fallos)
             $nombre = $_POST['nombre'] ?? '';
             $descripcion = $_POST['descripcion'] ?? '';
-            // Si el precio viene con coma, la cambiamos por punto para la BBDD
             $precio = !empty($_POST['precio']) ? str_replace(',', '.', $_POST['precio']) : 0;
             $tipo_id = !empty($_POST['tipo_id']) ? $_POST['tipo_id'] : null;
             $coleccion_id = !empty($_POST['coleccion_id']) ? $_POST['coleccion_id'] : null;
@@ -158,13 +149,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $talla = !empty($_POST['talla']) ? strtoupper($_POST['talla']) : 'U';
             $stock = isset($_POST['stock']) ? (int)$_POST['stock'] : 0;
             
-            // Si por algún casual llega sin color o sin nombre, bloqueamos la subida para evitar que rompa la BBDD
             if (empty($nombre) || empty($color_id)) {
-                header("Location: ../admin/admin.php?seccion=productos&error=error_subida");
-                exit();
+                die("<h2 style='color:red;'>Error crítico: No has puesto el nombre de la prenda o no has seleccionado un color. Dale atrás a tu navegador e inténtalo de nuevo.</h2>");
             }
 
-            // 3. SUBIDA DE MÚLTIPLES IMÁGENES
             $rutasDestino = [];
             if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'])) {
                 $totalImagenes = count($_FILES['imagenes']['name']);
@@ -172,7 +160,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 
                 for ($i = 0; $i < $totalImagenes; $i++) {
                     if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
-                        // Limpiamos el nombre original de la foto para evitar caracteres raros
                         $nombreOriginal = preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
                         $nombreArchivo = time() . '_' . $i . '_' . $nombreOriginal;
                         
@@ -183,15 +170,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             }
 
-            // 4. GUARDADO EN BASE DE DATOS
             $prodObj = new Producto($conexion);
-            if ($prodObj->crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $rutasDestino)) {
+            $resultado = $prodObj->crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $rutasDestino);
+            
+            if ($resultado === true) {
                 header("Location: ../admin/admin.php?seccion=productos&mensaje=prenda_subida");
             } else {
-                header("Location: ../admin/admin.php?seccion=productos&error=error_subida");
+                die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee; color: #900; font-family: sans-serif; max-width: 800px; margin: 50px auto;'>
+                        <h2>🚨 ¡Ups! La Base de Datos ha bloqueado la subida</h2>
+                        <p>No te preocupes, esto es lo que está fallando exactamente:</p>
+                        <pre style='background: #333; color: #fff; padding: 15px; overflow-x: auto; font-size: 16px;'>" . htmlspecialchars($resultado) . "</pre>
+                        <p><strong>Cópialo y pégamelo aquí para que lo arreglemos al instante.</strong></p>
+                        <br>
+                        <button onclick='window.history.back()' style='padding: 10px 20px; cursor: pointer;'>Volver Atrás</button>
+                     </div>");
             }
             exit();
-            break;
 
         default:
             header("Location: ../admin/admin.php");

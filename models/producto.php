@@ -996,47 +996,37 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
         try {
             $this->conexionDataBase->beginTransaction();
 
-            // Aseguramos los tipos exactos que pide MySQL para no provocar excepciones
-            $precio = (float)$precio;
-            $tipo_id = $tipo_id ? (int)$tipo_id : null;
-            $coleccion_id = $coleccion_id ? (int)$coleccion_id : null;
-            $genero = (int)$genero;
-            $color_id = (int)$color_id;
-            $stock = (int)$stock;
-
-            // 1. Tabla de Productos (Añadido talla y stock para evitar NULL y 0 en la tabla principal)
-            $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja, talla, stock) 
-                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, :talla, :stock)";
+            // 1. Inserción en PRODUCTOS (¡SIN talla ni stock, que van en su propia tabla!)
+            $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja) 
+                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0)";
             $sentenciaProd = $this->conexionDataBase->prepare($sqlProd);
             $sentenciaProd->execute([
                 ':nombre' => $nombre,
                 ':descripcion' => $descripcion,
                 ':precio' => $precio,
-                ':tipo_id' => $tipo_id,
-                ':coleccion_id' => $coleccion_id,
-                ':genero' => $genero,
-                ':talla' => $talla,
-                ':stock' => $stock
+                ':tipo_id' => $tipo_id ?: null,
+                ':coleccion_id' => $coleccion_id ?: null,
+                ':genero' => $genero
             ]);
             $idProducto = $this->conexionDataBase->lastInsertId();
 
-            // 2. Tabla de Colores
+            // 2. Inserción en PRODUCTO_COLORES
             $sqlColor = "INSERT INTO producto_colores (producto_id, color_id) VALUES (:id_prod, :id_color)";
             $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
             $sentenciaColor->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
 
-            // 3. Tabla de Tallas (El stock real)
+            // 3. Inserción en PRODUCTO_TALLAS (Aquí es donde se guarda la talla y el stock real)
             $sqlTalla = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock)";
             $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
             $sentenciaTalla->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => $stock]);
 
-            // 4. Tabla de Imágenes (Bucle para múltiples fotos)
+            // 4. Inserción de IMÁGENES
             if (!empty($urls_imagenes) && is_array($urls_imagenes)) {
                 $sqlImg = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:id_prod, :id_color, :url_img, :es_principal)";
                 $sentenciaImg = $this->conexionDataBase->prepare($sqlImg);
                 
                 foreach ($urls_imagenes as $index => $url) {
-                    $esPrincipal = ($index === 0) ? 1 : 0; // La primera es portada
+                    $esPrincipal = ($index === 0) ? 1 : 0;
                     $sentenciaImg->execute([
                         ':id_prod' => $idProducto, 
                         ':color_id' => $color_id, 
@@ -1050,9 +1040,7 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             return true;
         } catch (Exception $e) {
             $this->conexionDataBase->rollBack();
-            // Esto escribe el error real en los logs del servidor por si falla otra cosa
-            error_log("Error fatal en crearPrendaNueva: " . $e->getMessage());
-            return false;
+            return $e->getMessage(); 
         }
     }
 }
