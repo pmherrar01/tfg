@@ -25,7 +25,7 @@ $pedido = new Pedido($conexion);
 $producto  = new Producto($conexion);
 $listaProductos = $producto->listarInventarioCompleto();
 $listaColeciones = $producto->listarColecciones(true);
-$listaUsuarios = $usu->listarUsuarios(); 
+$listaUsuarios = $usu->listarUsuarios();
 
 
 
@@ -73,9 +73,9 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 <i class="bi bi-box-seam"></i> Productos
                             </a>
                         </li>
-                                                <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link admin-nav-link <?= ($seccion == 'segundaMano') ? 'active' : '' ?>" href="admin.php?seccion=segundaMano">
-                                <i class="bi bi-box-seam"></i>  Segunda mano
+                                <i class="bi bi-box-seam"></i> Segunda mano
                             </a>
                         </li>
                         <li class="nav-item">
@@ -88,7 +88,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 <i class="bi bi-people"></i> Usuarios
                             </a>
                         </li>
-                                                <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link admin-nav-link <?= ($seccion == 'looks') ? 'active' : '' ?>" href="admin.php?seccion=looks">
                                 <i class="bi bi-people"></i> Looks
                             </a>
@@ -231,7 +231,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '      <h5 class="fw-bold mb-3 text-uppercase"><i class="bi bi-box-seam me-2"></i>Subir Nueva Prenda al Catálogo</h5>';
                                 echo '      <form action="../controllers/adminController.php" method="POST" enctype="multipart/form-data" class="row g-3">';
                                 echo '          <input type="hidden" name="accion" value="crearPrenda">';
-                                
+
                                 echo '          <div class="col-md-4">';
                                 echo '              <label class="fw-bold small">Nombre de la Prenda:</label>';
                                 echo '              <input type="text" name="nombre" class="form-control border-dark" placeholder="Ej: Camiseta Oversize Negra" required>';
@@ -244,17 +244,21 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '              <label class="fw-bold small">Tipo de Prenda:</label>';
                                 echo '              <select name="tipo_id" class="form-select border-dark" required>';
                                 echo '                  <option value="">-- Seleccionar --</option>';
-                                foreach($prod->listarTiposPrendas() as $t) { echo "<option value='{$t['id']}'>{$t['nombre']}</option>"; }
+                                foreach ($prod->listarTiposPrendas() as $t) {
+                                    echo "<option value='{$t['id']}'>{$t['nombre']}</option>";
+                                }
                                 echo '              </select>';
                                 echo '          </div>';
                                 echo '          <div class="col-md-3">';
                                 echo '              <label class="fw-bold small">Colección:</label>';
                                 echo '              <select name="coleccion_id" class="form-select border-dark">';
                                 echo '                  <option value="">Ninguna</option>';
-                                foreach($listaColeciones as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                foreach ($listaColeciones as $c) {
+                                    echo "<option value='{$c['id']}'>{$c['nombre']}</option>";
+                                }
                                 echo '              </select>';
                                 echo '          </div>';
-                                
+
                                 echo '          <div class="col-md-12">';
                                 echo '              <label class="fw-bold small">Descripción del producto:</label>';
                                 echo '              <textarea name="descripcion" class="form-control border-dark" rows="2" placeholder="Escribe aquí los detalles del material, estilo..."></textarea>';
@@ -272,17 +276,22 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '              <label class="fw-bold small">Color Principal:</label>';
                                 echo '              <select name="color_id" class="form-select border-dark" required>';
                                 echo '                  <option value="">-- Seleccionar --</option>';
-                                foreach($prod->listaColores() as $c) { echo "<option value='{$c['id']}'>{$c['nombre']}</option>"; }
+                                foreach ($prod->listaColores() as $c) {
+                                    echo "<option value='{$c['id']}'>{$c['nombre']}</option>";
+                                }
                                 echo '              </select>';
                                 echo '          </div>';
-                                echo '          <div class="col-md-2">';
-                                echo '              <label class="fw-bold small">Talla (Inicial):</label>';
-                                echo '              <input type="text" name="talla" class="form-control border-dark text-uppercase" placeholder="Ej: M" required>';
-                                echo '          </div>';
-                                echo '          <div class="col-md-2">';
-                                echo '              <label class="fw-bold small">Stock (Inicial):</label>';
-                                echo '              <input type="number" name="stock" class="form-control border-dark" value="10" required>';
-                                echo '          </div>';
+                                echo '          <div class="col-md-12 mt-3">';
+                                echo '          <label class="fw-bold small mb-2">Stock por Tallas (Deja en 0 las que no tengas):</label>';
+                                echo '  <div class="d-flex flex-wrap gap-2">';
+                                echo '  <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">XS</span><input type="number" name="stock[XS]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo '  <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">S</span><input type="number" name="stock[S]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo ' <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">M</span><input type="number" name="stock[M]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo '      <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">L</span><input type="number" name="stock[L]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo '    <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">XL</span><input type="number" name="stock[XL]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo '     <div class="input-group input-group-sm" style="width: 115px;"><span class="input-group-text bg-dark text-white fw-bold">ÚNICA</span><input type="number" name="stock[U]" class="form-control text-center border-dark" value="0" min="0"></div>';
+                                echo '    </div>';
+                                echo '  </div>';
                                 echo '          <div class="col-md-3">';
                                 echo '              <label class="fw-bold small">Subir Foto:</label>';
                                 echo '              <input type="file" name="imagenes[]" class="form-control border-dark" accept="image/*" multiple required>';
@@ -407,16 +416,16 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
 
                                 echo '</form>';
                                 break;
-                                case 'segundaMano':
+                            case 'segundaMano':
 
                                 $totalSM = $producto->contarProductosPorTipo(true);
-                                $listaSM = $producto->listarProductosPaginados(true, 50, 0); 
+                                $listaSM = $producto->listarProductosPaginados(true, 50, 0);
 
                                 echo '<h3 class="fw-bold mb-4 text-uppercase">Revisión de Segunda Mano</h3>';
-                                
+
                                 echo '<form action="../controllers/adminController.php" method="POST">';
                                 echo '<input type="hidden" name="accion" value="actualizarSegundaMano">';
-                                
+
                                 echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
                                 echo '<table class="table align-middle text-center table-hover">';
                                 echo '  <thead class="table-dark">
@@ -430,8 +439,8 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         </thead>';
                                 echo '  <tbody>';
 
-                                $agrupadosSM = []; 
-                                
+                                $agrupadosSM = [];
+
                                 if (!empty($listaSM)) {
                                     foreach ($listaSM as $item) {
                                         if (!isset($agrupadosSM[$item['prenda_id']])) {
@@ -447,7 +456,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         echo '<tr>';
                                         echo '  <td class="fw-bold text-secondary">#' . $id . '</td>';
                                         echo '  <td class="text-uppercase fw-bold">' . htmlspecialchars($p['nombre']) . '</td>';
-                                        
+
                                         echo '  <td>';
                                         echo '      <select name="vendedor[' . $id . ']" class="form-select form-select-sm border-0 bg-light fw-bold">';
                                         foreach ($listaUsuarios as $u) {
@@ -459,7 +468,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
 
                                         echo '  <td>';
                                         $colorSelect = ($p['estado_revision'] == 'Aprobado') ? 'text-success' : (($p['estado_revision'] == 'Rechazado') ? 'text-danger' : 'text-warning');
-                                        
+
                                         echo '      <select name="revision[' . $id . ']" class="form-select form-select-sm fw-bold border-0 bg-light ' . $colorSelect . '">';
                                         $estados = ['Pendiente', 'Aprobado', 'Rechazado'];
                                         foreach ($estados as $est) {
@@ -477,11 +486,11 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '  </tbody>';
                                 echo '</table>';
                                 echo '</div>';
-                                
+
                                 echo '<div class="text-end mt-4 mb-5">';
                                 echo '  <button type="submit" class="btn btn-admin-black px-5 py-3 shadow-lg fw-bold"><i class="bi bi-save me-2"></i> Guardar Cambios de Revisión</button>';
                                 echo '</div>';
-                                
+
                                 echo '</form>';
                                 break;
                             case 'colecciones':
@@ -559,17 +568,17 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 echo '</div>';
                                 break;
                             case 'usuarios':
-                            $usuarioObj = new Usuario($db->conectar());
-                            $listaUsuarios = $usuarioObj->listarUsuarios();
+                                $usuarioObj = new Usuario($db->conectar());
+                                $listaUsuarios = $usuarioObj->listarUsuarios();
 
-                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
-                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Usuarios</h3>';
-                            echo '  <span class="badge bg-secondary fs-6">' . count($listaUsuarios) . ' Registrados</span>';
-                            echo '</div>';
+                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                                echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Usuarios</h3>';
+                                echo '  <span class="badge bg-secondary fs-6">' . count($listaUsuarios) . ' Registrados</span>';
+                                echo '</div>';
 
-                            echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
-                            echo '<table class="table admin-table table-hover align-middle">';
-                            echo '  <thead class="table-dark text-center">
+                                echo '<div class="table-responsive bg-white p-3 admin-card shadow-sm">';
+                                echo '<table class="table admin-table table-hover align-middle">';
+                                echo '  <thead class="table-dark text-center">
                                         <tr>
                                             <th>ID</th>
                                             <th>Nombre / Username</th>
@@ -578,183 +587,183 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                             <th style="width: 200px;">Acción</th>
                                         </tr>
                                     </thead>';
-                            echo '  <tbody>';
+                                echo '  <tbody>';
 
-                            if (empty($listaUsuarios)) {
-                                echo '<tr><td colspan="5" class="text-center py-4 text-muted">No hay usuarios registrados.</td></tr>';
-                            } else {
-                                foreach ($listaUsuarios as $u) {
-                                    $esAdmin = ($u['rol_id'] == 1);
-                                    
-                                    $nuevoRol = $esAdmin ? 2 : 1; 
+                                if (empty($listaUsuarios)) {
+                                    echo '<tr><td colspan="5" class="text-center py-4 text-muted">No hay usuarios registrados.</td></tr>';
+                                } else {
+                                    foreach ($listaUsuarios as $u) {
+                                        $esAdmin = ($u['rol_id'] == 1);
 
-                                    echo '<tr>';
-                                    echo '  <td class="text-center text-secondary fw-bold">#' . $u['id'] . '</td>';
-                                    echo '  <td class="fw-bold">' . htmlspecialchars($u['nombre']) . '</td>';
-                                    echo '  <td class="text-muted">' . htmlspecialchars($u['email']) . '</td>';
-                                    
-                                    echo '  <td class="text-center">';
-                                    if ($esAdmin) {
-                                        echo '<span class="badge bg-danger px-3 py-2"><i class="bi bi-star-fill me-1"></i> ADMIN</span>';
-                                    } else {
-                                        echo '<span class="badge bg-secondary px-3 py-2">CLIENTE</span>';
+                                        $nuevoRol = $esAdmin ? 2 : 1;
+
+                                        echo '<tr>';
+                                        echo '  <td class="text-center text-secondary fw-bold">#' . $u['id'] . '</td>';
+                                        echo '  <td class="fw-bold">' . htmlspecialchars($u['nombre']) . '</td>';
+                                        echo '  <td class="text-muted">' . htmlspecialchars($u['email']) . '</td>';
+
+                                        echo '  <td class="text-center">';
+                                        if ($esAdmin) {
+                                            echo '<span class="badge bg-danger px-3 py-2"><i class="bi bi-star-fill me-1"></i> ADMIN</span>';
+                                        } else {
+                                            echo '<span class="badge bg-secondary px-3 py-2">CLIENTE</span>';
+                                        }
+                                        echo '  </td>';
+
+                                        echo '  <td class="text-center">';
+                                        echo '      <form action="../controllers/adminController.php" method="POST" class="m-0">';
+                                        echo '          <input type="hidden" name="accion" value="actualizarRol">';
+                                        echo '          <input type="hidden" name="id_usuario" value="' . $u['id'] . '">';
+                                        echo '          <input type="hidden" name="nuevo_rol" value="' . $nuevoRol . '">';
+
+                                        if ($esAdmin) {
+                                            echo '          <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-bold">Quitar Admin</button>';
+                                        } else {
+                                            echo '          <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold">Hacer Admin</button>';
+                                        }
+
+                                        echo '      </form>';
+                                        echo '  </td>';
+                                        echo '</tr>';
                                     }
-                                    echo '  </td>';
-
-                                    echo '  <td class="text-center">';
-                                    echo '      <form action="../controllers/adminController.php" method="POST" class="m-0">';
-                                    echo '          <input type="hidden" name="accion" value="actualizarRol">';
-                                    echo '          <input type="hidden" name="id_usuario" value="' . $u['id'] . '">';
-                                    echo '          <input type="hidden" name="nuevo_rol" value="' . $nuevoRol . '">';
-                                    
-                                    if ($esAdmin) {
-                                        echo '          <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-bold">Quitar Admin</button>';
-                                    } else {
-                                        echo '          <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold">Hacer Admin</button>';
-                                    }
-                                    
-                                    echo '      </form>';
-                                    echo '  </td>';
-                                    echo '</tr>';
                                 }
-                            }
 
-                            echo '  </tbody>';
-                            echo '</table>';
-                            echo '</div>';
-                            break;
+                                echo '  </tbody>';
+                                echo '</table>';
+                                echo '</div>';
+                                break;
                             case 'looks':
-                            $lookObj = new Look($db->conectar());
-                            $looks = $lookObj->listarLooksAdmin();
+                                $lookObj = new Look($db->conectar());
+                                $looks = $lookObj->listarLooksAdmin();
 
-                            // LA MAGIA: Consultamos las combinaciones reales de Producto + Color
-                            $sqlCombos = "SELECT p.id as producto_id, p.nombre as producto_nombre, c.id as color_id, c.nombre as color_nombre
+                                // LA MAGIA: Consultamos las combinaciones reales de Producto + Color
+                                $sqlCombos = "SELECT p.id as producto_id, p.nombre as producto_nombre, c.id as color_id, c.nombre as color_nombre
                                           FROM productos p
                                           INNER JOIN producto_colores pc ON p.id = pc.producto_id
                                           INNER JOIN colores c ON pc.color_id = c.id
                                           WHERE p.es_segunda_mano = 0
                                           ORDER BY p.nombre ASC, c.nombre ASC";
-                            $combinaciones = $db->conectar()->query($sqlCombos)->fetchAll(PDO::FETCH_ASSOC);
+                                $combinaciones = $db->conectar()->query($sqlCombos)->fetchAll(PDO::FETCH_ASSOC);
 
-                            // Agrupar prendas por Look
-                            $looksAgrupados = [];
-                            foreach ($looks as $l) {
-                                $looksAgrupados[$l['look_id']]['activo'] = $l['activo'];
-                                if ($l['producto_id']) {
-                                    $looksAgrupados[$l['look_id']]['prendas'][] = $l;
+                                // Agrupar prendas por Look
+                                $looksAgrupados = [];
+                                foreach ($looks as $l) {
+                                    $looksAgrupados[$l['look_id']]['activo'] = $l['activo'];
+                                    if ($l['producto_id']) {
+                                        $looksAgrupados[$l['look_id']]['prendas'][] = $l;
+                                    }
                                 }
-                            }
 
-                            echo '<div class="d-flex justify-content-between align-items-center mb-4">';
-                            echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Looks</h3>';
-                            echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevoLook"><i class="bi bi-plus-lg me-2"></i> Crear Nuevo Look</button>';
-                            echo '</div>';
+                                echo '<div class="d-flex justify-content-between align-items-center mb-4">';
+                                echo '  <h3 class="fw-bold m-0 text-uppercase">Gestión de Looks</h3>';
+                                echo '  <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevoLook"><i class="bi bi-plus-lg me-2"></i> Crear Nuevo Look</button>';
+                                echo '</div>';
 
-                            // --- FORMULARIO CREAR LOOK ---
-                            echo '<div class="collapse mb-4" id="formNuevoLook">';
-                            echo '  <div class="card card-body admin-card border-0 shadow-sm bg-light">';
-                            echo '      <form action="../controllers/adminController.php" method="POST">';
-                            echo '          <input type="hidden" name="accion" value="crear_look">';
-                            echo '          <h6 class="fw-bold text-uppercase mb-3">Elige hasta 4 prendas para el look:</h6>';
-                            echo '          <div class="row g-3">';
-                            for ($i=0; $i < 4; $i++) { 
-                                echo '          <div class="col-md-6 border-bottom pb-2">';
-                                echo '              <span class="badge bg-dark mb-1">Prenda '.($i+1).'</span>';
-                                // UN SOLO SELECTOR COMBINADO
-                                echo '              <select name="prendas['.$i.']" class="form-select form-select-sm">';
-                                echo '                  <option value="">-- Seleccionar Prenda y Color --</option>';
-                                foreach ($combinaciones as $combo) {
-                                    $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
-                                    $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
-                                    echo "              <option value='{$valorCompuesto}'>{$textoAmostrar}</option>";
-                                }
-                                echo '              </select>';
-                                echo '          </div>';
-                            }
-                            echo '          </div>';
-                            echo '          <div class="text-end mt-3"><button type="submit" class="btn btn-dark fw-bold px-4">Guardar Look</button></div>';
-                            echo '      </form>';
-                            echo '  </div>';
-                            echo '</div>';
-
-                            // --- LISTADO DE LOOKS (TARJETAS) ---
-                            if (empty($looksAgrupados)) {
-                                echo '<div class="alert alert-secondary text-center">No hay looks configurados.</div>';
-                            } else {
-                                echo '<div class="row">';
-                                foreach ($looksAgrupados as $id => $datos) {
-                                    $estadoHTML = ($datos['activo'] == 1) ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
-                                    
-                                    echo '<div class="col-md-6 col-lg-6 mb-4">';
-                                    echo '  <div class="card h-100 border-0 shadow-sm admin-card">';
-                                    
-                                    echo '      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">';
-                                    echo '          <div><span class="fw-bold fs-5">LOOK #'.$id.'</span> <span class="ms-2">'.$estadoHTML.'</span></div>';
-                                    echo '          <div class="d-flex gap-2">';
-                                    echo '              <button class="btn btn-sm btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#editLook'.$id.'">Editar</button>';
-                                    echo '              <form action="../controllers/adminController.php" method="POST" onsubmit="return confirm(\'¿Borrar este look?\')">';
-                                    echo '                  <input type="hidden" name="accion" value="eliminarLook">';
-                                    echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
-                                    echo '                  <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>';
-                                    echo '              </form>';
+                                // --- FORMULARIO CREAR LOOK ---
+                                echo '<div class="collapse mb-4" id="formNuevoLook">';
+                                echo '  <div class="card card-body admin-card border-0 shadow-sm bg-light">';
+                                echo '      <form action="../controllers/adminController.php" method="POST">';
+                                echo '          <input type="hidden" name="accion" value="crear_look">';
+                                echo '          <h6 class="fw-bold text-uppercase mb-3">Elige hasta 4 prendas para el look:</h6>';
+                                echo '          <div class="row g-3">';
+                                for ($i = 0; $i < 4; $i++) {
+                                    echo '          <div class="col-md-6 border-bottom pb-2">';
+                                    echo '              <span class="badge bg-dark mb-1">Prenda ' . ($i + 1) . '</span>';
+                                    // UN SOLO SELECTOR COMBINADO
+                                    echo '              <select name="prendas[' . $i . ']" class="form-select form-select-sm">';
+                                    echo '                  <option value="">-- Seleccionar Prenda y Color --</option>';
+                                    foreach ($combinaciones as $combo) {
+                                        $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
+                                        $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
+                                        echo "              <option value='{$valorCompuesto}'>{$textoAmostrar}</option>";
+                                    }
+                                    echo '              </select>';
                                     echo '          </div>';
-                                    echo '      </div>';
-                                    
-                                    echo '      <div class="card-body">';
-                                    echo '          <ul class="list-group list-group-flush mb-3">';
-                                    $prendasActuales = $datos['prendas'] ?? [];
-                                    if (empty($prendasActuales)) echo '<li class="list-group-item text-muted">Look vacío</li>';
-                                    foreach ($prendasActuales as $prenda) {
-                                        echo '          <li class="list-group-item px-0 py-2 border-0">';
-                                        // TU LÍNEA DE CÓDIGO APLICADA AQUÍ:
-                                        echo '              <span class="text-uppercase small fw-bold text-secondary"><i class="bi bi-check2-circle me-1 text-success"></i>' . htmlspecialchars($prenda['nombre_producto']) . ' <span class="text-dark">- Color: ' . htmlspecialchars($prenda['nombre_color']) . '</span></span>';
-                                        echo '          </li>';
-                                    }
-                                    echo '          </ul>';
+                                }
+                                echo '          </div>';
+                                echo '          <div class="text-end mt-3"><button type="submit" class="btn btn-dark fw-bold px-4">Guardar Look</button></div>';
+                                echo '      </form>';
+                                echo '  </div>';
+                                echo '</div>';
 
-                                    // --- FORMULARIO DE EDICIÓN OCULTO ---
-                                    echo '          <div class="collapse mt-3 border-top pt-3" id="editLook'.$id.'">';
-                                    echo '              <form action="../controllers/adminController.php" method="POST">';
-                                    echo '                  <input type="hidden" name="accion" value="editar_look">';
-                                    echo '                  <input type="hidden" name="id_look" value="'.$id.'">';
-                                    
-                                    echo '                  <div class="mb-3 d-flex align-items-center gap-2">';
-                                    echo '                      <label class="fw-bold small">Estado del Look:</label>';
-                                    echo '                      <select name="activo" class="form-select form-select-sm w-auto">';
-                                    echo '                          <option value="1" '.($datos['activo']==1?'selected':'').'>🟢 Activo</option>';
-                                    echo '                          <option value="0" '.($datos['activo']==0?'selected':'').'>🔴 Oculto</option>';
-                                    echo '                      </select>';
-                                    echo '                  </div>';
+                                // --- LISTADO DE LOOKS (TARJETAS) ---
+                                if (empty($looksAgrupados)) {
+                                    echo '<div class="alert alert-secondary text-center">No hay looks configurados.</div>';
+                                } else {
+                                    echo '<div class="row">';
+                                    foreach ($looksAgrupados as $id => $datos) {
+                                        $estadoHTML = ($datos['activo'] == 1) ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
 
-                                    // SELECTORES COMBINADOS PARA EDICIÓN
-                                    for ($i=0; $i < 4; $i++) { 
-                                        $pIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['producto_id'] : '';
-                                        $cIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['color_id'] : '';
-                                        $valorCompuestoActual = ($pIdActual && $cIdActual) ? ($pIdActual . '_' . $cIdActual) : '';
-                                        
-                                        echo '              <div class="mb-2">';
-                                        echo '                  <select name="prendas['.$i.']" class="form-select form-select-sm">';
-                                        echo '                      <option value="">- Hueco Vacío -</option>';
-                                        foreach ($combinaciones as $combo) {
-                                            $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
-                                            $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
-                                            $sel = ($valorCompuesto == $valorCompuestoActual) ? 'selected' : '';
-                                            echo "                  <option value='{$valorCompuesto}' $sel>{$textoAmostrar}</option>";
+                                        echo '<div class="col-md-6 col-lg-6 mb-4">';
+                                        echo '  <div class="card h-100 border-0 shadow-sm admin-card">';
+
+                                        echo '      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">';
+                                        echo '          <div><span class="fw-bold fs-5">LOOK #' . $id . '</span> <span class="ms-2">' . $estadoHTML . '</span></div>';
+                                        echo '          <div class="d-flex gap-2">';
+                                        echo '              <button class="btn btn-sm btn-light fw-bold" data-bs-toggle="collapse" data-bs-target="#editLook' . $id . '">Editar</button>';
+                                        echo '              <form action="../controllers/adminController.php" method="POST" onsubmit="return confirm(\'¿Borrar este look?\')">';
+                                        echo '                  <input type="hidden" name="accion" value="eliminarLook">';
+                                        echo '                  <input type="hidden" name="id_look" value="' . $id . '">';
+                                        echo '                  <button type="submit" class="btn btn-sm btn-outline-danger border-0"><i class="bi bi-trash"></i></button>';
+                                        echo '              </form>';
+                                        echo '          </div>';
+                                        echo '      </div>';
+
+                                        echo '      <div class="card-body">';
+                                        echo '          <ul class="list-group list-group-flush mb-3">';
+                                        $prendasActuales = $datos['prendas'] ?? [];
+                                        if (empty($prendasActuales)) echo '<li class="list-group-item text-muted">Look vacío</li>';
+                                        foreach ($prendasActuales as $prenda) {
+                                            echo '          <li class="list-group-item px-0 py-2 border-0">';
+                                            // TU LÍNEA DE CÓDIGO APLICADA AQUÍ:
+                                            echo '              <span class="text-uppercase small fw-bold text-secondary"><i class="bi bi-check2-circle me-1 text-success"></i>' . htmlspecialchars($prenda['nombre_producto']) . ' <span class="text-dark">- Color: ' . htmlspecialchars($prenda['nombre_color']) . '</span></span>';
+                                            echo '          </li>';
                                         }
-                                        echo '                  </select>';
-                                        echo '              </div>';
+                                        echo '          </ul>';
+
+                                        // --- FORMULARIO DE EDICIÓN OCULTO ---
+                                        echo '          <div class="collapse mt-3 border-top pt-3" id="editLook' . $id . '">';
+                                        echo '              <form action="../controllers/adminController.php" method="POST">';
+                                        echo '                  <input type="hidden" name="accion" value="editar_look">';
+                                        echo '                  <input type="hidden" name="id_look" value="' . $id . '">';
+
+                                        echo '                  <div class="mb-3 d-flex align-items-center gap-2">';
+                                        echo '                      <label class="fw-bold small">Estado del Look:</label>';
+                                        echo '                      <select name="activo" class="form-select form-select-sm w-auto">';
+                                        echo '                          <option value="1" ' . ($datos['activo'] == 1 ? 'selected' : '') . '>🟢 Activo</option>';
+                                        echo '                          <option value="0" ' . ($datos['activo'] == 0 ? 'selected' : '') . '>🔴 Oculto</option>';
+                                        echo '                      </select>';
+                                        echo '                  </div>';
+
+                                        // SELECTORES COMBINADOS PARA EDICIÓN
+                                        for ($i = 0; $i < 4; $i++) {
+                                            $pIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['producto_id'] : '';
+                                            $cIdActual = isset($prendasActuales[$i]) ? $prendasActuales[$i]['color_id'] : '';
+                                            $valorCompuestoActual = ($pIdActual && $cIdActual) ? ($pIdActual . '_' . $cIdActual) : '';
+
+                                            echo '              <div class="mb-2">';
+                                            echo '                  <select name="prendas[' . $i . ']" class="form-select form-select-sm">';
+                                            echo '                      <option value="">- Hueco Vacío -</option>';
+                                            foreach ($combinaciones as $combo) {
+                                                $valorCompuesto = $combo['producto_id'] . '_' . $combo['color_id'];
+                                                $textoAmostrar = htmlspecialchars($combo['producto_nombre'] . ' - Color: ' . $combo['color_nombre']);
+                                                $sel = ($valorCompuesto == $valorCompuestoActual) ? 'selected' : '';
+                                                echo "                  <option value='{$valorCompuesto}' $sel>{$textoAmostrar}</option>";
+                                            }
+                                            echo '                  </select>';
+                                            echo '              </div>';
+                                        }
+                                        echo '                  <button type="submit" class="btn btn-dark btn-sm w-100 mt-2">Guardar Cambios</button>';
+                                        echo '              </form>';
+                                        echo '          </div>'; // Fin collapse editar
+
+                                        echo '      </div>';
+                                        echo '  </div>';
+                                        echo '</div>';
                                     }
-                                    echo '                  <button type="submit" class="btn btn-dark btn-sm w-100 mt-2">Guardar Cambios</button>';
-                                    echo '              </form>';
-                                    echo '          </div>'; // Fin collapse editar
-                                    
-                                    echo '      </div>';
-                                    echo '  </div>';
                                     echo '</div>';
                                 }
-                                echo '</div>';
-                            }
-                            break;
+                                break;
                         }
                         ?>
                     </div>

@@ -992,21 +992,19 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
         }
     }
 
-   public function crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $urls_imagenes) {
+   public function crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $tallas_stock, $urls_imagenes) {
         try {
             $this->conexionDataBase->beginTransaction();
 
-            // Aseguramos los tipos exactos para que MySQL no salte con errores raros
             $precio = (float)$precio;
             $tipo_id = $tipo_id ? (int)$tipo_id : null;
             $coleccion_id = $coleccion_id ? (int)$coleccion_id : null;
             $genero = (int)$genero;
             $color_id = (int)$color_id;
-            $stock = (int)$stock;
 
-            // 1. Inserción en PRODUCTOS (¡Ahora SÍ incluimos talla y stock para que no salga NULL!)
+            // En la tabla principal metemos talla 'Varias' y stock 0 para que no salte error
             $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja, talla, stock) 
-                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, :talla, :stock)";
+                        VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, 'Varias', 0)";
             $sentenciaProd = $this->conexionDataBase->prepare($sqlProd);
             $sentenciaProd->execute([
                 ':nombre' => $nombre,
@@ -1014,35 +1012,29 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
                 ':precio' => $precio,
                 ':tipo_id' => $tipo_id,
                 ':coleccion_id' => $coleccion_id,
-                ':genero' => $genero,
-                ':talla' => $talla,
-                ':stock' => $stock
+                ':genero' => $genero
             ]);
             $idProducto = $this->conexionDataBase->lastInsertId();
 
-            // 2. Inserción en PRODUCTO_COLORES
             $sqlColor = "INSERT INTO producto_colores (producto_id, color_id) VALUES (:id_prod, :id_color)";
             $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
             $sentenciaColor->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
 
-            // 3. Inserción en PRODUCTO_TALLAS (También se guarda aquí por si en un futuro añades más tallas)
+            // BUCLE MÁGICO: Guarda automáticamente todas las tallas que le hayas puesto stock
             $sqlTalla = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock)";
             $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
-            $sentenciaTalla->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => $stock]);
+            foreach ($tallas_stock as $talla => $stockVal) {
+                if ((int)$stockVal > 0) {
+                    $sentenciaTalla->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => (int)$stockVal]);
+                }
+            }
 
-            // 4. Inserción de IMÁGENES MÚLTIPLES
             if (!empty($urls_imagenes) && is_array($urls_imagenes)) {
                 $sqlImg = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:id_prod, :id_color, :url_img, :es_principal)";
                 $sentenciaImg = $this->conexionDataBase->prepare($sqlImg);
-                
                 foreach ($urls_imagenes as $index => $url) {
-                    $esPrincipal = ($index === 0) ? 1 : 0; // La primera foto es la de portada
-                    $sentenciaImg->execute([
-                        ':id_prod' => $idProducto, 
-                        ':id_color' => $color_id, 
-                        ':url_img' => $url,
-                        ':es_principal' => $esPrincipal
-                    ]);
+                    $esPrincipal = ($index === 0) ? 1 : 0; 
+                    $sentenciaImg->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':url_img' => $url, ':es_principal' => $esPrincipal]);
                 }
             }
 
@@ -1050,8 +1042,44 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             return true;
         } catch (Exception $e) {
             $this->conexionDataBase->rollBack();
-            // Esto escribe el error exacto para leerlo en pantalla
             return $e->getMessage(); 
+        }
+    }
+
+    public function anadirVariantePrenda($idProducto, $color_id, $tallas_stock, $urls_imagenes) {
+        try {
+            $this->conexionDataBase->beginTransaction();
+
+            $sqlColor = "INSERT IGNORE INTO producto_colores (producto_id, color_id) VALUES (:id_prod, :id_color)";
+            $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
+            $sentenciaColor->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
+
+            $sqlTalla = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock) ON DUPLICATE KEY UPDATE stock = stock + :stock";
+            $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
+            foreach ($tallas_stock as $talla => $stockVal) {
+                if ((int)$stockVal > 0) {
+                    $sentenciaTalla->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':talla' => $talla, ':stock' => (int)$stockVal]);
+                }
+            }
+
+            if (!empty($urls_imagenes) && is_array($urls_imagenes)) {
+                $checkSql = "SELECT COUNT(*) FROM imagenes_productos WHERE producto_id = ? AND color_id = ? AND es_principal = 1";
+                $stmtCheck = $this->conexionDataBase->prepare($checkSql);
+                $stmtCheck->execute([$idProducto, $color_id]);
+                $hasPrincipal = $stmtCheck->fetchColumn() > 0;
+
+                $sqlImg = "INSERT INTO imagenes_productos (producto_id, color_id, url_imagen, es_principal) VALUES (:id_prod, :id_color, :url_img, :es_principal)";
+                $sentenciaImg = $this->conexionDataBase->prepare($sqlImg);
+                foreach ($urls_imagenes as $index => $url) {
+                    $esPrincipal = (!$hasPrincipal && $index === 0) ? 1 : 0;
+                    $sentenciaImg->execute([':id_prod' => $idProducto, ':id_color' => $color_id, ':url_img' => $url, ':es_principal' => $esPrincipal]);
+                }
+            }
+            $this->conexionDataBase->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conexionDataBase->rollBack();
+            return $e->getMessage();
         }
     }
 }

@@ -39,7 +39,7 @@ include './includes/header.php';
 
                 <div class="position-relative flex-grow-1 bg-light overflow-hidden">
 
-                    <img id="imagenPrincipal" src="<?php echo $galeria['url_imagen']; ?>" class="w-100 h-100" style="object-fit: cover; transition: opacity 0.3s ease-in-out;" alt="Prenda principal">
+                    <img id="imagenPrincipal" src="<?php echo $galeria[0]['url_imagen']; ?>" class="w-100 h-100" style="object-fit: cover; transition: opacity 0.3s ease-in-out;" alt="Prenda principal">
 
                     <button class="btn position-absolute top-50 start-0 translate-middle-y ms-2 bg-white rounded-circle shadow-sm" style="width: 40px; height: 40px; z-index: 10;" onclick="cambiarConFlechas('prev')">
                         <i class="bi bi-chevron-left"></i>

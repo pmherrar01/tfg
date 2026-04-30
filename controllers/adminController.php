@@ -146,23 +146,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $coleccion_id = !empty($_POST['coleccion_id']) ? $_POST['coleccion_id'] : null;
             $genero = !empty($_POST['genero']) ? $_POST['genero'] : 3;
             $color_id = !empty($_POST['color_id']) ? $_POST['color_id'] : null;
-            $talla = !empty($_POST['talla']) ? strtoupper($_POST['talla']) : 'U';
-            $stock = isset($_POST['stock']) ? (int)$_POST['stock'] : 0;
+            $tallas_stock = isset($_POST['stock']) && is_array($_POST['stock']) ? $_POST['stock'] : [];
             
             if (empty($nombre) || empty($color_id)) {
-                die("<h2 style='color:red;'>Error crítico: No has puesto el nombre de la prenda o no has seleccionado un color. Dale atrás a tu navegador e inténtalo de nuevo.</h2>");
+                die("<h2 style='color:red;'>Error crítico: Faltan datos obligatorios.</h2>");
             }
 
             $rutasDestino = [];
-            if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'])) {
+            if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'][0])) {
                 $totalImagenes = count($_FILES['imagenes']['name']);
                 $rutaDirectorio = __DIR__ . '/../public/img/';
-                
                 for ($i = 0; $i < $totalImagenes; $i++) {
                     if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
                         $nombreOriginal = preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
                         $nombreArchivo = time() . '_' . $i . '_' . $nombreOriginal;
-                        
                         if (move_uploaded_file($_FILES['imagenes']['tmp_name'][$i], $rutaDirectorio . $nombreArchivo)) {
                             $rutasDestino[] = 'public/img/' . $nombreArchivo;
                         }
@@ -171,21 +168,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
 
             $prodObj = new Producto($conexion);
-            $resultado = $prodObj->crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $talla, $stock, $rutasDestino);
+            $resultado = $prodObj->crearPrendaNueva($nombre, $descripcion, $precio, $tipo_id, $coleccion_id, $genero, $color_id, $tallas_stock, $rutasDestino);
             
             if ($resultado === true) {
                 header("Location: ../admin/admin.php?seccion=productos&mensaje=prenda_subida");
             } else {
-                die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee; color: #900; font-family: sans-serif; max-width: 800px; margin: 50px auto;'>
-                        <h2>🚨 ¡Ups! La Base de Datos ha bloqueado la subida</h2>
-                        <p>No te preocupes, esto es lo que está fallando exactamente:</p>
-                        <pre style='background: #333; color: #fff; padding: 15px; overflow-x: auto; font-size: 16px;'>" . htmlspecialchars($resultado) . "</pre>
-                        <p><strong>Cópialo y pégamelo aquí para que lo arreglemos al instante.</strong></p>
-                        <br>
-                        <button onclick='window.history.back()' style='padding: 10px 20px; cursor: pointer;'>Volver Atrás</button>
-                     </div>");
+                die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'><h2>🚨 Error</h2><pre>" . htmlspecialchars($resultado) . "</pre></div>");
             }
             exit();
+            break;
+
+        case 'anadirColor':
+            $producto_id = $_POST['producto_id'] ?? null;
+            $color_id = $_POST['color_id'] ?? null;
+            $tallas_stock = isset($_POST['stock']) && is_array($_POST['stock']) ? $_POST['stock'] : [];
+
+            if (empty($producto_id) || empty($color_id)) {
+                die("<h2 style='color:red;'>Error: Faltan datos para la variante.</h2>");
+            }
+
+            $rutasDestino = [];
+            if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'][0])) {
+                $totalImagenes = count($_FILES['imagenes']['name']);
+                $rutaDirectorio = __DIR__ . '/../public/img/';
+                for ($i = 0; $i < $totalImagenes; $i++) {
+                    if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
+                        $nombreOriginal = preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
+                        $nombreArchivo = time() . '_' . $i . '_' . $nombreOriginal;
+                        if (move_uploaded_file($_FILES['imagenes']['tmp_name'][$i], $rutaDirectorio . $nombreArchivo)) {
+                            $rutasDestino[] = 'public/img/' . $nombreArchivo;
+                        }
+                    }
+                }
+            }
+
+            $prodObj = new Producto($conexion);
+            $resultado = $prodObj->anadirVariantePrenda($producto_id, $color_id, $tallas_stock, $rutasDestino);
+
+            if ($resultado === true) {
+                header("Location: ../admin/admin.php?seccion=productos&mensaje=color_anadido");
+            } else {
+                die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'>Error en DB: ".htmlspecialchars($resultado)."</div>");
+            }
+            exit();
+            
 
         default:
             header("Location: ../admin/admin.php");
