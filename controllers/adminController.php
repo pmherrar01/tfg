@@ -152,17 +152,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 die("<h2 style='color:red;'>Error crítico: Faltan datos obligatorios.</h2>");
             }
 
-            $rutasDestino = [];
+$rutasDestino = [];
             if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'][0])) {
                 $totalImagenes = count($_FILES['imagenes']['name']);
                 $rutaDirectorio = __DIR__ . '/../public/img/';
+                
                 for ($i = 0; $i < $totalImagenes; $i++) {
-                    if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
+                    $errorSubida = $_FILES['imagenes']['error'][$i];
+                    
+                    if ($errorSubida === UPLOAD_ERR_OK) {
                         $nombreOriginal = preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
                         $nombreArchivo = time() . '_' . $i . '_' . $nombreOriginal;
                         if (move_uploaded_file($_FILES['imagenes']['tmp_name'][$i], $rutaDirectorio . $nombreArchivo)) {
                             $rutasDestino[] = 'public/img/' . $nombreArchivo;
                         }
+                    } elseif ($errorSubida === UPLOAD_ERR_INI_SIZE || $errorSubida === UPLOAD_ERR_FORM_SIZE) {
+                        // El freno de emergencia si la foto pesa más de lo que permite el servidor
+                        die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'>
+                                <h2>🚨 Error de peso</h2>
+                                <p>La imagen <b>" . htmlspecialchars($_FILES['imagenes']['name'][$i]) . "</b> pesa demasiado.</p>
+                                <p>El servidor la ha bloqueado. Comprime la imagen o sube el límite 'upload_max_filesize' de tu servidor.</p>
+                                <button onclick='window.history.back()'>Volver Atrás</button>
+                             </div>");
                     }
                 }
             }
@@ -187,17 +198,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 die("<h2 style='color:red;'>Error: Faltan datos para la variante.</h2>");
             }
 
-            $rutasDestino = [];
+$rutasDestino = [];
             if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'][0])) {
                 $totalImagenes = count($_FILES['imagenes']['name']);
                 $rutaDirectorio = __DIR__ . '/../public/img/';
+                
                 for ($i = 0; $i < $totalImagenes; $i++) {
-                    if ($_FILES['imagenes']['error'][$i] === UPLOAD_ERR_OK) {
+                    $errorSubida = $_FILES['imagenes']['error'][$i];
+                    
+                    if ($errorSubida === UPLOAD_ERR_OK) {
                         $nombreOriginal = preg_replace("/[^a-zA-Z0-9.-]/", "_", basename($_FILES['imagenes']['name'][$i]));
                         $nombreArchivo = time() . '_' . $i . '_' . $nombreOriginal;
                         if (move_uploaded_file($_FILES['imagenes']['tmp_name'][$i], $rutaDirectorio . $nombreArchivo)) {
                             $rutasDestino[] = 'public/img/' . $nombreArchivo;
                         }
+                    } elseif ($errorSubida === UPLOAD_ERR_INI_SIZE || $errorSubida === UPLOAD_ERR_FORM_SIZE) {
+                        // El freno de emergencia si la foto pesa más de lo que permite el servidor
+                        die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'>
+                                <h2>🚨 Error de peso</h2>
+                                <p>La imagen <b>" . htmlspecialchars($_FILES['imagenes']['name'][$i]) . "</b> pesa demasiado.</p>
+                                <p>El servidor la ha bloqueado. Comprime la imagen o sube el límite 'upload_max_filesize' de tu servidor.</p>
+                                <button onclick='window.history.back()'>Volver Atrás</button>
+                             </div>");
                     }
                 }
             }
