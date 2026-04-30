@@ -26,35 +26,29 @@ function crearUrl($clave, $valor) {
 
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
-// LÓGICA DE FILTRADO UNIFICADA (Pasamos el flag $esModoSecreto a todas las consultas)
-if (isset($_GET["genero"])) {
-    $listaProductos = $producto->filtrar("genero", $_GET["genero"], null, $ordenActual, $esModoSecreto);
-    $mensajeFiltrado = "Género: " . ($_GET['genero'] == "1" ? "Hombre" : ($_GET['genero'] == "2" ? "Mujer" : "Unisex"));
-} elseif (isset($_GET["coleccion"]) && !$esModoSecreto) {
-    $listaProductos = $producto->filtrar('coleccion', $_GET["coleccion"], null, $ordenActual, $esModoSecreto);
-    $datosColeccion = $producto->obtenerNombreColeccion($_GET["coleccion"]); 
-    $mensajeFiltrado = "Colección: " . $datosColeccion['nombre'];
-} elseif (isset($_GET["tipo"])) {
-    $listaProductos = $producto->filtrar('tipoPrenda', $_GET["tipo"], null, $ordenActual, $esModoSecreto);
-    $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]); 
-    $mensajeFiltrado = "Tipo prenda: " . $datosTiposPrendas['nombre'];
-} elseif (isset($_GET["talla"])) {
-    $listaProductos = $producto->filtrar('talla', $_GET["talla"], null, $ordenActual, $esModoSecreto);
-    $mensajeFiltrado = "Talla: " . $_GET["talla"];
-} elseif (isset($_GET["color"])) {
-    $listaProductos = $producto->filtrar('color', $_GET["color"], null, $ordenActual, $esModoSecreto);
-    $mensajeFiltrado = "Color: " . $_GET["color"];
-} elseif (isset($_GET["rebajas"]) && !$esModoSecreto) {
-    $listaProductos = $producto->filtrar('rebajas', 1, null, $ordenActual, $esModoSecreto);
-    $mensajeFiltrado = "Productos en Rebajas";
-} elseif (isset($_GET["precioMin"]) && isset($_GET["precioMax"])) {
-    $listaProductos = $producto->filtrar('precio', $_GET["precioMax"], $_GET["precioMin"], $ordenActual, $esModoSecreto);
-    $mensajeFiltrado = "Productos entre " . $_GET["precioMin"] . "€ y " . $_GET["precioMax"] . "€";
-} elseif (isset($_GET["orden"])) {
-    $listaProductos = $producto->ordenar($_GET["orden"], $esModoSecreto);
-    $mensajeFiltrado = "Ordenado por selección";
+// Determinamos si el usuario ha aplicado algún filtro analizando los parámetros de la URL
+$filtrosActivos = array_filter($_GET, function($key) {
+    return in_array($key, ['genero', 'coleccion', 'tipo', 'talla', 'color', 'rebajas', 'precioMin', 'precioMax', 'orden']);
+}, ARRAY_FILTER_USE_KEY);
+
+if (!empty($filtrosActivos)) {
+    // Hay filtros activos, usamos la nueva función combinada
+    $listaProductos = $producto->filtrarCombinado($_GET, $esModoSecreto);
+    
+    // Construimos un título dinámico para mostrar en pantalla
+    $titulos = [];
+    if(isset($_GET['genero'])) $titulos[] = ($_GET['genero'] == 1 ? "Hombre" : ($_GET['genero'] == 2 ? "Mujer" : "Unisex"));
+    if(isset($_GET['tipo'])) {
+        $datosTiposPrendas = $producto->obtenerTipoPrenda($_GET["tipo"]);
+        $titulos[] = $datosTiposPrendas['nombre'];
+    }
+    if(isset($_GET['color'])) $titulos[] = "Color " . $_GET['color'];
+    if(isset($_GET['talla'])) $titulos[] = "Talla " . $_GET['talla'];
+    if(isset($_GET['rebajas'])) $titulos[] = "Rebajas";
+    
+    $mensajeFiltrado = !empty($titulos) ? implode(" | ", $titulos) : "Resultados de búsqueda";
 } else {
-    // Si no hay filtros, cargamos todo según el modo en el que estemos
+    // No hay filtros, cargamos todo el catálogo base
     if ($esModoSecreto) {
         $listaProductos = $producto->obtenerColeccionSecreta(); 
         $mensajeFiltrado = "Colección Exclusiva";
