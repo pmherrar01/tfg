@@ -123,6 +123,7 @@ include './includes/header.php';
                     </div>
 
                     <input type="hidden" name="totalPedido" value="<?php echo $totalFinalCheckout; ?>">
+                    <input type="hidden" name="direccionEnvio" value="<?php echo $datosComprador['direccion'] . ' - ' . $datosComprador['ciudad'] . ' (' . $datosComprador['codigo_postal'] . ')'; ?>">
 
                     <?php
                     $btnDisabled = (empty($datosComprador['direccion']) || empty($datosComprador['ciudad'])) ? 'disabled' : '';

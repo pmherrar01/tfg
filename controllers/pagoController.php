@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/db.php';
 require_once '../models/pedido.php';
-require_once '../models/producto.php'; 
+require_once '../models/producto.php';
 require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['usuario_id']) || empty($_SESSION['carrito'])) {
@@ -15,11 +15,11 @@ if (!isset($_SESSION['usuario_id']) || empty($_SESSION['carrito'])) {
 $conexion = new Database();
 $db = $conexion->conectar();
 $pedidoObj = new Pedido($db);
-$productoObj = new Producto($db); 
+$productoObj = new Producto($db);
 $idUsuario = $_SESSION['usuario_id'];
 
 if (isset($_GET['status']) && $_GET['status'] == 'success') {
-    
+
     $total = $_SESSION['checkout_data']['total'] ?? 0;
     $direccion = $_SESSION['checkout_data']['direccion'] ?? 'Dirección no proporcionada';
 
@@ -27,7 +27,7 @@ if (isset($_GET['status']) && $_GET['status'] == 'success') {
 
     if ($idPedido) {
         foreach ($_SESSION['carrito'] as $item) {
-            $idProducto = $item['idPrenda']; 
+            $idProducto = $item['idPrenda'];
             $idColor    = $item['color_id'];
             $talla      = $item['talla'];
             $cantidad   = $item['cantidad'];
@@ -39,6 +39,11 @@ if (isset($_GET['status']) && $_GET['status'] == 'success') {
         unset($_SESSION['carrito']);
         unset($_SESSION['checkout_data']);
 
+        if (isset($_SESSION['descuento']['codigo'])) {
+            $usuarioModel->marcarCodigoUsado($_SESSION['descuento']['codigo']);
+            unset($_SESSION['descuento']); 
+        }
+
         header("Location: ../gracias.php");
         exit();
     } else {
@@ -47,10 +52,10 @@ if (isset($_GET['status']) && $_GET['status'] == 'success') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
+
     $_SESSION['checkout_data'] = [
-        'total' => $_POST['total'] ?? 0,
-        'direccion' => $_POST['direccion'] ?? 'Dirección no proporcionada'
+        'total' => $_POST['totalPedido'] ?? 0,
+        'direccion' => $_POST['direccionEnvio'] ?? 'Dirección no proporcionada'
     ];
 
     $metodo_pago = $_POST['metodo_pago'] ?? 'tarjeta';
@@ -64,10 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $subtotal = 0;
 
     foreach ($_SESSION['carrito'] as $item) {
-        
+
         $datosProd = $productoObj->obtenerProducto($item['idPrenda']);
         $nombreReal = $datosProd['nombre'];
-        
+
         $rebaja = isset($datosProd['rebaja']) ? (int)$datosProd['rebaja'] : 0;
         $precioReal = $datosProd['precio'] - ($datosProd['precio'] * $rebaja / 100);
 
@@ -77,14 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $subtotal += ($precioReal * $item['cantidad']);
-        
+
         $line_items[] = [
             'price_data' => [
                 'currency' => 'eur',
                 'product_data' => [
                     'name' => $nombreReal . ' (Talla: ' . $item['talla'] . ')',
                 ],
-                'unit_amount' => round($precioReal * 100), 
+                'unit_amount' => round($precioReal * 100),
             ],
             'quantity' => $item['cantidad'],
         ];
@@ -97,13 +102,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 'product_data' => [
                     'name' => 'Gastos de envío',
                 ],
-                'unit_amount' => 499, 
+                'unit_amount' => 499,
             ],
             'quantity' => 1,
         ];
     }
 
-    $dominio = "http://" . $_SERVER['HTTP_HOST'] ; 
+    $dominio = "http://" . $_SERVER['HTTP_HOST'];
 
     try {
         $checkout_session = \Stripe\Checkout\Session::create([
@@ -117,9 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("HTTP/1.1 303 See Other");
         header("Location: " . $checkout_session->url);
         exit();
-
     } catch (Exception $e) {
         die("Error al conectar con Stripe: " . $e->getMessage());
     }
 }
-?>

@@ -476,5 +476,16 @@ class Usuario
         return $sentencia->execute([':rol_id' => $idRol, ':id' => $idUsuario]);
     }
 
+    public function marcarCodigoUsado($codigo) {
+    try {
+        $sql = "UPDATE codigos_accesos SET usado = 1, fecha_uso = NOW() WHERE codigo = :codigo AND usado = 0";
+        $sentencia = $this->conexionDataBase->prepare($sql);
+        return $sentencia->execute([':codigo' => $codigo]);
+    } catch (PDOException $e) {
+        error_log("Error al marcar código como usado: " . $e->getMessage());
+        return false;
+    }
+}
+
 
 }
