@@ -3,6 +3,7 @@ session_start();
 require_once '../config/db.php';
 require_once '../models/pedido.php';
 require_once '../models/producto.php';
+require_once '../models/usuario.php';
 require_once '../vendor/autoload.php';
 
 if (!isset($_SESSION['usuario_id']) || empty($_SESSION['carrito'])) {
@@ -12,11 +13,12 @@ if (!isset($_SESSION['usuario_id']) || empty($_SESSION['carrito'])) {
 
 \Stripe\Stripe::setApiKey('sk_test_51TRSRfHJPlhS3OiOmWvQ9M4K1TuNPsHDsBNsV9l99ziXgumDDGjjQtGNQNprptcmSqS0QYrdrGx4AMaOr2HAcy5o006E97tSH6');
 
-$conexion = new Database();
-$db = $conexion->conectar();
-$pedidoObj = new Pedido($db);
-$productoObj = new Producto($db);
+$db = new Database();
+$conexion = $db->conectar();
+$pedidoObj = new Pedido($conexion);
+$productoObj = new Producto($conexion);
 $idUsuario = $_SESSION['usuario_id'];
+$usuario = new Usuario($conexion);
 
 if (isset($_GET['status']) && $_GET['status'] == 'success') {
 
@@ -36,13 +38,16 @@ if (isset($_GET['status']) && $_GET['status'] == 'success') {
             $productoObj->actualizarStock($idProducto, $idColor, $talla, $cantidad);
         }
 
+
+            if (isset($_SESSION['descuento']['codigo'])) {
+            $usuario->marcarCodigoUsado($_SESSION['descuento']['codigo']);
+            unset($_SESSION['descuento']); 
+        }
+
         unset($_SESSION['carrito']);
         unset($_SESSION['checkout_data']);
 
-        if (isset($_SESSION['descuento']['codigo'])) {
-            $usuarioModel->marcarCodigoUsado($_SESSION['descuento']['codigo']);
-            unset($_SESSION['descuento']); 
-        }
+
 
         header("Location: ../gracias.php");
         exit();
