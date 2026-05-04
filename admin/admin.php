@@ -533,7 +533,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     <input type="hidden" name="accion" value="actualizarSegundaMano">
 
                                     <div class="bg-white p-3 admin-card shadow-sm mb-4">
-                                        <!-- CABECERA TIPO TABLA (Solo visible en PC) -->
                                         <div class="row d-none d-md-flex bg-dark text-white fw-bold py-2 text-center align-items-center text-uppercase small">
                                             <div class="col-md-4 text-start px-3">ID / Prenda</div>
                                             <div class="col-md-3">Vendedor (Usuario)</div>
@@ -556,7 +555,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                             <div class="py-4 text-muted text-center border-bottom">No hay prendas de segunda mano registradas.</div>
                                         <?php } else { ?>
                                             <?php foreach ($agrupadosSM as $id => $p) { 
-                                                // Definir color del estado
                                                 $colorSelect = ($p['estado_revision'] == 'Aprobado') ? 'text-success' : (($p['estado_revision'] == 'Rechazado') ? 'text-danger' : 'text-warning');
                                             ?>
                                                 <div class="row align-items-center py-3 border-bottom px-2 px-md-0">
@@ -614,31 +612,31 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                             ?>
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <h3 class="fw-bold m-0 text-uppercase">Gestión de Colecciones</h3>
-                                    <button class="btn btn-admin-black" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaColeccion">
-                                        <i class="bi bi-plus-lg me-2"></i> Nueva Colección
+                                    <button class="btn btn-admin-black px-3 py-2" type="button" data-bs-toggle="collapse" data-bs-target="#formNuevaColeccion">
+                                        <i class="bi bi-plus-lg d-md-none"></i> <span class="d-none d-md-inline"><i class="bi bi-plus-lg me-2"></i> Nueva Colección</span>
                                     </button>
                                 </div>
 
                                 <div class="collapse mb-4" id="formNuevaColeccion">
-                                    <div class="card card-body admin-card border-0 shadow-sm">
-                                        <form action="../controllers/adminController.php" method="POST" class="row g-3">
+                                    <div class="card card-body admin-card border-0 shadow-sm bg-light">
+                                        <form action="../controllers/adminController.php" method="POST" class="row g-3 align-items-end">
                                             <input type="hidden" name="accion" value="crearColeccion">
-                                            <div class="col-md-4">
-                                                <label class="fw-bold mb-1">Nombre:</label>
-                                                <input type="text" name="nombre_coleccion" class="form-control" placeholder="Ej: Invierno 2026" required>
+                                            <div class="col-12 col-md-4">
+                                                <label class="fw-bold mb-1 small text-uppercase">Nombre:</label>
+                                                <input type="text" name="nombre_coleccion" class="form-control border-dark" placeholder="Ej: Invierno 2026" required>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label class="fw-bold mb-1">Descripción:</label>
-                                                <textarea name="descripcion_coleccion" class="form-control" rows="1" placeholder="Breve descripción..."></textarea>
+                                            <div class="col-12 col-md-6">
+                                                <label class="fw-bold mb-1 small text-uppercase">Descripción:</label>
+                                                <textarea name="descripcion_coleccion" class="form-control border-dark" rows="1" placeholder="Breve descripción..."></textarea>
                                             </div>
-                                            <div class="col-md-2 d-flex align-items-end">
-                                                <button type="submit" class="btn btn-dark w-100">Crear</button>
+                                            <div class="col-12 col-md-2 mt-3 mt-md-0">
+                                                <button type="submit" class="btn btn-dark w-100 fw-bold">Crear</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
 
-                                <div class="table-responsive bg-white p-3 admin-card shadow-sm">
+                                <div class="table-responsive bg-white p-3 admin-card shadow-sm d-none d-md-block">
                                     <table class="table admin-table table-hover align-middle">
                                         <thead class="table-dark text-center">
                                             <tr>
@@ -657,10 +655,10 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                                         <input type="hidden" name="id_coleccion" value="<?php echo $col['id']; ?>">
 
                                                         <td class="text-center text-secondary fw-bold">#<?php echo $col['id']; ?></td>
-                                                        <td><input type="text" name="nombre" value="<?php echo htmlspecialchars($col['nombre']); ?>" class="form-control form-control-sm fw-bold"></td>
-                                                        <td><textarea name="descripcion" class="form-control form-control-sm" rows="1"><?php echo htmlspecialchars($col['descripcion'] ?? ''); ?></textarea></td>
+                                                        <td><input type="text" name="nombre" value="<?php echo htmlspecialchars($col['nombre']); ?>" class="form-control form-control-sm fw-bold border-dark"></td>
+                                                        <td><textarea name="descripcion" class="form-control form-control-sm border-dark" rows="1"><?php echo htmlspecialchars($col['descripcion'] ?? ''); ?></textarea></td>
                                                         <td>
-                                                            <select name="nuevo_estado" class="form-select form-select-sm">
+                                                            <select name="nuevo_estado" class="form-select form-select-sm border-dark">
                                                                 <option value="1" <?php echo ($col['activa'] == 1 ? 'selected' : ''); ?>>Activa</option>
                                                                 <option value="2" <?php echo ($col['activa'] == 2 ? 'selected' : ''); ?>>No Activa</option>
                                                                 <option value="3" <?php echo ($col['activa'] == 3 ? 'selected' : ''); ?>>Próximamente</option>
@@ -675,6 +673,56 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div class="d-md-none">
+                                    <?php foreach ($todasLasColecciones as $col) { 
+                                        $bordeCard = 'border-dark';
+                                        if ($col['activa'] == 1) $bordeCard = 'border-success';
+                                        if ($col['activa'] == 2) $bordeCard = 'border-danger';
+                                        if ($col['activa'] == 3) $bordeCard = 'border-warning';
+                                    ?>
+                                        <div class="card mb-3 shadow-sm border-0 border-start border-4 <?php echo $bordeCard; ?>">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                                                    <span class="text-secondary fw-bold">#<?php echo $col['id']; ?></span>
+                                                    <?php 
+                                                        $badgeClass = ($col['activa'] == 1) ? 'bg-success' : (($col['activa'] == 2) ? 'bg-danger' : 'bg-warning text-dark');
+                                                        $badgeText = ($col['activa'] == 1) ? 'Activa' : (($col['activa'] == 2) ? 'Inactiva' : 'Próximamente');
+                                                    ?>
+                                                    <span class="badge <?php echo $badgeClass; ?>"><?php echo $badgeText; ?></span>
+                                                </div>
+
+                                                <form action="../controllers/adminController.php" method="POST" class="row g-2">
+                                                    <input type="hidden" name="accion" value="actualizarColeccion">
+                                                    <input type="hidden" name="id_coleccion" value="<?php echo $col['id']; ?>">
+
+                                                    <div class="col-12">
+                                                        <label class="small fw-bold text-uppercase text-muted mb-1">Nombre:</label>
+                                                        <input type="text" name="nombre" value="<?php echo htmlspecialchars($col['nombre']); ?>" class="form-control form-control-sm fw-bold border-dark">
+                                                    </div>
+                                                    
+                                                    <div class="col-12">
+                                                        <label class="small fw-bold text-uppercase text-muted mb-1">Descripción:</label>
+                                                        <textarea name="descripcion" class="form-control form-control-sm border-dark" rows="2"><?php echo htmlspecialchars($col['descripcion'] ?? ''); ?></textarea>
+                                                    </div>
+
+                                                    <div class="col-8 mt-3">
+                                                        <label class="small fw-bold text-uppercase text-muted mb-1">Estado:</label>
+                                                        <select name="nuevo_estado" class="form-select form-select-sm border-dark">
+                                                            <option value="1" <?php echo ($col['activa'] == 1 ? 'selected' : ''); ?>>Activa</option>
+                                                            <option value="2" <?php echo ($col['activa'] == 2 ? 'selected' : ''); ?>>No Activa</option>
+                                                            <option value="3" <?php echo ($col['activa'] == 3 ? 'selected' : ''); ?>>Próximamente</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <div class="col-4 mt-3 d-flex align-items-end">
+                                                        <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold shadow-sm">Guardar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
                             <?php
                                 break;
                             case 'usuarios':
@@ -686,7 +734,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                     <span class="badge bg-secondary fs-6"><?php echo count($listaUsuarios); ?> Registrados</span>
                                 </div>
 
-                                <div class="table-responsive bg-white p-3 admin-card shadow-sm">
+                                <div class="table-responsive bg-white p-3 admin-card shadow-sm d-none d-md-block">
                                     <table class="table admin-table table-hover align-middle">
                                         <thead class="table-dark text-center">
                                             <tr>
@@ -740,6 +788,48 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div class="d-md-none">
+                                    <?php if (empty($listaUsuarios)) { ?>
+                                        <div class="alert alert-secondary text-center py-4">No hay usuarios registrados.</div>
+                                    <?php } else { ?>
+                                        <?php
+                                        foreach ($listaUsuarios as $u) {
+                                            $esAdmin = ($u['rol_id'] == 1);
+                                            $nuevoRol = $esAdmin ? 2 : 1;
+                                            
+                                            $bordeCard = $esAdmin ? 'border-danger' : 'border-secondary';
+                                        ?>
+                                            <div class="card mb-3 shadow-sm border-0 border-start border-4 <?php echo $bordeCard; ?>">
+                                                <div class="card-body">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <span class="text-secondary fw-bold">#<?php echo $u['id']; ?></span>
+                                                        <?php if ($esAdmin) { ?>
+                                                            <span class="badge bg-danger"><i class="bi bi-star-fill me-1"></i> ADMIN</span>
+                                                        <?php } else { ?>
+                                                            <span class="badge bg-secondary">CLIENTE</span>
+                                                        <?php } ?>
+                                                    </div>
+                                                    
+                                                    <h5 class="fw-bold mb-1 fs-6"><?php echo htmlspecialchars($u['nombre']); ?></h5>
+                                                    <p class="text-muted small mb-3"><i class="bi bi-envelope me-2"></i><?php echo htmlspecialchars($u['email']); ?></p>
+
+                                                    <form action="../controllers/adminController.php" method="POST" class="m-0 border-top pt-3">
+                                                        <input type="hidden" name="accion" value="actualizarRol">
+                                                        <input type="hidden" name="id_usuario" value="<?php echo $u['id']; ?>">
+                                                        <input type="hidden" name="nuevo_rol" value="<?php echo $nuevoRol; ?>">
+
+                                                        <?php if ($esAdmin) { ?>
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger w-100 fw-bold">Quitar permisos de Admin</button>
+                                                        <?php } else { ?>
+                                                            <button type="submit" class="btn btn-sm btn-dark w-100 fw-bold">Hacer Administrador</button>
+                                                        <?php } ?>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
                             <?php
                                 break;
                             case 'looks':
@@ -770,7 +860,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
                                 <div class="collapse mb-4" id="formNuevoLook">
                                     <div class="card card-body admin-card border-0 shadow-sm bg-light">
                                         <form action="../controllers/adminController.php" method="POST">
-                                            <input type="hidden" name="accion" value="crear_look">
+                                            <input type="hidden" name="accion" value="crearLook">
                                             <h6 class="fw-bold text-uppercase mb-3">Elige hasta 4 prendas para el look:</h6>
                                             <div class="row g-3">
                                                 <?php for ($i = 0; $i < 4; $i++) { ?>
@@ -834,7 +924,7 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'pedidos';
 
                                                         <div class="collapse mt-3 border-top pt-3" id="editLook<?php echo $id; ?>">
                                                             <form action="../controllers/adminController.php" method="POST">
-                                                                <input type="hidden" name="accion" value="editar_look">
+                                                                <input type="hidden" name="accion" value="editarLook">
                                                                 <input type="hidden" name="id_look" value="<?php echo $id; ?>">
 
                                                                 <div class="mb-3 d-flex align-items-center gap-2">

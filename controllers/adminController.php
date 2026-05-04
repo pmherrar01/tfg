@@ -54,6 +54,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             header("Location: ../admin/admin.php?seccion=productos&pagina=$pagRetorno&mensaje=inventario_actualizado");
             exit();
+
+            case "actualizarSegundaMano":
+            if (isset($_POST['revision']) && isset($_POST['vendedor'])) {
+                $producto = new Producto($conexion); 
+                foreach ($_POST['revision'] as $idPrenda => $estado) {
+                    $idVendedor = $_POST['vendedor'][$idPrenda];
+                    $producto->actualizarRevisionSegundaMano($idPrenda, $estado, $idVendedor);
+                }
+            }
+            header("Location: ../admin/admin.php?seccion=segundaMano&mensaje=estado_actualizado");
+            exit();
+            
             
         case "crearColeccion":
             $nombre = isset($_POST['nombre_coleccion']) ? trim($_POST['nombre_coleccion']) : "";
@@ -93,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 header("Location: ../admin/admin.php?seccion=usuarios&error=usuario_invalido");
             }
             exit();
-        case 'crear_look':
+        case 'crearLook':
             $prendasRaw = $_POST['prendas'] ?? [];
             $prendasLimpias = [];
             
@@ -112,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
             exit();
 
-        case 'editar_look':
+        case 'editarLook':
             $idLook = $_POST['id_look'] ?? 0;
             $activo = $_POST['activo'] ?? 1;
             $prendasRaw = $_POST['prendas'] ?? [];
@@ -167,9 +179,8 @@ $rutasDestino = [];
                             $rutasDestino[] = 'public/img/' . $nombreArchivo;
                         }
                     } elseif ($errorSubida === UPLOAD_ERR_INI_SIZE || $errorSubida === UPLOAD_ERR_FORM_SIZE) {
-                        // El freno de emergencia si la foto pesa más de lo que permite el servidor
                         die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'>
-                                <h2>🚨 Error de peso</h2>
+                                <h2>Error de peso</h2>
                                 <p>La imagen <b>" . htmlspecialchars($_FILES['imagenes']['name'][$i]) . "</b> pesa demasiado.</p>
                                 <p>El servidor la ha bloqueado. Comprime la imagen o sube el límite 'upload_max_filesize' de tu servidor.</p>
                                 <button onclick='window.history.back()'>Volver Atrás</button>
@@ -187,7 +198,7 @@ $rutasDestino = [];
                 die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'><h2>🚨 Error</h2><pre>" . htmlspecialchars($resultado) . "</pre></div>");
             }
             exit();
-            break;
+            
 
         case 'anadirColor':
             $producto_id = $_POST['producto_id'] ?? null;
@@ -213,9 +224,8 @@ $rutasDestino = [];
                             $rutasDestino[] = 'public/img/' . $nombreArchivo;
                         }
                     } elseif ($errorSubida === UPLOAD_ERR_INI_SIZE || $errorSubida === UPLOAD_ERR_FORM_SIZE) {
-                        // El freno de emergencia si la foto pesa más de lo que permite el servidor
                         die("<div style='padding: 30px; border: 2px solid red; background: #ffeeee;'>
-                                <h2>🚨 Error de peso</h2>
+                                <h2>Error de peso</h2>
                                 <p>La imagen <b>" . htmlspecialchars($_FILES['imagenes']['name'][$i]) . "</b> pesa demasiado.</p>
                                 <p>El servidor la ha bloqueado. Comprime la imagen o sube el límite 'upload_max_filesize' de tu servidor.</p>
                                 <button onclick='window.history.back()'>Volver Atrás</button>
