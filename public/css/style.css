@@ -1050,7 +1050,7 @@ footer a:hover {
 }
 
 /* =========================================
-   CARRUSEL RESPONSIVE (SCROLL HORIZONTAL MÓVIL)
+   CARRUSELES RESPONSIVE (NOVEDADES Y RECIENTES)
    ========================================= */
 
 /* Altura base para PC */
@@ -1060,46 +1060,61 @@ footer a:hover {
 }
 
 @media (max-width: 767px) {
-    /* Reducimos la altura de la foto en móvil para que no ocupe toda la pantalla */
     .img-fluida-reciente {
-        height: 280px; 
+        height: 300px; 
     }
     
-    /* Convertimos el contenedor en un scroll deslizable (Swipe) */
-    #carruselRecientesInner {
-        display: flex;
-        overflow-x: auto;
+    #carruselRecientesInner, #carruselNovedadesInner {
+        display: flex !important;
+        overflow-x: auto !important;
         scroll-snap-type: x mandatory;
-        flex-wrap: nowrap;
+        flex-wrap: nowrap !important;
         -webkit-overflow-scrolling: touch;
-        padding-bottom: 20px; /* Espacio para que no se corte la sombra */
-        scrollbar-width: none; /* Ocultar barra en Firefox */
-    }
-    
-    #carruselRecientesInner::-webkit-scrollbar {
-        display: none; /* Ocultar barra en Chrome/Safari/Edge */
-    }
-    
-    /* Forzamos a que TODAS las "diapositivas" de Bootstrap se pongan en fila */
-    #carruselRecientesInner .carousel-item {
-        display: block !important; 
-        opacity: 1 !important;
-        flex: 0 0 auto;
-        width: auto;
-        transition: none;
-    }
-    
-    /* Evitamos que las prendas caigan a la línea de abajo */
-    #carruselRecientesInner .row {
-        flex-wrap: nowrap; 
+        padding-bottom: 20px; 
+        scrollbar-width: none; 
+        width: 100%;
         margin: 0;
     }
     
-    /* Cada prenda ocupa el 65% de la pantalla, dejando asomar la siguiente */
-    #carruselRecientesInner .col-6 {
-        flex: 0 0 65%; 
-        max-width: 65%;
-        scroll-snap-align: start; /* Efecto imán al deslizar */
+    #carruselRecientesInner::-webkit-scrollbar, 
+    #carruselNovedadesInner::-webkit-scrollbar {
+        display: none; 
+    }
+    
+    #carruselRecientesInner .carousel-item,
+    #carruselNovedadesInner .carousel-item {
+        display: flex !important; 
+        opacity: 1 !important;
+        flex: 0 0 auto;
+        width: auto !important;
+        transition: none;
+        margin-right: 0;
+    }
+    
+    #carruselRecientesInner .row,
+    #carruselNovedadesInner .row {
+        flex-wrap: nowrap !important; 
+        margin: 0;
+        width: 100%;
+    }
+    
+    #carruselRecientesInner .col-6,
+    #carruselNovedadesInner .col-6 {
+        flex: 0 0 75vw !important; 
+        width: 75vw !important;
+        max-width: 75vw !important;
+        scroll-snap-align: center; 
         padding-right: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .search-input-container {
+        right: 0 !important; 
+        max-width: 200px; 
+    }
+    .search-wrapper:hover .search-input-container, 
+    .search-input-container:focus-within {
+        width: 200px; 
     }
 }

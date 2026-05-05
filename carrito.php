@@ -33,50 +33,65 @@ include './includes/header.php';
             <div class="col-lg-8">
                 <?php foreach ($carritoDetallado as $item){ ?>
                     <div class="card border-0 border-bottom rounded-0 mb-3 pb-3">
-                        <div class="row g-0 align-items-center">
-
-                            <div class="col-3 col-md-2">
+                        <div class="row g-0">
+                            
+                            <div class="col-4 col-md-2">
                                 <a href="fichaProducto.php?idPrenda=<?php echo $item['idPrenda']; ?>&color=<?php echo $item['color_id']; ?>">
-                                    <img src="<?php echo $item['imagen']; ?>" class="img-fluid w-100 object-fit-cover" style="height: 120px;" alt="<?php echo $item['nombre']; ?>">
+                                    <img src="<?php echo $item['imagen']; ?>" class="img-fluid w-100 object-fit-cover" style="height: 140px;" alt="<?php echo $item['nombre']; ?>">
                                 </a>
                             </div>
-
-                            <div class="col-7 col-md-8 px-3">
-                                <div class="d-flex flex-column h-100 justify-content-center">
-                                    <h5 class="fw-bold text-uppercase fs-6 mb-1">
-                                        <a href="fichaProducto.php?idPrenda=<?php echo $item['idPrenda']; ?>&color=<?php echo $item['color_id']; ?>" class="text-decoration-none text-dark">
-                                            <?php echo $item['nombre']; ?>
-                                        </a>
-                                    </h5>
-                                    <p class="text-muted small mb-1">Color: <?php echo $item['color_nombre']; ?> | Talla: <?php echo $item['talla']; ?></p>
-
-                                    <div class="d-flex align-items-center mt-2 gap-3">
-
+                            
+                            <div class="col-8 col-md-10 px-3 d-flex flex-column justify-content-between">
+                                
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="pe-2">
+                                        <h5 class="fw-bold text-uppercase fs-6 mb-1">
+                                            <a href="fichaProducto.php?idPrenda=<?php echo $item['idPrenda']; ?>&color=<?php echo $item['color_id']; ?>" class="text-decoration-none text-dark">
+                                                <?php echo $item['nombre']; ?>
+                                            </a>
+                                        </h5>
+                                        <p class="text-muted small mb-1">Color: <?php echo $item['color_nombre']; ?> | Talla: <?php echo $item['talla']; ?></p>
+                                    </div>
+                                    
+                                    <div class="text-end d-none d-md-block">
+                                        <?php if ($item['rebaja'] > 0){ ?>
+                                            <span class="text-muted text-decoration-line-through small"><?php echo number_format($item['precio_original'] * $item['cantidad'], 2); ?> €</span><br>
+                                            <span class="fw-bold fs-5 text-danger"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                            <div class="mt-1"><span class="badge bg-danger">-<?php echo $item['rebaja']; ?>%</span></div>
+                                        <?php } else{ ?>
+                                            <span class="fw-bold fs-5"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                        <?php } ?>
+                                        <?php if ($item['cantidad'] > 1){ ?>
+                                            <br><span class="text-muted small">(<?php echo $item['precio']; ?> €/u)</span>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-end mt-2 mt-md-0">
+                                    <div class="d-flex align-items-center gap-2 gap-md-3">
                                         <div class="d-flex align-items-center border border-dark rounded-0">
                                             <a href="controllers/carritoController.php?accion=restar&indice=<?php echo $item['indice']; ?>" class="btn btn-sm btn-light rounded-0 px-2 py-0 border-0" style="background: transparent;">-</a>
                                             <span class="px-3 fw-bold border-start border-end border-dark" style="font-size: 0.9rem;"><?php echo $item['cantidad']; ?></span>
                                             <a href="controllers/carritoController.php?accion=sumar&indice=<?php echo $item['indice']; ?>" class="btn btn-sm btn-light rounded-0 px-2 py-0 border-0" style="background: transparent;">+</a>
                                         </div>
-
-                                        <a href="controllers/carritoController.php?accion=eliminar&indice=<?php echo $item['indice']; ?>" class="text-danger small text-decoration-underline">Eliminar</a>
+                                        
+                                        <a href="controllers/carritoController.php?accion=eliminar&indice=<?php echo $item['indice']; ?>" class="text-danger small text-decoration-none">
+                                            <i class="bi bi-trash fs-5 d-md-none"></i>
+                                            <span class="d-none d-md-inline text-decoration-underline">Eliminar</span>
+                                        </a>
+                                    </div>
+                                    
+                                    <div class="text-end d-block d-md-none">
+                                        <?php if ($item['rebaja'] > 0){ ?>
+                                            <span class="text-muted text-decoration-line-through small d-block" style="font-size: 0.75rem;"><?php echo number_format($item['precio_original'] * $item['cantidad'], 2); ?> €</span>
+                                            <span class="fw-bold fs-6 text-danger"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                        <?php } else{ ?>
+                                            <span class="fw-bold fs-6"><?php echo number_format($item['subtotal'], 2); ?> €</span>
+                                        <?php } ?>
                                     </div>
                                 </div>
+
                             </div>
-
-                            <div class="col-2 col-md-2 text-end">
-                                <?php if ($item['rebaja'] > 0){ ?>
-                                    <span class="text-muted text-decoration-line-through small"><?php echo number_format($item['precio_original'] * $item['cantidad'], 2); ?> €</span><br>
-                                    <span class="fw-bold fs-5 text-danger"><?php echo number_format($item['subtotal'], 2); ?> €</span>
-                                    <div class="mt-1"><span class="badge bg-danger">-<?php echo $item['rebaja']; ?>%</span></div>
-                                <?php } else{ ?>
-                                    <span class="fw-bold fs-5"><?php echo number_format($item['subtotal'], 2); ?> €</span>
-                                <?php } ?>
-
-                                <?php if ($item['cantidad'] > 1){ ?>
-                                    <br><span class="text-muted small">(<?php echo $item['precio']; ?> €/u)</span>
-                                <?php } ?>
-                            </div>
-
                         </div>
                     </div>
                 <?php } ?>
@@ -100,7 +115,7 @@ include './includes/header.php';
                     <div class="mb-4 p-3 bg-light border border-dark">
                         <label class="form-label fw-bold text-uppercase small" style="letter-spacing: 1px;">¿Tienes un código de descuento?</label>
 
-                        <?php if (isset($_GET['error'])): ?>
+                        <?php if (isset($_GET['error'])){ ?>
                             <div class="alert alert-danger py-2 rounded-0 small fw-bold mb-3 border-2 border-danger">
                                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                                 <?php
@@ -111,20 +126,22 @@ include './includes/header.php';
                                 }
                                 ?>
                             </div>
-                        <?php endif; ?>
+                        <?php }; ?>
 
-                        <?php if (isset($_SESSION['descuento'])): ?>
+                        <?php if (isset($_SESSION['descuento'])){ ?>
                             <div class="alert alert-success m-0 py-2 d-flex justify-content-between align-items-center rounded-0 border-success border-2 fw-bold">
                                 <span><i class="bi bi-tag-fill me-2"></i> Código <strong><?= $_SESSION['descuento']['codigo'] ?></strong> (-<?= $_SESSION['descuento']['porcentaje'] ?>%)</span>
                                 <a href="controllers/carritoController.php?accion=quitar_descuento" class="text-danger text-decoration-none" title="Quitar descuento"><i class="bi bi-x-lg"></i></a>
                             </div>
-                        <?php else: ?>
-                            <form action="controllers/carritoController.php" method="POST" class="d-flex gap-2 m-0">
+                        <?php }else { ?>
+                            <form action="controllers/carritoController.php" method="POST" class="m-0">
                                 <input type="hidden" name="accion" value="aplicar_descuento">
-                                <input type="text" name="codigo_descuento" class="form-control rounded-0 text-uppercase" placeholder="Introduce tu código" required>
-                                <button type="submit" class="btn btn-dark rounded-0 text-uppercase fw-bold">Aplicar</button>
+                                <div class="input-group">
+                                    <input type="text" name="codigo_descuento" class="form-control rounded-0 text-uppercase" placeholder="Tu código" required>
+                                    <button type="submit" class="btn btn-dark rounded-0 text-uppercase fw-bold">Aplicar</button>
+                                </div>
                             </form>
-                        <?php endif; ?>
+                        <?php }; ?>
                     </div>
 
 

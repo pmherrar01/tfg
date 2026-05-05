@@ -16,82 +16,80 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
-    <div class="container-fluid px-4 px-lg-5 position-relative">
+    <div class="container-fluid px-3 px-lg-5 d-flex flex-wrap align-items-center">
 
-      <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
-        <span class="bi bi-list fs-3"></span>
-      </button>
+      <div class="d-flex justify-content-between align-items-center w-100 position-relative py-2 py-lg-0" style="z-index: 10;">
+        
+        <button class="navbar-toggler border-0 p-0 shadow-none text-white d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+          <span class="bi bi-list fs-2"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="menuPrincipal">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-3 mt-lg-0">
-          <li class="nav-item"><a class="nav-link" href="../catalogo.php">Catalogo</a></li>
-          <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=1">Hombre</a></li>
-          <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=2">Mujer</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="../citas.php">Pide Cita</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="../segundaMano.php">Segunda Mano</a></li>
-          <li class="nav-item"><a class="nav-link text-danger" href="../contacto.php">Contacto</a></li>
+        <a class="navbar-brand position-absolute top-50 start-50 translate-middle m-0 fw-bold fs-4 text-uppercase ls-2" href="index.php">
+          HERROR
+        </a>
+
+        <div class="d-flex gap-3 gap-md-4 align-items-center ms-auto position-relative z-3">
+          
+          <div class="search-wrapper d-flex align-items-center position-relative m-0">
+            <a href="#" class="text-reset search-icon-btn"><i class="bi bi-search fs-5"></i></a>
+            <div class="search-input-container">
+              <input type="text" id="inputBuscador" class="form-control rounded-0 border-dark border-2 text-uppercase fw-bold" placeholder="BUSCAR..." autocomplete="off">
+              <div id="cajaResultados" class="position-absolute w-100 bg-white border border-dark border-2 shadow-lg d-none" style="top: 100%; left: 0; z-index: 1000; max-height: 400px; overflow-y: auto;">
+              </div>
+            </div>
+          </div>
+
+          <?php if (!isset($_SESSION['usuario_id'])) { ?>
+            <a href="#" class="text-reset" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+              <i class="bi bi-person fs-5"></i>
+            </a>
+          <?php } else { ?>
+            <div class="dropdown">
+              <a href="#" class="text-white text-decoration-none dropdown-toggle text-uppercase fw-bold d-flex align-items-center gap-1" style="font-size: 0.85rem;" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-fill fs-5"></i> <span class="d-none d-md-inline">Hola, <?php echo $_SESSION['nombre']; ?></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end rounded-0 border-dark mt-3 position-absolute" aria-labelledby="dropdownUser">
+                <li><a class="dropdown-item" href="perfil.php">Mi Perfil</a></li>
+                <li><a class="dropdown-item" href="perfil.php?seccion=pedidos">Mis Pedidos</a></li>
+                <li><a class="dropdown-item" href="perfil.php?seccion=favoritos">Mis Favoritos</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger fw-bold" href="controllers/usuarioController.php?accion=logout">Cerrar Sesión</a></li>
+              </ul>
+            </div>
+          <?php }; ?>
+          
+          <a href="carrito.php" class="text-reset position-relative">
+            <i class="bi bi-bag fs-5"></i>
+            <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; transform: translate(-30%, -20%) !important;">
+              <?php
+              if (isset($_SESSION['carrito'])) {
+                $totalArticulos = 0;
+                foreach ($_SESSION['carrito'] as $item) {
+                  $totalArticulos += $item['cantidad'];
+                }
+                echo $totalArticulos;
+              } else {
+                echo 0;
+              }
+              ?>
+            </span>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="collapse navbar-collapse w-100" id="menuPrincipal">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-center text-lg-start border-top border-secondary border-opacity-25 border-lg-0 mt-3 mt-lg-0 pt-3 pt-lg-0">
+          <li class="nav-item"><a class="nav-link py-2" href="../catalogo.php">Catálogo</a></li>
+          <li class="nav-item"><a class="nav-link py-2" href="catalogo.php?genero=1">Hombre</a></li>
+          <li class="nav-item"><a class="nav-link py-2" href="catalogo.php?genero=2">Mujer</a></li>
+          <li class="nav-item"><a class="nav-link py-2 text-danger fw-bold" href="../citas.php">Pide Cita</a></li>
+          <li class="nav-item"><a class="nav-link py-2 text-danger fw-bold" href="../segundaMano.php">Segunda Mano</a></li>
+          <li class="nav-item"><a class="nav-link py-2 text-danger fw-bold" href="../contacto.php">Contacto</a></li>
         </ul>
       </div>
 
-      <a class="navbar-brand position-absolute top-50 start-50 translate-middle m-0 fw-bold fs-4 text-uppercase ls-2" href="index.php">
-        HERROR
-      </a>
-
-      <div class="d-flex gap-3 align-items-center order-lg-last ms-auto">
-        <div class="search-wrapper d-flex align-items-center position-relative">
-          <a href="#" class="text-reset search-icon-btn"><i class="bi bi-search fs-5"></i></a>
-
-          <div class="search-input-container">
-            <input type="text" id="inputBuscador" class="form-control rounded-0 border-dark border-2 text-uppercase fw-bold" placeholder="BUSCAR PRENDA..." autocomplete="off">
-
-            <div id="cajaResultados" class="position-absolute w-100 bg-white border border-dark border-2 shadow-lg d-none" style="top: 100%; left: 0; z-index: 1000; max-height: 400px; overflow-y: auto;">
-            </div>
-          </div>
-        </div>
-
-
-
-        <?php if (!isset($_SESSION['usuario_id'])) { ?>
-          <a href="#" class="text-reset" data-bs-toggle="modal" data-bs-target="#modalUsuario">
-            <i class="bi bi-person"></i>
-          </a>
-        <?php } else { ?>
-          <div class="dropdown">
-            <a href="#" class="text-white text-decoration-none dropdown-toggle text-uppercase fw-bold" style="font-size: 0.85rem;" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-person-fill"></i> Hola, <?php echo $_SESSION['nombre']; ?>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end rounded-0 border-dark mt-3" aria-labelledby="dropdownUser">
-              <li><a class="dropdown-item" href="perfil.php">Mi Perfil</a></li>
-              <li><a class="dropdown-item" href="perfil.php?seccion=pedidos">Mis Pedidos</a></li>
-              <li><a class="dropdown-item" href="perfil.php?seccion=favoritos">Mis Favoritos</a></li>
-
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item text-danger fw-bold" href="controllers/usuarioController.php?accion=logout">Cerrar Sesión</a></li>
-            </ul>
-          </div>
-        <?php }; ?>
-        <a href="carrito.php" class="text-reset position-relative">
-          <i class="bi bi-bag"></i>
-          <span id="contador-carrito" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-            <?php
-            if (isset($_SESSION['carrito'])) {
-              $totalArticulos = 0;
-              foreach ($_SESSION['carrito'] as $item) {
-                $totalArticulos += $item['cantidad'];
-              }
-              echo $totalArticulos;
-            } else {
-              echo 0;
-            }
-            ?>
-          </span>
-        </a>
-      </div>
-
     </div>
-
   </nav>
 
   <?php if (!isset($_SESSION['usuario_id'])) { ?>

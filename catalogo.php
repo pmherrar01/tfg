@@ -15,167 +15,180 @@ include './includes/header.php';
         </div>
     </div>
     <div class="row">
-<aside class="col-lg-3 d-none d-lg-block mb-4">
-    <div class="sticky-top" style="top: 100px; z-index: 1;">
-        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
-            <h5 class="fw-bold text-uppercase m-0">Filtros</h5>
-            <?php
-            if(!$esModoSecreto){
-            ?>
-            <a href="catalogo.php" class="text-muted small text-decoration-underline">Limpiar</a>
-            <?php
-            }else{
-            ?>
-                        <a href="catalogo.php?especial=herror" class="text-muted small text-decoration-underline">Limpiar</a>
-                        <?php
-            }
-
-            ?>
+        <div class="col-12 d-lg-none mb-3">
+            <button class="btn btn-outline-dark w-100 fw-bold text-uppercase rounded-0 py-3 d-flex justify-content-between align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#filtrosOffcanvas">
+                <span><i class="bi bi-sliders me-2"></i> Filtrar y Ordenar</span>
+                <i class="bi bi-chevron-right"></i>
+            </button>
         </div>
-        <div class="accordion accordion-flush" id="acordeonFiltros">
-            
-            <?php if (!$esModoSecreto) { ?>
-                <a href="<?php echo crearUrl('rebajas', '1'); ?>" class="list-group-item list-group-item-action fw-bold text-danger text-uppercase" style="letter-spacing: 1px;">
-                    <i class="bi bi-tag-fill me-2"></i> Rebajas
-                </a>
-            <?php } ?>
 
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroOrdenar">
-                        Ordenar por
-                    </button>
-                </h2>
-                <div id="filtroOrdenar" class="accordion-collapse collapse show" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-2">
-                        <ul class="list-unstyled mb-0">
+        <aside class="col-lg-3 mb-4">
+            <div class="offcanvas-lg offcanvas-start border-0 shadow-sm" tabindex="-1" id="filtrosOffcanvas" aria-labelledby="filtrosOffcanvasLabel">
+                
+                <div class="offcanvas-header border-bottom bg-light d-lg-none">
+                    <h5 class="offcanvas-title fw-bold text-uppercase m-0" id="filtrosOffcanvasLabel" style="letter-spacing: 2px;">Filtros</h5>
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="offcanvas" data-bs-target="#filtrosOffcanvas" aria-label="Cerrar"></button>
+                </div>
+
+                <div class="offcanvas-body p-0 p-lg-0 flex-column bg-white">
+                    <div class="sticky-top w-100" style="top: 100px; z-index: 1;">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2 p-3 p-lg-0">
+                            <h5 class="fw-bold text-uppercase m-0 d-none d-lg-block">Filtros</h5>
+                            <?php if(!$esModoSecreto){ ?>
+                                <a href="catalogo.php" class="text-muted small text-decoration-underline fw-bold">Limpiar <span class="d-none d-lg-inline">todo</span></a>
+                            <?php } else { ?>
+                                <a href="catalogo.php?especial=herror" class="text-muted small text-decoration-underline fw-bold">Limpiar <span class="d-none d-lg-inline">todo</span></a>
+                            <?php } ?>
+                        </div>
+
+                        <div class="accordion accordion-flush w-100" id="acordeonFiltros">
+                            
                             <?php if (!$esModoSecreto) { ?>
-                                <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaDesc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más reciente - más antiguo </a></li>
-                                <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaAsc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más antiguo - más reciente</a></li>
+                                <a href="<?php echo crearUrl('rebajas', '1'); ?>" class="list-group-item list-group-item-action fw-bold text-danger text-uppercase px-3 px-lg-0 mb-2 border-bottom pb-3" style="letter-spacing: 1px;">
+                                    <i class="bi bi-tag-fill me-2"></i> Rebajas
+                                </a>
                             <?php } ?>
-                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioAsc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Menor a Mayor</a></li>
-                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioDesc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Mayor a Menor</a></li>
-                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreAsc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: A - Z</a></li>
-                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreDesc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: Z - A</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroGenero">
-                        Género
-                    </button>
-                </h2>
-                <div id="filtroGenero" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-2">
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '1'); ?>" class="text-muted nav-filtro transicion-suave">Hombre</a></li>
-                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '2'); ?>" class="text-muted nav-filtro transicion-suave">Mujer</a></li>
-                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '3'); ?>" class="text-muted nav-filtro transicion-suave">Unisex</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <?php if (!$esModoSecreto) { ?>
-                <div class="accordion-item bg-transparent border-bottom">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColeccion">
-                            Colección
-                        </button>
-                    </h2>
-                    <div id="filtroColeccion" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                        <div class="accordion-body px-0 py-2">
-                            <ul class="list-unstyled mb-0">
-                                <?php foreach ($listaCategorias as $categoria) { ?>
-                                    <li class="mb-2"><a href="<?php echo crearUrl('coleccion', $categoria['id']); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $categoria["nombre"] ?></a></li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            <?php } ?>
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroOrdenar">
+                                        Ordenar por
+                                    </button>
+                                </h2>
+                                <div id="filtroOrdenar" class="accordion-collapse collapse show" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-2">
+                                        <ul class="list-unstyled mb-0">
+                                            <?php if (!$esModoSecreto) { ?>
+                                                <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaDesc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más reciente - más antiguo </a></li>
+                                                <li class="mb-2"><a href="<?php echo crearUrl('orden', 'fechaAsc'); ?>" class="text-muted nav-filtro transicion-suave">Fecha: más antiguo - más reciente</a></li>
+                                            <?php } ?>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioAsc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Menor a Mayor</a></li>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'precioDesc'); ?>" class="text-muted nav-filtro transicion-suave">Precio: Mayor a Menor</a></li>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreAsc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: A - Z</a></li>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('orden', 'nombreDesc'); ?>" class="text-muted nav-filtro transicion-suave">Alfabéticamente: Z - A</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroGenero">
+                                        Género
+                                    </button>
+                                </h2>
+                                <div id="filtroGenero" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-2">
+                                        <ul class="list-unstyled mb-0">
+                                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '1'); ?>" class="text-muted nav-filtro transicion-suave">Hombre</a></li>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '2'); ?>" class="text-muted nav-filtro transicion-suave">Mujer</a></li>
+                                            <li class="mb-2"><a href="<?php echo crearUrl('genero', '3'); ?>" class="text-muted nav-filtro transicion-suave">Unisex</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
 
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroCategoria">
-                        Tipo de prenda
-                    </button>
-                </h2>
-                <div id="filtroCategoria" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-2">
-                        <ul class="list-unstyled mb-0">
-                            <?php foreach ($listaTiposProductos as $productoLista) { ?>
-                                <li class="mb-2"><a href="<?php echo crearUrl('tipo', $productoLista["id"]); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $productoLista["nombre"] ?></a></li>
+                            <?php if (!$esModoSecreto) { ?>
+                                <div class="accordion-item bg-transparent border-bottom">
+                                    <h2 class="accordion-header">
+                                        <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColeccion">
+                                            Colección
+                                        </button>
+                                    </h2>
+                                    <div id="filtroColeccion" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                        <div class="accordion-body px-3 px-lg-0 py-2">
+                                            <ul class="list-unstyled mb-0">
+                                                <?php foreach ($listaCategorias as $categoria) { ?>
+                                                    <li class="mb-2"><a href="<?php echo crearUrl('coleccion', $categoria['id']); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $categoria["nombre"] ?></a></li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             <?php } ?>
-                        </ul>
+
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroCategoria">
+                                        Tipo de prenda
+                                    </button>
+                                </h2>
+                                <div id="filtroCategoria" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-2">
+                                        <ul class="list-unstyled mb-0">
+                                            <?php foreach ($listaTiposProductos as $productoLista) { ?>
+                                                <li class="mb-2"><a href="<?php echo crearUrl('tipo', $productoLista["id"]); ?>" class="text-muted nav-filtro transicion-suave"><?php echo $productoLista["nombre"] ?></a></li>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroTalla">
+                                        Talla
+                                    </button>
+                                </h2>
+                                <div id="filtroTalla" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-2">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a href="<?php echo crearUrl('talla', 'Única'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">ÚNICA</a>
+                                            <a href="<?php echo crearUrl('talla', 'XS'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XS</a>
+                                            <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">S</a>
+                                            <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">M</a>
+                                            <a href="<?php echo crearUrl('talla', 'L'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">L</a>
+                                            <a href="<?php echo crearUrl('talla', 'XL'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XL</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColor">
+                                        Color
+                                    </button>
+                                </h2>
+                                <div id="filtroColor" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-2">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <?php foreach ($listaColores as $color) { ?>
+                                                <a href="<?php echo crearUrl('color', $color["nombre"]); ?>" class="color-swatch border border-dark" style="background-color: <?php echo $color["valor_hexadecimal"] ?>;" title="<?php echo $color["nombre"] ?>"></a>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="accordion-item bg-transparent border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent px-3 px-lg-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroPrecio">
+                                        Precio
+                                    </button>
+                                </h2>
+                                <div id="filtroPrecio" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
+                                    <div class="accordion-body px-3 px-lg-0 py-3">
+                                        <div class="range-slider-container position-relative mb-3 mt-4">
+                                            <div class="slider-track"></div>
+                                            <input type="range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" value="<?php echo $precioMin; ?>" id="slider-min" class="custom-range">
+                                            <input type="range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" value="<?php echo $precioMax; ?>" id="slider-max" class="custom-range">
+                                        </div>
+                                        <div class="d-flex justify-content-between text-muted small fw-bold mb-3">
+                                            <span>Min: <span id="precio-min-val"><?php echo $precioMin ?></span> €</span>
+                                            <span>Max: <span id="precio-max-val"><?php echo $precioMax ?></span> €</span>
+                                        </div>
+                                        <button class="btn btn-dark w-100 btn-sm text-uppercase" onclick="aplicarFiltroPrecio()">Aplicar Filtro</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
-            
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroTalla">
-                        Talla
-                    </button>
-                </h2>
-                <div id="filtroTalla" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-2">
-                        <div class="d-flex flex-wrap gap-2">
-                            <a href="<?php echo crearUrl('talla', 'Única'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">ÚNICA</a>
-                            <a href="<?php echo crearUrl('talla', 'XS'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XS</a>
-                            <a href="<?php echo crearUrl('talla', 'S'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">S</a>
-                            <a href="<?php echo crearUrl('talla', 'M'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">M</a>
-                            <a href="<?php echo crearUrl('talla', 'L'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">L</a>
-                            <a href="<?php echo crearUrl('talla', 'XL'); ?>" class="border text-muted text-decoration-none px-3 py-1 nav-filtro transicion-suave">XL</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroColor">
-                        Color
-                    </button>
-                </h2>
-                <div id="filtroColor" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-2">
-                        <div class="d-flex flex-wrap gap-2">
-                            <?php foreach ($listaColores as $color) { ?>
-                                <a href="<?php echo crearUrl('color', $color["nombre"]); ?>" class="color-swatch border border-dark" style="background-color: <?php echo $color["valor_hexadecimal"] ?>;" title="<?php echo $color["nombre"] ?>"></a>
-                            <?php } ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="accordion-item bg-transparent border-bottom">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed bg-transparent px-0 fw-bold text-uppercase shadow-none" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#filtroPrecio">
-                        Precio
-                    </button>
-                </h2>
-                <div id="filtroPrecio" class="accordion-collapse collapse" data-bs-parent="#acordeonFiltros">
-                    <div class="accordion-body px-0 py-3">
-                        <div class="range-slider-container position-relative mb-3 mt-4">
-                            <div class="slider-track"></div>
-                            <input type="range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" value="<?php echo $precioMin; ?>" id="slider-min" class="custom-range">
-                            <input type="range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" value="<?php echo $precioMax; ?>" id="slider-max" class="custom-range">
-                        </div>
-                        <div class="d-flex justify-content-between text-muted small fw-bold mb-3">
-                            <span>Min: <span id="precio-min-val"><?php echo $precioMin ?></span>€</span>
-                            <span>Max: <span id="precio-max-val"><?php echo $precioMax ?></span>€</span>
-                        </div>
-                        <button class="btn btn-dark w-100 btn-sm text-uppercase" onclick="aplicarFiltroPrecio()">Aplicar Filtro</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</aside>
+        </aside>
         <section class="col-lg-9">
             <div class="row g-4">
                 <?php
