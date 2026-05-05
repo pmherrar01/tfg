@@ -1118,3 +1118,31 @@ footer a:hover {
         width: 200px; 
     }
 }
+
+/* Ajustes extra para el footer */
+.hover-white:hover {
+    color: #ffffff !important;
+}
+
+/* =========================================
+   CHATBOT RESPONSIVE (Evita que se salga en móvil)
+   ========================================= */
+@media (max-width: 576px) {
+    .chatbot-wrapper {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .chatbot-toggle-btn {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .chatbot-window {
+        width: calc(100vw - 30px);
+        height: 65vh; 
+        max-height: 500px;
+        bottom: 80px; 
+        right: 0;
+    }
+}
