@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const formContacto = document.getElementById('formContacto');
     
-    // Configuramos el estilo de la alerta para que coincida con HERROR
     const swalContacto = Swal.mixin({
         confirmButtonColor: 'var(--color-principal, #000)',
         showClass: { popup: 'animate__animated animate__fadeIn animate__faster' },
@@ -24,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 mensaje: document.getElementById('mensajeContacto').value
             };
 
-            // Llamamos a nuestro controlador intermedio
             fetch('controllers/apiContactoController.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

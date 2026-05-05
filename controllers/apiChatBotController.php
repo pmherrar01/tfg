@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../config/db.php"; // IMPORTANTE: Necesitamos la conexión
+require_once "../config/db.php";
 header("Content-Type: application/json");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

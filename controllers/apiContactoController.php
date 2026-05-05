@@ -13,7 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $webhookUrl = 'http://localhost:5678/webhook/contacto-herror';
+    $config = parse_ini_file(__DIR__ . '/../config/config.ini');
+    $webhook = $config['base_url'] . $config['contacto'];
 
     $postData = json_encode([
         'nombre' => $nombre,
@@ -22,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'fecha' => date('d/m/Y H:i:s')
     ]);
 
-    $ch = curl_init($webhookUrl);
+    $ch = curl_init($webhook);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);

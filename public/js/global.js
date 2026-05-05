@@ -356,7 +356,7 @@ function pintarPrendasRecientes() {
                         
                         <a href="fichaProducto.php?idPrenda=${prenda.id}&color=${prenda.colorPrenda}" class="text-decoration-none text-dark d-block">
                             ${htmlBadge}
-                            <img src="${prenda.imagen}" class="card-img-top rounded-0" alt="${prenda.nombre}" style="height: 380px; object-fit: cover;">
+                            <img src="${prenda.imagen}" class="card-img-top rounded-0 img-fluida-reciente" alt="${prenda.nombre}">
                         </a>
                         
                         <div id="overlay-tallas-${prenda.id}" class="overlay-tallas d-none position-absolute bottom-0 start-0 w-100 bg-white bg-opacity-75 p-3 text-center">

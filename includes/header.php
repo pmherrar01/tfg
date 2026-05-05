@@ -29,6 +29,7 @@
           <li class="nav-item"><a class="nav-link" href="catalogo.php?genero=2">Mujer</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="../citas.php">Pide Cita</a></li>
           <li class="nav-item"><a class="nav-link text-danger" href="../segundaMano.php">Segunda Mano</a></li>
+          <li class="nav-item"><a class="nav-link text-danger" href="../contacto.php">Contacto</a></li>
         </ul>
       </div>
 

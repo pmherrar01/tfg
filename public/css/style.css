@@ -1048,3 +1048,58 @@ footer a:hover {
     background-color: #333;
     color: #fff;
 }
+
+/* =========================================
+   CARRUSEL RESPONSIVE (SCROLL HORIZONTAL MÓVIL)
+   ========================================= */
+
+/* Altura base para PC */
+.img-fluida-reciente {
+    height: 380px;
+    object-fit: cover;
+}
+
+@media (max-width: 767px) {
+    /* Reducimos la altura de la foto en móvil para que no ocupe toda la pantalla */
+    .img-fluida-reciente {
+        height: 280px; 
+    }
+    
+    /* Convertimos el contenedor en un scroll deslizable (Swipe) */
+    #carruselRecientesInner {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 20px; /* Espacio para que no se corte la sombra */
+        scrollbar-width: none; /* Ocultar barra en Firefox */
+    }
+    
+    #carruselRecientesInner::-webkit-scrollbar {
+        display: none; /* Ocultar barra en Chrome/Safari/Edge */
+    }
+    
+    /* Forzamos a que TODAS las "diapositivas" de Bootstrap se pongan en fila */
+    #carruselRecientesInner .carousel-item {
+        display: block !important; 
+        opacity: 1 !important;
+        flex: 0 0 auto;
+        width: auto;
+        transition: none;
+    }
+    
+    /* Evitamos que las prendas caigan a la línea de abajo */
+    #carruselRecientesInner .row {
+        flex-wrap: nowrap; 
+        margin: 0;
+    }
+    
+    /* Cada prenda ocupa el 65% de la pantalla, dejando asomar la siguiente */
+    #carruselRecientesInner .col-6 {
+        flex: 0 0 65%; 
+        max-width: 65%;
+        scroll-snap-align: start; /* Efecto imán al deslizar */
+        padding-right: 15px;
+    }
+}

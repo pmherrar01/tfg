@@ -14,11 +14,10 @@ include './includes/header.php';
     data-rebaja="<?php echo isset($datosPrenda['rebaja']) ? (int)$datosPrenda['rebaja'] : 0; ?>">
     <div class="row">
 
-        <div class="col-md-6 mb-4 mb-md-0">
-
-            <div class="d-flex gap-3 h-100">
-
-                <div class="d-flex flex-column gap-2 overflow-y-auto pe-1" style="width: 85px; max-height: 80vh;">
+<div class="col-md-6 mb-4 mb-md-0">
+            <div class="d-flex flex-column-reverse flex-md-row gap-3 h-100">
+                
+                <div class="d-flex flex-row flex-md-column gap-2 overflow-auto pe-md-1 pb-2 pb-md-0" style="max-height: 80vh;">
                     <?php
                     $cont = 0;
                     foreach ($galeria as $img) {
@@ -28,7 +27,7 @@ include './includes/header.php';
                         <img src="<?php echo $img['url_imagen']; ?>"
                             class="miniatura-galeria miniatura-color <?php echo $claseActiva; ?>"
                             data-color-id="<?php echo $colorId; ?>"
-                            style="width: 100%; height: 110px; object-fit: cover; cursor: pointer; flex-shrink: 0;"
+                            style="width: 85px; height: 110px; object-fit: cover; cursor: pointer; flex-shrink: 0;"
                             onclick="cambiarFoto(this, '<?php echo $img['url_imagen']; ?>')"
                             alt="Miniatura">
                     <?php
@@ -37,14 +36,12 @@ include './includes/header.php';
                     ?>
                 </div>
 
-                <div class="position-relative flex-grow-1 bg-light overflow-hidden">
-
-                    <img id="imagenPrincipal" src="<?php echo $galeria[0]['url_imagen']; ?>" class="w-100 h-100" style="object-fit: cover; transition: opacity 0.3s ease-in-out;" alt="Prenda principal">
-
+                <div class="position-relative flex-grow-1 bg-light overflow-hidden" style="min-height: 450px;">
+                    <img id="imagenPrincipal" src="<?php echo $galeria[0]['url_imagen']; ?>" class="w-100 h-100 position-absolute" style="object-fit: cover; transition: opacity 0.3s ease-in-out;" alt="Prenda principal">
+                    
                     <button class="btn position-absolute top-50 start-0 translate-middle-y ms-2 bg-white rounded-circle shadow-sm" style="width: 40px; height: 40px; z-index: 10;" onclick="cambiarConFlechas('prev')">
                         <i class="bi bi-chevron-left"></i>
                     </button>
-
                     <button class="btn position-absolute top-50 end-0 translate-middle-y me-2 bg-white rounded-circle shadow-sm" style="width: 40px; height: 40px; z-index: 10;" onclick="cambiarConFlechas('next')">
                         <i class="bi bi-chevron-right"></i>
                     </button>
