@@ -5,8 +5,8 @@ include './includes/header.php';
 
 <div class="container-fluid p-0 position-relative" style="height: 40vh; margin-top: 80px;">
     <img src="public/img/fondo.jpg" class="w-100 h-100 object-fit-cover" alt="Showroom HERROR" style="filter: brightness(0.6);">
-    <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-100">
-        <h1 class="display-4 fw-bold text-uppercase" style="letter-spacing: 5px;">Showroom Exclusivo</h1>
+<div class="position-absolute top-50 start-50 translate-middle text-center text-white w-100 px-3">
+        <h1 class="display-4 fw-bold text-uppercase titulo-citas">Showroom Exclusivo</h1>
         <p class="fs-5">Reserva tu cita privada en nuestra tienda</p>
     </div>
 </div>
@@ -21,7 +21,7 @@ include './includes/header.php';
                 recibir asesoramiento de estilo exclusivo o recoger tus pedidos online en un entorno único.
             </p>
             
-            <div class="flex-grow-1 bg-light position-relative" style="min-height: 350px;">
+            <div class="flex-grow-1 bg-light position-relative mapa-citas">
                 <iframe 
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.8930759449527!2d-3.7068409225622716!3d40.433366471436706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd422889dc61cd51%3A0x7d87718fe6a0552f!2sCalle%20de%20Fuencarral%2C%20Madrid!5e0!3m2!1ses!2ses!4v1776428358937!5m2!1ses!2ses" 
                     class="position-absolute top-0 start-0 w-100 h-100 border-0" 

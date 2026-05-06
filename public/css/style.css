@@ -1146,3 +1146,68 @@ footer a:hover {
         right: 0;
     }
 }
+
+/* =========================================
+   MODAL DE LOGIN / REGISTRO RESPONSIVE
+   ========================================= */
+@media (max-width: 767px) {
+    /* Hacemos el modal un pelín más bajo para que quepa el teclado del móvil */
+    .anim-container {
+        height: 520px;
+    }
+    
+    /* Ocultamos la parte decorativa (fotos y textos gigantes) */
+    .anim-container .info-content {
+        display: none !important;
+    }
+    
+    /* Obligamos a que el formulario ocupe todo el ancho disponible */
+    .anim-container .form-box {
+        width: 100% !important;
+        padding: 0 25px !important;
+    }
+    
+    /* Ajustamos el tamaño del título para que no agobie */
+    .form-box h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+    }
+}
+
+/* =========================================
+   SEGUNDA MANO RESPONSIVE (Imágenes)
+   ========================================= */
+.img-contenedor-sm {
+    height: 350px; /* Altura original para PC */
+}
+
+@media (max-width: 767px) {
+    .img-contenedor-sm {
+        height: 220px; /* Altura perfecta para que quepan 2 prendas cuadradas en el móvil */
+    }
+}
+
+/* =========================================
+   CITAS RESPONSIVE (Banner y Mapa)
+   ========================================= */
+.titulo-citas {
+    letter-spacing: 5px;
+}
+
+.mapa-citas {
+    min-height: 350px;
+}
+
+@media (max-width: 767px) {
+    /* Evita que la palabra rompa la pantalla por exceso de espaciado */
+    .titulo-citas {
+        font-size: 2.2rem; 
+        letter-spacing: 2px; 
+    }
+    
+    /* Hacemos el mapa más bajito para que el formulario se vea antes en la pantalla */
+    .mapa-citas {
+        min-height: 250px; 
+        margin-bottom: 1.5rem;
+    }
+}

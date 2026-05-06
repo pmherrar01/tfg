@@ -37,14 +37,13 @@ include './includes/header.php';
                         </div>
 
                         <div class="row">
-                            <div class="col-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label for="precioPrenda" class="form-label fw-bold small text-uppercase text-muted">Precio (€)</label>
-                                <input type="number" step="0.01" class="form-control rounded-0 p-2" id="precioPrenda" name="precioPrenda" placeholder="0.00" required>
+                                <input type="number" step="0.01" class="form-control rounded-0 p-2 shadow-none border-dark" id="precioPrenda" name="precioPrenda" placeholder="0.00" required>
                             </div>
-
-                            <div class="col-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label for="tallaPrenda" class="form-label fw-bold small text-uppercase text-muted">Talla</label>
-                                <select class="form-select rounded-0 p-2" id="tallaPrenda" name="tallaPrenda" required>
+                                <select class="form-select rounded-0 p-2 shadow-none border-dark" id="tallaPrenda" name="tallaPrenda" required>
                                     <option value="" selected disabled>Elegir...</option>
                                     <?php foreach ($listaTallas as $talla) { ?>
                                         <option value="<?php echo $talla['talla']; ?>"><?php echo $talla['talla']; ?></option>
@@ -111,7 +110,7 @@ include './includes/header.php';
 
                             <a href="fichaProducto.php?idPrenda=<?= $prenda['id'] ?>&color=<?= $prenda['color_id'] ?>" class="text-decoration-none text-dark d-block flex-grow-1">
 
-                                <div class="position-relative overflow-hidden border border-dark border-1" style="height: 350px;">
+                                <div class="position-relative overflow-hidden border border-dark border-1 img-contenedor-sm">
                                     <img src="<?= !empty($prenda['url_imagen']) ? $prenda['url_imagen'] : 'public/img/fondo.jpg' ?>"
                                         class="w-100 h-100" alt="<?= $prenda['nombre'] ?>" style="object-fit: cover;">
 
