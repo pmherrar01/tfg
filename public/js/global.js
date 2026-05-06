@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (mensaje === 'error_subida') {
             swalRapido.fire({ icon: 'error', title: 'Error de servidor', text: 'No se pudo guardar la imagen. Revisa los permisos de la carpeta.' });
         } else if (mensaje === 'prenda_subida') {
-            swalRapido.fire({ icon: 'success', title: '¡Prenda Subida!', text: 'Tu prenda se ha publicado correctamente en la sección de Segunda Mano.' });
+            swalRapido.fire({ icon: 'success', title: '¡Prenda Subida!', text: 'Tu prenda se ha publicado correctamente.' });
         } else if (mensaje === 'estado_actualizado') {
             swalRapido.fire({ icon: 'success', title: '¡Actualizado!', text: 'El estado del pedido se ha modificado correctamente.' });
         }
@@ -130,13 +130,13 @@ document.addEventListener("DOMContentLoaded", function () {
             swalRapido.fire({ icon: 'warning', title: '¡Falta la talla!', text: 'Por favor, selecciona una talla antes de añadir al carrito.' });
         } else if (error === 'no_stock') {
             swalRapido.fire({ icon: 'error', title: 'Límite de stock', text: 'No hay más unidades disponibles de este artículo en tu talla y color.' });
-        } else if (error === 'debes_iniciar_sesion') {
-            swalRapido.fire({ icon: 'warning', title: 'ACCESO RESTRINGIDO', text: 'Debes iniciar sesión para validar tu código de acceso anticipado.', borderRadius: '0' });
+        } else if (error === 'debes_iniciar_sesion' || error === 'acceso_denegado') {
+            swalRapido.fire({ icon: 'warning', title: 'ACCESO RESTRINGIDO', text: 'Debes iniciar sesión antes.', borderRadius: '0' });
         } else if (error === 'codigo_invalido') {
             swalRapido.fire({ icon: 'error', title: 'CÓDIGO NO VÁLIDO', text: 'El código introducido es incorrecto o no pertenece a tu cuenta.' });
         } else if (error === 'codigo_usado') {
             swalRapido.fire({ icon: 'info', title: 'CÓDIGO AGOTADO', text: 'Este código ya ha sido utilizado anteriormente.' });
-        } else if (error === 'codigo_existente') { // ¡LA NUEVA DE LA NEWSLETTER!
+        } else if (error === 'codigo_existente') { 
             swalRapido.fire({ icon: 'warning', title: 'Ya estás en la lista', text: 'Este correo ya ha recibido un código de bienvenida anteriormente.' });
         }else if (error === "noAdmin"){
             swalRapido.fire({ icon: 'warning', title: 'No eres admin', text: 'No tienes acceso, no eres administrador' });
