@@ -1069,18 +1069,8 @@ footer a:hover {
     .search-input-container:focus-within {
         width: 200px; 
     }
-}
 
-/* Ajustes extra para el footer */
-.hover-white:hover {
-    color: #ffffff !important;
-}
-
-/* =========================================
-   CHATBOT RESPONSIVE (Evita que se salga en móvil)
-   ========================================= */
-@media (max-width: 576px) {
-    .chatbot-wrapper {
+        .chatbot-wrapper {
         bottom: 15px;
         right: 15px;
     }
@@ -1099,9 +1089,12 @@ footer a:hover {
     }
 }
 
-/* =========================================
-   SEGUNDA MANO RESPONSIVE (Imágenes)
-   ========================================= */
+
+.hover-white:hover {
+    color: #ffffff !important;
+}
+
+
 .img-contenedor-sm {
     height: 350px; /* Altura original para PC */
 }
