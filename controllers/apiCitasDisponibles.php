@@ -13,7 +13,7 @@ if (isset($_GET['fecha'])) {
             FROM citas 
             WHERE DATE(fecha_cita) = :fecha AND estado != 'cancelada' 
             GROUP BY DATE_FORMAT(fecha_cita, '%H:%i') 
-            HAVING total >= 10"; // El límite estricto de 10 personas
+            HAVING total >= 10";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':fecha', $fecha);

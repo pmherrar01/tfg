@@ -11,10 +11,8 @@ $db = new DataBase();
 $producto = new Producto($db->conectar());
 $imagen = new Imagen($db->conectar());
 
-// Detectamos si estamos en la colección VIP
 $esModoSecreto = (isset($_GET['especial']) && $_GET['especial'] == 'herror');
 
-// Función creadora de URLs inteligente (conserva el modo secreto y filtros previos)
 function crearUrl($clave, $valor) {
     $parametros = $_GET;
     $parametros[$clave] = $valor;
@@ -26,16 +24,13 @@ function crearUrl($clave, $valor) {
 
 $ordenActual = isset($_GET["orden"]) ? $_GET["orden"] : null;
 
-// Determinamos si el usuario ha aplicado algún filtro analizando los parámetros de la URL
 $filtrosActivos = array_filter($_GET, function($key) {
     return in_array($key, ['genero', 'coleccion', 'tipo', 'talla', 'color', 'rebajas', 'precioMin', 'precioMax', 'orden']);
 }, ARRAY_FILTER_USE_KEY);
 
 if (!empty($filtrosActivos)) {
-    // Hay filtros activos, usamos la nueva función combinada
     $listaProductos = $producto->filtrarCombinado($_GET, $esModoSecreto);
     
-    // Construimos un título dinámico para mostrar en pantalla
     $titulos = [];
     if(isset($_GET['genero'])) $titulos[] = ($_GET['genero'] == 1 ? "Hombre" : ($_GET['genero'] == 2 ? "Mujer" : "Unisex"));
     if(isset($_GET['tipo'])) {
@@ -48,7 +43,6 @@ if (!empty($filtrosActivos)) {
     
     $mensajeFiltrado = !empty($titulos) ? implode(" | ", $titulos) : "Resultados de búsqueda";
 } else {
-    // No hay filtros, cargamos todo el catálogo base
     if ($esModoSecreto) {
         $listaProductos = $producto->obtenerColeccionSecreta(); 
         $mensajeFiltrado = "Colección Exclusiva";
@@ -58,7 +52,6 @@ if (!empty($filtrosActivos)) {
     }
 }
 
-// OBTENER LISTADOS PARA LOS MENÚS DESPLEGABLES DEL ASIDE
 if ($esModoSecreto) {
     $listaCategorias = []; 
     $listaColores = $producto->obtenerColoresColeccionSecreta();
@@ -69,11 +62,9 @@ if ($esModoSecreto) {
 
 $listaTiposProductos = $producto->listarTiposPrendas();
 
-// Extraemos los precios dinámicos según el modo en el que estemos
 $precioMax = $producto->obtenerPrecioMinMax("MAX", $esModoSecreto);
 $precioMin = $producto->obtenerPrecioMinMax("MIN", $esModoSecreto);
 
-// FAVORITOS
 $arrayFavoritos = [];
 if (isset($_SESSION['usuario_id'])) {
     $favoritoModel = new Favorito($db->conectar());

@@ -42,25 +42,19 @@ document.addEventListener("DOMContentLoaded", function () {
     sliderMin.addEventListener("input", controlarSliders);
     sliderMax.addEventListener("input", controlarSliders);
     
-    // Inicializar visualmente la barra al cargar la página
     updateSliderTrack();
 });
 
-// Función global para aplicar el filtro (fuera del DOMContentLoaded para que el botón la encuentre)
 function aplicarFiltroPrecio() {
     let min = document.getElementById("slider-min").value;
     let max = document.getElementById("slider-max").value;
     
-    // Capturamos la URL actual con todos sus parámetros
     let urlParams = new URLSearchParams(window.location.search);
     
-    // Le inyectamos los nuevos valores del precio
     urlParams.set('precioMin', min);
     urlParams.set('precioMax', max);
     
-    // Si cambian el precio, quitamos la paginación para volver a la página 1
     urlParams.delete('pagina');
     
-    // Redirigimos conservando absolutamente TODO lo demás (incluido ?especial=herror)
     window.location.href = 'catalogo.php?' + urlParams.toString();
 }

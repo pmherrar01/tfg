@@ -654,7 +654,7 @@ footer a:hover {
 
 .overlay-tallas {
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px); /* Para Safari */
+    -webkit-backdrop-filter: blur(8px); 
     z-index: 10;
 }
 
@@ -791,11 +791,8 @@ footer a:hover {
     color: inherit;
 }
 
-/* =========================================
-   ESTILOS TARJETA DE CRÉDITO INTERACTIVA
-========================================= */
 .tarjeta-contenedor {
-    perspective: 1000px; /* Le da profundidad 3D al girar */
+    perspective: 1000px; 
 }
 
 .tarjeta-credito {
@@ -803,12 +800,12 @@ footer a:hover {
     height: 200px;
     position: relative;
     transition: transform 0.6s;
-    transform-style: preserve-3d; /* Permite que las caras tengan 3D */
+    transform-style: preserve-3d; 
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     border-radius: 15px;
 }
 
-/* Esta clase se añade con JS cuando se pincha en el CVV */
+
 .tarjeta-credito.girada {
     transform: rotateY(180deg);
 }
@@ -817,7 +814,7 @@ footer a:hover {
     position: absolute;
     width: 100%;
     height: 100%;
-    backface-visibility: hidden; /* Oculta la cara que está de espaldas */
+    backface-visibility: hidden; 
     border-radius: 15px;
     overflow: hidden;
 }
@@ -828,7 +825,7 @@ footer a:hover {
 
 .tarjeta-dorso {
     background: linear-gradient(135deg, #4a4a4a 0%, #1f1f1f 100%);
-    transform: rotateY(180deg); /* El dorso empieza girado */
+    transform: rotateY(180deg); 
 }
 
 .banda-magnetica {
@@ -837,20 +834,15 @@ footer a:hover {
     background-color: #000;
 }
 
-/* ==========================================
-   ESTILOS DEL CHATBOT HERROR
-   ========================================== */
 
-/* Contenedor principal que fija la posición en la esquina inferior derecha */
 .chatbot-wrapper {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    z-index: 9999; /* Para que esté por encima del menú y las fotos */
+    z-index: 9999; 
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-/* El botón redondo negro */
 .chatbot-toggle-btn {
     background-color: #000;
     color: #fff;
@@ -871,7 +863,6 @@ footer a:hover {
     background-color: #333;
 }
 
-/* La ventana del chat */
 .chatbot-window {
     width: 360px;
     height: 500px;
@@ -882,10 +873,9 @@ footer a:hover {
     display: flex;
     flex-direction: column;
     position: absolute;
-    bottom: 85px; /* Sube la ventana para que no tape el botón */
+    bottom: 85px;
     right: 0;
     overflow: hidden;
-    /* Animación de entrada suave */
     animation: slideUpChat 0.3s ease forwards; 
 }
 
@@ -894,7 +884,6 @@ footer a:hover {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Cabecera negra de la ventana */
 .chatbot-header {
     background-color: #000;
     color: #fff;
@@ -906,7 +895,6 @@ footer a:hover {
     border-bottom: 2px solid #000;
 }
 
-/* Zona central donde van los mensajes */
 .chatbot-messages {
     flex: 1;
     padding: 20px;
@@ -917,7 +905,6 @@ footer a:hover {
     gap: 12px;
 }
 
-/* Estilo general de un mensaje (bocadillo) */
 .chat-msg {
     max-width: 85%;
     padding: 12px 16px;
@@ -927,7 +914,6 @@ footer a:hover {
     word-wrap: break-word;
 }
 
-/* Mensaje del BOT (Gris claro) */
 .bot-msg {
     background-color: #e9ecef;
     color: #000;
@@ -936,7 +922,6 @@ footer a:hover {
     border: 1px solid #ddd;
 }
 
-/* Mensaje del USUARIO (Negro) */
 .user-msg {
     background-color: #000;
     color: #fff;
@@ -944,7 +929,6 @@ footer a:hover {
     border-bottom-right-radius: 0;
 }
 
-/* Animación de "pensando" */
 .loading-msg {
     font-style: italic;
     color: #666;
@@ -953,7 +937,6 @@ footer a:hover {
     padding: 5px 0 !important;
 }
 
-/* Zona de abajo (Input y botón de enviar) */
 .chatbot-input-area {
     display: flex;
     border-top: 2px solid #000;
@@ -981,16 +964,12 @@ footer a:hover {
     background-color: #333;
 }
 
-/* =========================================
-   ESTILOS ESPECÍFICOS DEL PANEL DE ADMIN
-========================================= */
 
 .admin-body {
     font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa; /* Fondo gris muy clarito */
+    background-color: #f8f9fa; 
 }
 
-/* El menú lateral oscuro */
 .sidebar-admin {
     min-height: 100vh;
     background-color: var(--color-principal);
@@ -1000,16 +979,14 @@ footer a:hover {
     z-index: 1040; 
 }
 
-/* Enlaces del menú lateral */
 .admin-nav-link {
-    color: #adb5bd; /* Gris clarito */
+    color: #adb5bd; 
     font-weight: 500;
     padding: 1rem 1.5rem;
     border-radius: 0;
     transition: all 0.3s;
 }
 
-/* Efecto hover en el menú */
 .admin-nav-link:hover, 
 .admin-nav-link.active {
     color: white !important;
@@ -1020,12 +997,10 @@ footer a:hover {
     margin-right: 10px;
 }
 
-/* Espaciado del contenido central */
 .admin-content {
     padding: 2rem;
 }
 
-/* Tarjetas y Tablas del Admin */
 .admin-card {
     border: none;
     border-radius: 0;
@@ -1037,7 +1012,6 @@ footer a:hover {
     color: #fff;
 }
 
-/* Botones genéricos del admin */
 .btn-admin-black {
     background-color: #000;
     color: #fff;
@@ -1050,11 +1024,6 @@ footer a:hover {
     color: #fff;
 }
 
-/* =========================================
-   CARRUSELES RESPONSIVE (NOVEDADES Y RECIENTES)
-   ========================================= */
-
-/* Altura base para PC */
 .img-fluida-reciente {
     height: 380px;
     object-fit: cover;
@@ -1096,43 +1065,37 @@ footer a:hover {
 
 
 .img-contenedor-sm {
-    height: 350px; /* Altura original para PC */
+    height: 350px;
 }
 
 @media (max-width: 767px) {
     .img-contenedor-sm {
-        height: 220px; /* Altura perfecta para que quepan 2 prendas cuadradas en el móvil */
+        height: 220px;
     }
 
-        /* Evita que la palabra rompa la pantalla por exceso de espaciado */
     .titulo-citas {
         font-size: 2.2rem; 
         letter-spacing: 2px; 
     }
     
-    /* Hacemos el mapa más bajito para que el formulario se vea antes en la pantalla */
     .mapa-citas {
         min-height: 250px; 
         margin-bottom: 1.5rem;
     }
 
-        /* Hacemos el modal un pelín más bajo para que quepa el teclado del móvil */
     .anim-container {
         height: 520px;
     }
     
-    /* Ocultamos la parte decorativa (fotos y textos gigantes) */
     .anim-container .info-content {
         display: none !important;
     }
     
-    /* Obligamos a que el formulario ocupe todo el ancho disponible */
     .anim-container .form-box {
         width: 100% !important;
         padding: 0 25px !important;
     }
     
-    /* Ajustamos el tamaño del título para que no agobie */
     .form-box h2 {
         font-size: 1.8rem;
         margin-bottom: 20px;
@@ -1200,9 +1163,6 @@ footer a:hover {
 
 }
 
-/* =========================================
-   CITAS RESPONSIVE (Banner y Mapa)
-   ========================================= */
 .titulo-citas {
     letter-spacing: 5px;
 }

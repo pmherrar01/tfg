@@ -905,7 +905,6 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             $genero = (int)$genero;
             $color_id = (int)$color_id;
 
-            // En la tabla principal metemos talla 'Varias' y stock 0 para que no salte error
             $sqlProd = "INSERT INTO productos (nombre, descripcion, precio, tipo_id, coleccion_id, genero, activo, es_segunda_mano, rebaja, talla, stock) 
                         VALUES (:nombre, :descripcion, :precio, :tipo_id, :coleccion_id, :genero, 1, 0, 0, 'Varias', 0)";
             $sentenciaProd = $this->conexionDataBase->prepare($sqlProd);
@@ -923,7 +922,6 @@ public function actualizarRevisionSegundaMano($id, $estado, $idVendedor) {
             $sentenciaColor = $this->conexionDataBase->prepare($sqlColor);
             $sentenciaColor->execute([':id_prod' => $idProducto, ':id_color' => $color_id]);
 
-            // BUCLE MÁGICO: Guarda automáticamente todas las tallas que le hayas puesto stock
             $sqlTalla = "INSERT INTO producto_tallas (producto_id, color_id, talla, stock) VALUES (:id_prod, :id_color, :talla, :stock)";
             $sentenciaTalla = $this->conexionDataBase->prepare($sqlTalla);
             foreach ($tallas_stock as $talla => $stockVal) {

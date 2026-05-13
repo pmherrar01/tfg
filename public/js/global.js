@@ -92,10 +92,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // 1. LEER LAS ALERTAS DIRECTAMENTE DESDE LA URL (La forma más segura)
     const urlParams = new URLSearchParams(window.location.search);
 
-    // --- MENSAJES DE ÉXITO O INFO (?mensaje=...) ---
     if (urlParams.has('mensaje')) {
         const mensaje = urlParams.get('mensaje');
         
@@ -118,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // --- MENSAJES DE ERROR O AVISO (?error=...) ---
     if (urlParams.has('error')) {
         const error = urlParams.get('error');
         
@@ -145,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 
-    // 2. ALERTAS INYECTADAS POR PHP DIRECTAMENTE (Variables globales)
     if (typeof bienvenidoAlerta !== 'undefined') {
         if (bienvenidoAlerta === 'true') {
             swalRapido.fire({
